@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@300&family=Nunito:ital,wght@0,200;0,400;0,600;0,700;1,200&family=Ubuntu+Mono:wght@400;700&display=swap');
+
+:root{
+    --green: #27ae60;
+    --yellow: #F8E559;
+    --black: #192a56;
+    --light-color: #666;
+    --review: #b9b1b1;
+    --smooth: rgb(161, 105, 105);
+    --box-shadow:0 .5rem 1.5rem rgba(0,0,0,0.1);
+    --swiper-theme-color: #27ae69;
+        --swiper-button-next-color:var(--green);
+        --swiper-button-prev-color:var(--green);
+        --swiper-pagination-color: var(--swiper-theme-color);
+        --swiper-pagination-bullet-size: 8px;
+        --swiper-pagination-bullet-width: 8px;
+        --swiper-pagination-bullet-height: 8px;
+        --swiper-pagination-bullet-inactive-color: #000;
+        --swiper-pagination-bullet-inactive-opacity: 0.2;
+        --swiper-pagination-bullet-opacity: 1;
+        --swiper-pagination-bullet-horizontal-gap: 4px;
+        --swiper-pagination-bullet-vertical-gap: 6px;
+}
+*{
+    font-family: 'Nunito', sans-serif;
+    margin: 0; padding: 0;
+    text-decoration: none;
+    box-sizing: border-box;
+    /* outline: none; border: none; */
+    /* text-transform: capitalize; */
+    transition: all .2s linear;
+    text-decoration: none;
+}
+html, body{
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    
+}
+html{
+    scroll-behavior: smooth;
+    font-size: 1rem;
+}
+
+
+/* user-form section */
+.user-profile{
+    padding: 5%;
+}
+.user{
+    display: grid;
+    grid-template-rows: 100px auto;
+}
+.user .munchino{
+    height: 100px;
+    text-align: center;
+    /* margin-top: 50px; */
+}
+.user .munchino img{
+    height: 100px;
+    padding: 0;
+}
+.user form{
+    text-align: center;
+    /* background-color: #F8E559; */
+}
+
+form .paragraph{
+    display: inline-block;
+    font-weight: 700;
+    font-size: x-large;
+}
+
+#logo{
+    font-size: 2rem;
+    font-weight: bolder;
+    color: #F8E559;
+    text-shadow: 1px 1.5px 2px var(--black);
+    display: inline-block;
+}
+.light-text-container{
+    display: flex;
+    justify-content: center;
+}
+.light-text{
+    width: 500px;
+    color: #666;
+    
+    
+}
+.light-text2{
+    color: #666;
+    width: 250px;
+    font-size: small;
+}
+.light-text2 span{
+    color: var();
+}
+.light-input{
+    width: 470px;
+    height: 50px;
+    text-indent: 10px;
+    font-size: 15px;
+    /* border-radius: .5rem; */
+
+}
+
+.btn{
+    /* margin-top: 1rem; */
+    width: 470px;
+    height: 50px;
+    outline: 0; border: 0;
+    color: white;
+    background: var(--black);
+    display: inline-block;
+    font-size: 1.1rem;
+    /* border-radius: .5rem; */
+    padding: .8rem 3rem;
+    cursor: pointer;
+    display: inline-block;
+    margin-inline:auto;
+}
+.btn:hover{
+    background: var(--green);
+    letter-spacing: .1rem;
+}
+.btn2{
+    width: 470px;
+    height: 50px;
+    border: solid .4px var(--black);
+    /* outline: 0; border: 0; */
+    color: var(--black);
+    background: transparent;
+    display: inline-block;
+    font-size: 1.1rem;
+    padding: .8rem 3rem;
+    cursor: pointer;
+    display: inline-block;
+    margin-inline:auto;
+}
+.btn2:hover{
+    background-color: #adb5c8;
+    letter-spacing: .1rem;
+}
+.btn3{
+    width: 470px;
+    height: 50px;
+    border: solid .4px var(--black);
+    /* outline: 0; border: 0; */
+    text-align: center;
+    color: var(--yellow);
+    background: transparent;
+    display: inline-block;
+    font-size: 1.1rem;
+    padding: .8rem 3rem;
+    cursor: pointer;
+    display: inline-block;
+    margin-inline:auto;
+}
+.btn3:hover{
+    letter-spacing: .1rem;
+    color: var(--black);
+}
+.btn3 img{
+    height: 20px;
+}
+.pix{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    /* background-color: green; */
+    gap: 0px;
+}
+.pix .txt{
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.pix p{
+    display: flex;
+    justify-content: flex-end;
+}
