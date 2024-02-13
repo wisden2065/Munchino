@@ -193,14 +193,15 @@ header .icons #menu-list-icon{
 
 }
 /* container for cart and cart-summary */
-.cart-box{
+.cart-box{    
     display: grid;
     grid-template-columns: 3fr 1.2fr;
     grid-gap: 50px;
     margin: 0 5%;
     padding: 20px 0;
-    
-
+}
+.cart-ul{
+    list-style-type: none;
 }
 /* container for cart-items and product description */
 .cart-container{

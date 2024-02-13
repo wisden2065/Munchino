@@ -187,7 +187,8 @@ header .icons #menu-list-icon{
     position: absolute;
     top: 0; left: 0; right: 0; 
     height: 100%; 
-    background: url(pictures/land.jpg);
+    /* background: url(pictures/land.jpg); */
+    background-color: var(--review);
     background-size: cover;
     object-fit: cover;
 
@@ -283,6 +284,13 @@ header .icons #menu-list-icon{
     grid-gap: 20px;
     text-align: center;
 }
+
+/* #box-container2{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem,  1fr));
+    grid-gap: 20px;
+    text-align: center;
+} */
 
 .dishes .box-container .box img{
     width: 100%; 
@@ -473,11 +481,11 @@ menu #box-container .box .content span{
     gap: 1rem;
 }
 .myForm .inputBox .input span{
-    flex
+    /* flex */
 }
 .myForm .inputBox .input input{
     text-indent:10px;
-    font-size:.8rem;
+    font-size: 0.8rem;
 }
 .myForm .inputBox .input textarea{
     resize: none;
@@ -493,7 +501,7 @@ menu #box-container .box .content span{
     height: 20vh;
     padding: 20px 20%;
  }
- .box-container{
+ .footer .box-container{
     display: flex;
     justify-content: space-between;
 }

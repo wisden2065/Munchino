@@ -26,7 +26,7 @@
             <i class="fa-solid fa-list" id="menu-list-icon"></i>
             <i class="fas fa-search" id="search-icon"></i>
             <a href="cart.html" class="fas fa-shopping-cart" id="cart-icon"></a>
-            <span>0</span>
+            <span id="cartTotal">0</span>
             <a href="user-profile-sign-in.html" class="fa-solid fa-user"></a>
             
         </div>
@@ -36,10 +36,12 @@
  
 
     <!--Ad-to-cart section starts-->
+
     <section id="cart-section">
+      
         <div class="cart-advert">
           <div class="signIn">
-            <div class="cartTotal"> <h1>Cart:(1 item)</h1></div>
+            <div class="cartTotal"> <h1></h1></div>
                   
                   <div class="user-signin"> <i class="fas fa-star"></i><span style="text-decoration: underline; cursor: pointer;" > <a href="user-profile-sign-in.html">sign-in</a></span> to easily redeem Rewards and for faster checkout</div>
           </div>
@@ -60,8 +62,8 @@
         </div>  
 
         <div class="cart-box">
-          <ul>   <!--ul is the wrapper for the list of shopped items-->
-            <li>
+          <ul id="cart_ul">   <!--ul is the wrapper for the list of shopped items-->
+            <!-- <li>
               <div class="cart-container">
                     <div class="product-div"><img src="" alt=""></div>
                     <div class="product-desc">
@@ -100,7 +102,7 @@
                       </div>
                     </div>
                 </div>   
-              </li>
+              </li> -->
 
             </ul>
     
@@ -179,6 +181,7 @@
     <section id="bottom-section">
       
     </section>
+  <script src="cart.js"></script>   
   <script src="index.js"></script>   
 </body>
 </html>

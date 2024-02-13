@@ -69,27 +69,4 @@ const swiper = new Swiper('.swiper', {
   
   });
 
-  try {
-    
-  } catch (error) {
-    
-  }
-
-  const me = ()=>{
-    return 10;
-  }
-console.log(me())
-
-
-let item = {
-  "name":"Chicken pepper soup",
-  "image":"/img/chicken.jpg",
-  "price": 2.08
-}
-
-
-let items = [item, item, item, item];
-
-items.forEach(
   
-)

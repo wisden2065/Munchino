@@ -1,0 +1,15 @@
+
+[
+    {"id": 1, "image": "pictures/food-item-8.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
+    {"id": 2, "image": "pictures/food-item-6.png", "foodName": "tasty yam", "rating": 2, "amount": 1300},
+    {"id": 3, "image": "pictures/food-item-5.png", "foodName": "tasty fish", "rating": 2, "amount": 1500},
+    {"id": 4, "image": "pictures/food-item-4.png", "foodName": "chicken fish", "rating": 2, "amount": 1300},
+    {"id": 5, "image": "pictures/food-item-3.png", "foodName": "chicken and chips", "rating": 2, "amount": 1200},
+    {"id": 6, "image": "pictures/food-item-17.png", "foodName": "Fried Chicken", "rating": 2, "amount": 1500},
+    {"id": 7, "image": "pictures/food-item-10.png", "foodName": "Chicken and salad", "rating": 2, "amount": 800},
+    {"id": 8, "image": "pictures/food-item-9.png", "foodName": "Chicken and fish", "rating": 2, "amount": 1500},
+    {"id": 9, "image": "pictures/food-item-8.png", "foodName": "Fried Chicken", "rating": 2, "amount": 1000},
+    {"id": 10, "image": "pictures/food-item-8.png", "foodName": "Grilled Chicken", "rating": 2, "amount": 1200},
+    {"id": 11, "image": "pictures/food-item-8.png", "foodName": "Grilled Turkey", "rating": 2, "amount": 1570},
+    {"id": 12, "image": "pictures/food-item-8.png", "foodName": "Chicken crips", "rating": 2, "amount": 1130}
+]
