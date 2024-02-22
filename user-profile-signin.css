@@ -80,6 +80,7 @@ form .paragraph{
     text-shadow: 1px 1.5px 2px var(--black);
     display: inline-block;
 }
+
 .light-text-container{
     display: flex;
     justify-content: center;
@@ -104,9 +105,15 @@ form .paragraph{
     text-indent: 10px;
     font-size: 15px;
     /* border-radius: .5rem; */
+    outline: none;
 
 }
-
+.light-input.error{
+    outline: solid 2px red;
+}
+.light-input.success{
+    outline: solid 2px green;
+}
 .btn{
     /* margin-top: 1rem; */
     width: 470px;
@@ -182,4 +189,7 @@ form .paragraph{
 .pix p{
     display: flex;
     justify-content: flex-end;
+}
+#smallTag{
+    color: red;
 }
