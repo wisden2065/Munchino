@@ -1,4 +1,4 @@
-e
+
 
 
 
@@ -43,13 +43,13 @@ let cartContainer = document.querySelector("#cart_ul");
 let cartBox = document.querySelector(".cart-box")                //get a ref to the htmlElement with the id cart_ul, which will be populated with the function [addToCart()]
 let spanCounter = document.getElementById("cartTotal");                //get a ref to the span for number of items
 
-console.log(cartContainer);
-console.log(cartBox);
+console.log(cartContainer);  //nul
+console.log(cartBox);       //null
 console.log(productContainer); 
 
-let productList = [];    //declares an empty arrayList that will be populated with data from JSON
+let productList = [];    //declares an empty array that will be populated with data from JSON. This List would contain all the available products that would later be displayed to the UI
 
-let cartList = [];  //declares an empty array to store the cart value
+let cartList = [];  //declares an empty array to store individual cartItems. The CartItem  would be added to the list after a click event is triggered on the btn 
 
 //function that populates the empty array--productList from the array of objects in products.json file -----in this function, there would be a call to the function that displays the List to the UI
 const populateProductList =()=>{
@@ -57,7 +57,7 @@ const populateProductList =()=>{
     fetch("products.json")  //fetch food data from products.json file 
     .then(promiseObj => promiseObj.json())   // the fetch() returns an object which is a promise Object and that Object is converted to JSON with the .then()
     .then((data) => {productList = data;     //JSON assigned to the array productList
-        console.table(data);
+        console.log(data);
         displayProductList();   //calling the fn to add list to UI
 
     }); 
@@ -77,7 +77,7 @@ function displayProductList(){
             // newProduct.dataset.id = product.id
             // a string variable html is created to store the HTML markup as a string and is assigned to each element (product) in the array
         //    the += appends/concatenates the HTML for each iteration to the existing HTML content in html
-            html += `<div class="box" id="${product.id}">    
+          html += `<div class="box" id="${product.id}">    
                                         <img src="${product.image}" alt="">
                                         <div class="content">
                                             <h3>${product.foodName}</h3>
@@ -105,10 +105,10 @@ function displayProductList(){
 //adding a general eventListener on the productContainer that houses individual food Object
 productContainer.addEventListener("click", (g)=>{
     //the event parameter (g), is an object that tells us about the event 
-    let clickedItem = g.target;     //using the target property to return the object of the same event
+    let clickedItem = g.target;     //using the target property to return the object where the same event occurred
     
-    if(clickedItem.classList.contains("btn")){        //if object clicked contains the class .btn anywhere in the food object
-        let clickedParent = clickedItem.closest(".btn")  //stops 
+    if(clickedItem.classList.contains("btn")){        //if object where the clicked event occurred contains the class .btn anywhere in its parent or sibling element
+        let clickedParent = clickedItem.closest(".btn")  // 
         let productId = clickedParent.id;
         console.log("I have clicked on a button and the id is:", productId);
        addProductToCart(productId)
@@ -270,7 +270,20 @@ function displayCartListToHTML(){
 
 
         
+  // adding functionality to search icon
+  let form = document.querySelector("#search-form");
+  let searchIcon = document.querySelector("#search-icon2"); //gets a ref to the font awesome search icon
 
+  let searchInput = form["input"];
+  console.log(searchInput);
+  console.log(searchIcon);
+
+  searchIcon.addEventListener("click", ()=>{
+    // console.log(searchInput.value);
+    productList.filter((newList)=>{
+        newList.name === searchInput.value
+    })
+  })
 
         
     

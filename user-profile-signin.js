@@ -11,7 +11,7 @@ let phoneInput = userSigninForm['enterNumber'];
 let smallTag = document.querySelector("#smallTag");
 // console.log(phoneInput);
 
-phoneInput.addEventListener("keydown", ()=>{
+phoneInput.addEventListener("keyup", ()=>{
     let inputValue = phoneInput.value;
     console.log(inputValue);
     console.log(typeof inputValue);
