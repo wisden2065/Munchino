@@ -70,7 +70,7 @@ function displayProductList(){
     let html = "";   //creates a variable html that would be the inner value of the objects of the array and overwrites the previous content
     console.log(productList.length);
     
-    if(productList.length > 0){
+    if(productList.length >= 0){
         productList.forEach(product=>{   //the forEach loop iterates through the arrayList(productList), and generates a html content for each object in the array
             // let newProduct = document.createElement("div");
             // newProduct.classList.add("box")
@@ -93,7 +93,10 @@ function displayProductList(){
                                         </div>
                                         </div>`
                                         productContainer.innerHTML = html;  //sets the generated HTML to the div(productContainer)
-            // productContainer.appendChild(newProduct); //code resulted into a bug when this line was placed after the forEach loop
+            
+                                        // productContainer.appendChild(newProduct); //code resulted into a bug when this line was placed after the forEach loop
+
+                                        console.log("In the loop");
         })
         
     }
@@ -279,10 +282,14 @@ function displayCartListToHTML(){
   console.log(searchIcon);
 
   searchIcon.addEventListener("click", ()=>{
-    // console.log(searchInput.value);
-    productList.filter((newList)=>{
+    console.log(searchInput.value);
+   let filteredList =  productList.filter((newList)=>{
         newList.name === searchInput.value
+       
+        // displayProductList(filteredList)
     })
+    // console.log(filteredList)
+    displayProductList(filteredList)
   })
 
         
