@@ -40,7 +40,7 @@ const productContainer = document.getElementById("dishes-container");   //get a 
 
 
 let cartContainer = document.querySelector("#cart_ul");
-let cartBox = document.querySelector(".cart-box")                //get a ref to the htmlElement with the id cart_ul, which will be populated with the function [addToCart()]
+let cartBox = document.querySelector(".cart-box ul"); console.log(cartBox);             //get a ref to the htmlElement with the id cart_ul, which will be populated with the function [addToCart()]
 let spanCounter = document.getElementById("cartTotal");                //get a ref to the span for number of items
 
 console.log(cartContainer);  //nul

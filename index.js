@@ -20,9 +20,11 @@ let navbar = document.querySelector(".navbar");
 
 // console.log(navbar);
 // console.log(menu);
+
 menu.onclick = ()=>{
   menu.classList.toggle("fa-xmark");
   navbar.classList.toggle("navList-activate")
+  
 }
 
 //functionality for search-icon
@@ -45,7 +47,16 @@ let cart = document.querySelector(".cart");
 cartIcon.onclick=()=>{
   cart.classList.toggle("cart-containerAdd")
   cartIcon.classList.toggle("color")
+  
 }
+
+
+// functionalty to maintain icon color onclick
+let iconToBeClick = document.querySelector(".icons");
+console.log(iconToBeClick.children);
+iconToBeClick.children.addEventListener("click", ()=>{
+  iconToBeClick.children.classList.toggle("color_click")
+})
 //swiper js begins here
 const swiper = new Swiper('.swiper', {
     // Optional parameters
