@@ -40,7 +40,7 @@ const productContainer = document.getElementById("dishes-container");   //get a 
 
 
 let cartContainer = document.querySelector("#cart_ul");
-let cartBox = document.querySelector(".cart-box ul"); console.log(cartBox);             //get a ref to the htmlElement with the id cart_ul, which will be populated with the function [addToCart()]
+let cartBox = document.querySelector(".cart-box ul");           //get a ref to the htmlElement with the id cart_ul, which will be populated with the function [addToCart()]
 let spanCounter = document.getElementById("cartTotal");                //get a ref to the span for number of items
 
 console.log(cartContainer);  //nul
@@ -96,7 +96,7 @@ function displayProductList(){
             
                                         // productContainer.appendChild(newProduct); //code resulted into a bug when this line was placed after the forEach loop
 
-                                        console.log("In the loop");
+                                        // console.log("In the loop");
         })
         
     }
@@ -275,20 +275,28 @@ function displayCartListToHTML(){
         
   // adding functionality to search icon
   let form = document.querySelector("#search-form");
-  let searchIcon = document.querySelector("#search-icon2"); //gets a ref to the font awesome search icon
+  let searchIcon = document.querySelector("#icon-searchProduct"); //gets a ref to the font awesome search icon
 
   let searchInput = form["input"];
   console.log(searchInput);
   console.log(searchIcon);
 
+
+// logs value of input to console onKeyup
+ searchInput.addEventListener("keyup", ()=>{
+    // console.log(searchInput.value);
+ })  
+
+//  logs value of input onclick to the searchIcon
   searchIcon.addEventListener("click", ()=>{
-    console.log(searchInput.value);
-   let filteredList =  productList.filter((newList)=>{
-        newList.name === searchInput.value
-       
-        // displayProductList(filteredList)
+    // console.log(searchInput.value);
+    let filteredList =  productList.filter((newList)=>{
+        return searchInput.value.includes(newList.name)
+   
+        displayProductList(filteredList)
     })
     // console.log(filteredList)
+    console.log(filteredList);
     displayProductList(filteredList)
   })
 
