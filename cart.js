@@ -36,22 +36,25 @@
 
 
 
-const productContainer = document.getElementById("dishes-container");   //get a ref to the htmlELement with the Id dishes-container which will be populated to display products with a function [displayFoodData()]
-
 
 let cartContainer = document.querySelector("#cart_ul");
-let cartBox = document.querySelector(".cart-box ul");           //get a ref to the htmlElement with the id cart_ul, which will be populated with the function [addToCart()]
+let cartBox = document.querySelector(".cart-box");           //get a ref to the htmlElement with the id cart_ul, which will be populated with the function [addToCart()]
 let spanCounter = document.getElementById("cartTotal");                //get a ref to the span for number of items
 
 console.log(cartContainer);  //nul
 console.log(cartBox);       //null
+console.log(spanCounter);
+
+
+const productContainer = document.querySelector(".box-container");   //get a ref to the htmlELement with the Id dishes-container which will be populated to display products with a function [displayFoodData()]
 console.log(productContainer); 
 
 let productList = [];    //declares an empty array that will be populated with data from JSON. This List would contain all the available products that would later be displayed to the UI
 
 let cartList = [];  //declares an empty array to store individual cartItems. The CartItem  would be added to the list after a click event is triggered on the btn 
 
-//function that populates the empty array--productList from the array of objects in products.json file -----in this function, there would be a call to the function that displays the List to the UI
+
+//populates the empty Product List
 const populateProductList =()=>{
 
     fetch("products.json")  //fetch food data from products.json file 
@@ -59,12 +62,13 @@ const populateProductList =()=>{
     .then((data) => {productList = data;     //JSON assigned to the array productList
         console.log(data);
         displayProductList();   //calling the fn to add list to UI
-
-    }); 
+    });
 }
 
 populateProductList(); 
 
+
+// Displays the Product List to the UI
 function displayProductList(){   
     // productContainer.innerHTML = "";
     let html = "";   //creates a variable html that would be the inner value of the objects of the array and overwrites the previous content
@@ -93,7 +97,7 @@ function displayProductList(){
                                         </div>
                                         </div>`
                                         productContainer.innerHTML = html;  //sets the generated HTML to the div(productContainer)
-            
+       
                                         // productContainer.appendChild(newProduct); //code resulted into a bug when this line was placed after the forEach loop
 
                                         // console.log("In the loop");
@@ -102,7 +106,6 @@ function displayProductList(){
     }
   
     }
-
 
 
 //adding a general eventListener on the productContainer that houses individual food Object
