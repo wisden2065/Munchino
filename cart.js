@@ -1,53 +1,14 @@
 
-
-
-
-// // Dish Section========
-
-
-// //function to display food data
-
-// function displayFood(foodObjects){
-
-//     const boxContainer = document.getElementById("dishes-container");
-//     let html = "";
-//     foodObjects.forEach((foodObject) => {  //why is id property unimportant
-//         html  += `<div class="box" id="${foodObject.id}" >                 
-//         <img src="${foodObject.image}" alt="">
-//         <div class="content">
-//             <h3>${foodObject.foodName}</h3>
-//             <div class="stars">
-//                 <i class="fas fa-star"></i>
-//                 <i class="fas fa-star"></i>
-//                 <i class="fas fa-star"></i>
-//                 <i class="fas fa-star"></i>
-//                 <i class="fas fa-star-half-alt"></i>
-//                 <span>N${foodObject.amount}</span> 
-//                 <a href="#" class="btn" id="${foodObject.id}">Add to cart</a>
-//             </div>
-//         </div>
-//     </div>`
-//     });
-
-//     boxContainer.innerHTML = html;
-// }
-
-// displayFood(allFoodData);
-
-
-
-
 let cartContainer = document.querySelector("#cart_ul");
 let cartBox = document.querySelector(".cart-box");           //get a ref to the htmlElement with the id cart_ul, which will be populated with the function [addToCart()]
 let spanCounter = document.getElementById("cartTotal");                //get a ref to the span for number of items
 
 console.log(cartContainer);  //nul
 console.log(cartBox);       //null
-console.log(spanCounter);
+console.log(spanCounter); 
 
 
-const productContainer = document.querySelector(".box-container");   //get a ref to the htmlELement with the Id dishes-container which will be populated to display products with a function [displayFoodData()]
-console.log(productContainer); 
+
 
 let productList = [];    //declares an empty array that will be populated with data from JSON. This List would contain all the available products that would later be displayed to the UI
 
@@ -75,12 +36,8 @@ function displayProductList(){
     console.log(productList.length);
     
     if(productList.length >= 0){
-        productList.forEach(product=>{   //the forEach loop iterates through the arrayList(productList), and generates a html content for each object in the array
-            // let newProduct = document.createElement("div");
-            // newProduct.classList.add("box")
-            // newProduct.dataset.id = product.id
-            // a string variable html is created to store the HTML markup as a string and is assigned to each element (product) in the array
-        //    the += appends/concatenates the HTML for each iteration to the existing HTML content in html
+        productList.forEach(product=>{   
+
           html += `<div class="box" id="${product.id}">    
                                         <img src="${product.image}" alt="">
                                         <div class="content">
@@ -96,7 +53,7 @@ function displayProductList(){
                                             </div>
                                         </div>
                                         </div>`
-                                        productContainer.innerHTML = html;  //sets the generated HTML to the div(productContainer)
+                                        productContainerInIndex.innerHTML = html;  //sets the generated HTML to the div(productContainer)
        
                                         // productContainer.appendChild(newProduct); //code resulted into a bug when this line was placed after the forEach loop
 
@@ -109,17 +66,6 @@ function displayProductList(){
 
 
 //adding a general eventListener on the productContainer that houses individual food Object
-productContainer.addEventListener("click", (g)=>{
-    //the event parameter (g), is an object that tells us about the event 
-    let clickedItem = g.target;     //using the target property to return the object where the same event occurred
-    
-    if(clickedItem.classList.contains("btn")){        //if object where the clicked event occurred contains the class .btn anywhere in its parent or sibling element
-        let clickedParent = clickedItem.closest(".btn")  // 
-        let productId = clickedParent.id;
-        console.log("I have clicked on a button and the id is:", productId);
-       addProductToCart(productId)
-    }
-})
 
 
 
@@ -154,9 +100,11 @@ function addProductToCart(productId){
 
 function displayCartListToHTML(){
 
-        let cartListWrapper = document.querySelector("#cart_ul");
+        let cartListWrapper = document.querySelector(".ulForCart");
+        console.log(cartListWrapper);
     
         let newLiInCartList = document.createElement("li");
+        console.log(newLiInCartList);
 
         productList.forEach((product)=>{
             newLiInCartList += `
@@ -170,7 +118,7 @@ function displayCartListToHTML(){
             </div>
             <div class="price-per-qty">
             <div class="price-wrapper">
-                <p>Individualy</p>
+                <p>Individually</p>
                 <span>Now $${cartList.amount}</span>
             </div>
             </div>
@@ -276,32 +224,7 @@ function displayCartListToHTML(){
 
 
         
-  // adding functionality to search icon
-  let form = document.querySelector("#search-form");
-  let searchIcon = document.querySelector("#icon-searchProduct"); //gets a ref to the font awesome search icon
-
-  let searchInput = form["input"];
-  console.log(searchInput);
-  console.log(searchIcon);
-
-
-// logs value of input to console onKeyup
- searchInput.addEventListener("keyup", ()=>{
-    // console.log(searchInput.value);
- })  
-
-//  logs value of input onclick to the searchIcon
-  searchIcon.addEventListener("click", ()=>{
-    // console.log(searchInput.value);
-    let filteredList =  productList.filter((newList)=>{
-        return searchInput.value.includes(newList.name)
-   
-        displayProductList(filteredList)
-    })
-    // console.log(filteredList)
-    console.log(filteredList);
-    displayProductList(filteredList)
-  })
+ 
 
         
     
@@ -310,6 +233,5 @@ function displayCartListToHTML(){
 
     
 // 
-
 
 
