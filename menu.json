@@ -1,0 +1,14 @@
+[
+    {"id": 1, "image": "pictures/food-item-8.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
+    {"id": 2, "image": "pictures/food-item-9.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
+    {"id": 3, "image": "pictures/home-img-7.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
+    {"id": 4, "image": "pictures/food-item-8.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
+    {"id": 5, "image": "pictures/food-item-5.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
+    {"id": 6, "image": "pictures/food-item-10.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
+    {"id": 7, "image": "pictures/food-item-8.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
+    {"id": 8, "image": "pictures/food-item-10.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
+    {"id": 9, "image": "pictures/home-img-7.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
+    {"id": 10, "image": "pictures/food-item-9.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
+    {"id": 11, "image": "pictures/home-img-7.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
+    {"id": 12, "image": "pictures/food-item-8.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550}
+]
