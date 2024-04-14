@@ -75,18 +75,18 @@ const swiper = new Swiper('.swiper', {
   
   });
 
+// swiper JS ends
 
-// add to cart functionality
-const productContainerInIndexPage = document.querySelector(".box-container");   //get a ref to the htmlELement with the Id dishes-container which will be populated to display products with a function [displayFoodData()]
-console.log(productContainerInIndexPage); 
-
-
-let productList = [];    //declares an empty array that will be populated with data from JSON. This List would contain all the available products that would later be displayed to the UI
-
-let cartList = [];  //declares an empty array to store individual cartItems. The CartItem  would be added to the list after a click event is triggered on the btn 
+const dishesList_container = document.querySelector(".box-container");   
+console.log(dishesList_container); 
 
 
-//Asynchronous operation 1: (b/c of the fetch function and the promise chains) operation that populates the empty ProductList
+let productList = [];    //empty list that will be populated with data from JSON.
+
+let cartList = [];  //empty list to store individual cartItems. The CartItem  would be added to the list after a click event is triggered on the btn 
+
+
+//Asynchronous operation 1:  - populates the empty ProductList
 const populateProductList =()=>{
     fetch("dishes.json")  //fetch food data from products.json file 
     .then(promiseObj => promiseObj.json())   // the fetch() returns an object which is a promise Object and that Object is converted to JSON with the .then()
@@ -98,57 +98,60 @@ const populateProductList =()=>{
     }); 
 }
 
-// Synchronous operations continues, till all synchronous tasks are completed
-console.log('log me first while fetching data');
-console.log('still in the index.js thread while waiting for fetch');
 populateProductList();
 
-console.log("I am also printed before the populateProductList() is called");
+// Synchronous operations continues, till all synchronous tasks are completed before weaving into fetch() executes
 
 // Asynchronous operation 2 :Displays the Product List to the UI
 function pushProductListToUI(){   
     
-    console.log(productList.length);  // logs 12
-    let element = '';
-        if(productList.length > 0){
-            productList.forEach(product=>{
-                element += `<div class="box" id="${product.id}">
-                                <img src="${product.image}" alt="">
-                                <div class="content">
-                                    <h3>${product.foodName}</h3>
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                        <span>N${product.amount}</span> 
-                                        <a href="#" class="btn" id="${product.id}">Add to cart</a>
-                                    </div>
-                                </div>
-                            </div>`
-                    console.log('about to push productContainer to the UI in Idex page');
+console.log(productList.length);  // logs 12
+let element = '';
+    if(productList.length > 0){
+        productList.forEach(product=>{
+                                element += `<div class="box" id="${product.id}">
+                                                <img src="${product.image}" alt="">
+                                                <div class="content">
+                                                    <h3>${product.foodName}</h3>
+                                                    <div class="stars">
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                    </div>
+                                                    <div>
+                                                        <span><i class="fas fa-naira-sign">${product.amount}</i></span> 
+                                                        <a href="#" class="btn" id="${product.id}">Add to cart</a>
+                                                    </div>
+                                                </div>
+                                            </div>`
+                                    console.log('about to push productContainer to the UI in Idex page');
 
-                // productContainerInIndex.innerHTML = newArray;                      
-            })
-            
-            let newArray = [];
-            newArray.push(element)
-            productContainerInIndexPage.innerHTML = newArray;
-        }
-        else{
-          console.log('No Item in productList');
-        }
-        console.log('last message in the function pushProductToUI() after the if() block');
+                                // productContainerInIndex.innerHTML = newArray;                      
+                            })
+        
+        let newArray = [];
+        newArray.push(element)
+        dishesList_container.innerHTML = newArray;
     }
+    else{
+        console.log('No Item in productList');
+    }
+    console.log('last message in the function pushProductToUI() after the if() block');
+}
 
    
-    console.log('Will i also print before the populateProductList()');
+console.log('Will i also print before the populateProductList()');
 
 
 
 // Asynchronous operation 3: Thread of execution is weaved into this function after a click event is performed on the btn
-productContainerInIndexPage.addEventListener("click", (g)=>{
+// adding click event listener to dishesList container
+dishesList_container.addEventListener("click", clickHandler )
+
+// click event handler
+function clickHandler(g){
     //the event parameter (g), is an object that tells us about the event 
     let clickedItem = g.target;     //using the target property to return the object where the same event occurred
     
@@ -162,9 +165,7 @@ productContainerInIndexPage.addEventListener("click", (g)=>{
         console.log("You have clicked on an element that doesn't contain the class btn");
     }
 
-})
-
-
+}
  // adding functionality to search icon
  let form = document.querySelector("#search-form"); 
  let searchIcon = document.querySelector("#icon-searchProduct"); //gets a ref to the font awesome search icon
@@ -194,11 +195,6 @@ searchInput.addEventListener("keyup", ()=>{
 
  console.log('Still in the thread of synchronous operation');
 
-let cartListUIcontainer = document.querySelector(".cart-box");
-let spanCounter = document.getElementById("cartTotal");                //get a ref to the span for number of items
-
-console.log(cartListUIcontainer);  //null
-console.log(spanCounter); //null
 
 
 function addProductToCart(productId){
@@ -235,65 +231,66 @@ function addProductToCart(productId){
     displayCartListToHTML()
 }
 
+let cartListUIcontainer = document.getElementById("cartBox")
+console.log(cartListUIcontainer); 
 
 function displayCartListToHTML(){
 
-        console.log(cartListWrapper);
         let newLiInCartList = document.createElement("li");
         console.log(newLiInCartList);
 
         productList.forEach((product)=>{
-            newLiInCartList += `
-            <div class="cart-container" id="">
-            <div class="product-div"><img src="" alt=""></div>
-            <div class="product-desc">
-            <div class="product-wrapper">
-                <h3>${product.foodName}</h3>
-                <p>Just food</p>
-            </div>
-            </div>
-            <div class="price-per-qty">
-            <div class="price-wrapper">
-                <p>Individually</p>
-                <span>Now $${cartList.amount}</span>
-            </div>
-            </div>
-            <div class="remove-item">
-            <div class="del-wrapper">
-                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-                </svg>
-            </div>
-            </div>
-            <div class="shop-cart">
-            <div class="cart-wrapper">
-                <span class="add" ><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/>
-                </svg></span>
-                <span id="amount">2</span>
-                <span class="minus"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
-                </svg></span>
-            </div>
-            </div>
-            <div class="sum">
-            <div class="sum-wrapper">
-                <span><i class="fas fa-naira-sign">${cartList.amount}</span>
-            </div>
-            </div>
-        </div>`
+                                            newLiInCartList += `<div class="cart-container" id="${product.id}">
+                                                                    <div class="product-div"><img src="" alt=""></div>
+                                                                            <div class="product-desc">
+                                                                                <div class="product-wrapper">
+                                                                                    <h3>${product.foodName}</h3>
+                                                                                    <p>Just food</p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="price-per-qty">
+                                                                                <div class="price-wrapper">
+                                                                                <p>Individually</p>
+                                                                                <span>Now $${cartList.amount}</span>
+                                                                            </div>
+                                                                    </div>
+                                                                    <div class="remove-item">
+                                                                        <div class="del-wrapper">
+                                                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                                                            </svg>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="shop-cart">
+                                                                        <div class="cart-wrapper">
+                                                                            <span class="add">
+                                                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/>
+                                                                                </svg>
+                                                                            </span>
+                                                                            <span id="amount">2</span>
+                                                                            <span class="minus">
+                                                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                                                                                </svg>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="sum">
+                                                                        <div class="sum-wrapper">
+                                                                            <span><i class="fas fa-naira-sign">${cartList.amount}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>`
 
-        })
-        cartListWrapper.innerHTML = newLiInCartList;
+                                            
+                                        })
+        cartListUIcontainer.innerHTML = newLiInCartList;
 }
-// })
-//Asynchronous function in this thread---
 
 
 
-console.log('completed thread of synchronous operation in cart.js'); 
 
-// -------------------------------------------------------------------------
 // menu.json
 
 let cartList2 = [];
@@ -312,11 +309,27 @@ function fetchMenuFoods(){
 fetchMenuFoods();
 
 
-let box_container = document.getElementById('box-container');
-console.log(box_container);
+let menuList_container = document.getElementById('box-container');
+console.log(menuList_container);
+
 // function to populate box_container with data from menu.json
 console.log(cartList2);
 function populateMenu(){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     console.log('In populateMenu()');
     let html = '';
     if(cartList2.length > 0){
@@ -326,18 +339,21 @@ function populateMenu(){
                             <img src="${e.image}" alt="">
                         </div>
                         <div class="content">
-                            <h3>"${e.foodName}"</h3>
+                            <h3>${e.foodName}</h3>
                             <div><i class="fas fa-naira-sign">${e.amount}</i></div>
                             <a href="#" class="btn food">add to cart</a>
                         </div>
                     </div>`
         })
-        box_container.innerHTML = html;
-    }
+        menuList_container.innerHTML = html;
+    } 
     else{
         console.log('no item in cartList2 yet');
     }
 }
+
+// adding click event listener to products in menuList
+menuList_container.addEventListener("click", clickHandler)
 
 
 

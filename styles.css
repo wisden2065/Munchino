@@ -604,7 +604,11 @@ menu #box-container .box .content span{
 #search-form #close:hover{
     color: var(--green );
 }
-
+form .btnWrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
  /* search-icon styling ends here */
 
 
