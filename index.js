@@ -228,13 +228,13 @@ function addProductToCart(productId){
                     cartList[indexofClickedItemInCartList].quantity = cartList[indexofClickedItemInCartList].quantity +  1;
                 }
     console.log(cartList.length);  //present length of cartList array
-    displayCartListToHTML()
+    displayCartListToUI()
 }
 
-let cartListUIcontainer = document.getElementById("cartBox")
+let cartListUIcontainer = document.querySelector("cartBox")
 console.log(cartListUIcontainer); 
 
-function displayCartListToHTML(){
+function displayCartListToUI(){
 
         let newLiInCartList = document.createElement("li");
         console.log(newLiInCartList);

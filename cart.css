@@ -193,7 +193,7 @@ header .icons #menu-list-icon{
 
 }
 /* container for cart and cart-summary */
-.cart-box{    
+.cartBox{    
     display: grid;
     grid-template-columns: 3fr 1.2fr;
     grid-gap: 50px;
