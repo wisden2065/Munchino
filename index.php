@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+include('connect.php');
+
+
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,13 +26,31 @@
 
 <body>
 
+<?php
+    if(isset($_SESSION['session-id'])){
+        $session = $_SESSION['session-id'];
+
+        $query = "SELECT * FROM users WHERE email = '$session'";
+        $result = mysqli_query($connection, $query) or die("Error");
+        if($row = mysqli_num_rows($result) > 0){
+            $user = mysqli_fetch_array($result);
+            $name = $user['firstName'];
+            $picture = $user['picture'];
+            
+            // $pictureName = $picture['firstName']; //cannot access offset of type string?
+            // $picturePath = $_SERVER['DOCUMENT_ROOT'].'/e-commerce/pic/'.$picture;
+        }
+        else{
+            // echo "Else block";
+        }
+    ?>
     
     <!--header section starts-->
     <header>
         <a href="#" class="logo"><img src="pictures/munchino-logo-3.png" alt=""><p id="logo">Munchino</p></a>
         
         <nav class="navbar">
-                <a  class="active" href="#home">home</a> 
+                <a  class="active" href="index.php">home</a> 
                 <a  href="#dishes">dishes</a> 
                 <a  href="#about">about</a> 
                 <a  href="#menu">menu</a> 
@@ -32,10 +61,29 @@
         <div class="icons">
             <i class="fa-solid fa-list" id="menu-list-icon"></i>
             <i class="fas fa-search" id="search-icon"></i>
-            <a href="cart.html" target="_blank" class="fas fa-shopping-cart" id="cart-icon"></a>
             <span>0</span>
-            <a href="user-profile-sign-in.html" class="fa-solid fa-user"></a>
+            <a href="cart.php" target="_blank" class="fas fa-shopping-cart" id="cart-icon"></a>
+            <a href="signin.php" class=""><div class="profile"><img src="<?php echo "pic/$picture"; ?>" alt=""></div></a>
+            <a href="logout.php" class="fa-solid fa-right-from-bracket"></a>
         </div>
+
+        <!-- Bootstrap made dropdown -->
+        <!-- <div class="dropdown">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Dropdown link
+            </a>
+
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+        </div> -->
+
+
+
+
+
     </header>
 
     <!--header section ends-->
@@ -453,6 +501,14 @@
 <!-----Add-to-cart script link-->
 
 <!-- <script src="cart.js"></script> -->
+<?php
+    }
+    else{
+        // echo "not found";
+        header('location: logout.php');
+    }
+
+?>
     
 </body>
 </html>

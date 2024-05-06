@@ -120,6 +120,28 @@ header .icons a{
     background: #eee;
     z-index: 1000;
 }
+/* style for user img */
+header .icons{
+    position: relative;
+    /* width: 20rem; */
+    display: flex;
+
+}
+.profile{
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    /* background-color: #F8E559; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.profile img{
+    width: 100%;
+    height: 100%;
+    
+}
 header .icons span{
     background-color: rgb(241, 63, 8);
     color: #fff;
@@ -129,7 +151,7 @@ header .icons span{
     width: 1.5rem;
     border-radius: 50%;
     position: absolute;
-    top: 7px; right: 85px;
+    top: 7px; right: 150px;
 }
 header .icons i:hover,
 header .icons a:hover{
@@ -177,8 +199,10 @@ header .icons #menu-list-icon{
 }
 .cart-head{
     background-color: var(--black);
-    height: 50px;
-    text-align: center; 
+    height: 60px;
+    /* text-align: center;  */
+    display: flex;
+    justify-content: space-between;
     margin-bottom: 20px;
     padding: 10px 5px;
     position: sticky;
@@ -187,6 +211,7 @@ header .icons #menu-list-icon{
 .cart-head h1{
     display: inline-block;
 }
+
 .cart-head svg{
     height: 30px;
     color: var(--yellow);
@@ -374,6 +399,8 @@ header .icons #menu-list-icon{
 .btn:hover{
     background: var(--green);
     letter-spacing: .1rem;
+    outline: none;
+    border: none;
 }
 .btn2{
     background-color: var(--yellow);

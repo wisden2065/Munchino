@@ -1,0 +1,197 @@
+
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@300&family=Nunito:ital,wght@0,200;0,400;0,600;0,700;1,200&family=Ubuntu+Mono:wght@400;700&display=swap');
+
+:root{
+    --green: #27ae60;
+    --yellow: #F8E559;
+    --black: #192a56;
+    --light-color: #666;
+    --review: #b9b1b1;
+    --smooth: rgb(161, 105, 105);
+    --box-shadow:0 .5rem 1.5rem rgba(0,0,0,0.1);
+    --swiper-theme-color: #27ae69;
+        --swiper-button-next-color:var(--green);
+        --swiper-button-prev-color:var(--green);
+        --swiper-pagination-color: var(--swiper-theme-color);
+        --swiper-pagination-bullet-size: 8px;
+        --swiper-pagination-bullet-width: 8px;
+        --swiper-pagination-bullet-height: 8px;
+        --swiper-pagination-bullet-inactive-color: #000;
+        --swiper-pagination-bullet-inactive-opacity: 0.2;
+        --swiper-pagination-bullet-opacity: 1;
+        --swiper-pagination-bullet-horizontal-gap: 4px;
+        --swiper-pagination-bullet-vertical-gap: 6px;
+}
+*{
+    font-family: 'Nunito', sans-serif;
+    /* margin: 0; padding: 0; */
+    text-decoration: none;
+    box-sizing: border-box;
+    /* outline: none; border: none; */
+    text-transform: capitalize;
+    transition: all .2s linear;
+    text-decoration: none;
+}
+html, body{
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    
+}
+body{
+    /* background: var(--yellow); */
+}
+
+html{
+    scroll-behavior: smooth;
+    font-size: 1rem;
+}
+/* Munchino & Body style */
+.munchino{
+    height: 100px;
+    text-align: center;
+    /* margin-top: 50px; */
+}
+.munchino img{
+    height: 100px;
+    padding: 0;
+}
+.order-container-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.order-container{
+    width: 70vw;
+    /* height: 50vh; */
+    place-content: center;
+    box-shadow: var(--box-shadow);
+    border: solid 1px #ebeaea;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+}
+.order-wrapper{
+    padding: 20px;
+}
+
+/* Bill styling */
+.bill-plan-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+
+}
+.bill-plan-container .bill{
+    border: solid 2px blue;
+    padding: 20px;
+    /* margin: 10px; */
+    place-content: center;
+}
+.bill-plan-container .annual{
+    border: solid 2px #e1dfdf;
+}
+.bill-plan-container .bill sub{
+    font-size: 30px;
+    font-weight: 500;
+    color: blue;
+}
+.bill-plan-container .bill sup{
+    color: blue;
+}
+.bill-today{
+    border: solid 2px var(--black);
+    border-radius: 8px;
+    background-color: #737e9d;
+}
+
+/* summary style */
+.package-summary{
+    border-left: solid 1px var(--green);
+}
+.package-wrapper{
+    padding: 20px;
+}
+.round{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+.round::after{
+    content: '';
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: blue;
+    /* position: absolute; */
+    border: solid 3px #e0dfdf;
+}
+.round-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.round-default{
+    height: 23px;
+    width: 23px;
+    border-radius: 50%;
+    background-color: #e0dfdf;
+}
+.get-promo, .bill-today, h3, form {
+    padding: 10px;
+}
+.card-div .cards img{
+    height: 20px;
+}
+
+
+/* Button style */
+.btn{
+    margin-top: 1rem;
+    color: white;
+    background: var(--black);
+    display: inline-block;
+    font-size: 1.2rem;
+    border-radius: .5rem;
+    padding: .4rem 2.5rem;
+    cursor: pointer;
+}
+.btn:hover{
+    background: var(--green);
+    /* letter-spacing: .1rem; */
+    outline: none;
+}
+
+/* Form style */
+.input input[type='text']{
+    width: 100%;
+    border: none; outline: none;
+}
+.input{
+    border: solid .5px var(--light-color);
+    border-radius: 5px;
+    padding: 5px 0;
+    text-indent: 6px;
+    display: flex;
+    justify-content: space-between;
+}
+.card-details{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+}
+.card1, .card2{
+    border: solid .5px var(--light-color);
+    border-radius: 5px;
+    padding: 5px 0;
+    text-indent: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+.card-details input{
+    outline: none; border: none;
+}

@@ -44,7 +44,16 @@ html{
     font-size: 1rem;
 }
 
-
+/* admin login */
+.admin-login p a{
+    border: solid 1px var(--black);
+    width: 3rem;
+    color: var(--black);
+}
+.admin-login p a:hover{
+    cursor: pointer;
+    color: var(--green);
+}
 /* user-form section */
 .user-profile{
     padding: 5%;
@@ -107,6 +116,9 @@ form .paragraph{
     /* border-radius: .5rem; */
     outline: none;
 
+}
+.light-input[type=file]{
+    border: 1px solid #666;
 }
 .light-input.error{
     outline: solid 2px red;

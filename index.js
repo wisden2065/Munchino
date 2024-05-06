@@ -1,4 +1,30 @@
 
+// adding functionality to search icon
+let form = document.querySelector("#search-form"); 
+let searchIcon = document.querySelector("#icon-searchProduct"); //gets a ref to the font awesome search icon
+
+let searchInput = form["input"];
+console.log(searchInput);
+console.log(searchIcon);
+
+
+// logs value of input to console onKeyup
+searchInput.addEventListener("keyup", ()=>{
+  // console.log(searchInput.value);
+})  
+
+//  logs value of input onclick to the searchIcon
+searchIcon.addEventListener("click", ()=>{
+  // console.log(searchInput.value);
+  let filteredList =  productList.filter((newList)=>{
+      return searchInput.value.includes(newList.name)
+ 
+      displayProductList(filteredList);
+  })
+  // console.log(filteredList)
+  console.log(filteredList);
+  displayProductList(filteredList)
+})
 
 //navbar toggle to activeBtn-- onCLick
 let allBtn = document.querySelectorAll(".navbar a")
@@ -28,12 +54,6 @@ search.onclick =()=>{
     searchToggle.classList.toggle("activate-searchForm");
 }
 
-console.log('started all synchronous operations');
-console.log('still in the index.js thread');
-console.log('still in the index.js thread');
-console.log('still in the index.js thread');
-console.log('still in the index.js thread');
-
 // Search cancel functionality 
 let searchCancel = document.querySelector("#close");
 console.log(searchCancel);
@@ -49,7 +69,6 @@ cartIcon.onclick=()=>{
   cartIcon.classList.toggle("color")
   
 }
-
 
 
 //swiper js begins here
@@ -77,36 +96,51 @@ const swiper = new Swiper('.swiper', {
 
 // swiper JS ends
 
-const dishesList_container = document.querySelector(".box-container");   
-console.log(dishesList_container); 
 
 
-let productList = [];    //empty list that will be populated with data from JSON.
+let productList = [];    //To be populated with data from dishes.json by fetchDishesFood()
 
 let cartList = [];  //empty list to store individual cartItems. The CartItem  would be added to the list after a click event is triggered on the btn 
 
 
 //Asynchronous operation 1:  - populates the empty ProductList
-const populateProductList =()=>{
+const fetchDishesFood =()=>{
     fetch("dishes.json")  //fetch food data from products.json file 
     .then(promiseObj => promiseObj.json())   // the fetch() returns an object which is a promise Object and that Object is converted to JSON with the .then()
     .then((data) => {productList = data;     //JSON assigned to the array productList
         console.log('completed fetching data');
         console.log('Resolved data: ',data);
         console.log(productList == data);
+
         pushProductListToUI();   //calling the fn to add list to UI
     }); 
 }
 
-populateProductList();
+fetchDishesFood();
 
-// Synchronous operations continues, till all synchronous tasks are completed before weaving into fetch() executes
+let cartList2 = [];  //To be populated with menu.json by fetchMenuFoods()
+
+// function to populate cartList2 with data from menu.json
+function fetchMenuFoods(){
+    const menuFoodItems = fetch('menu.json');
+    menuFoodItems.then((promise)=>{
+        promise.json()
+        .then(data=>{
+            cartList2 =data
+            console.log(cartList2);
+            pushMenuFoodListToUI()
+        })
+    })
+}
+fetchMenuFoods();
 
 // Asynchronous operation 2 :Displays the Product List to the UI
-function pushProductListToUI(){   
-    
-console.log(productList.length);  // logs 12
-let element = '';
+const dishesList_container = document.querySelector(".box-container");   
+console.log(dishesList_container); 
+
+function pushProductListToUI(){    
+    console.log(productList.length);  // logs 12
+    let element = '';
     if(productList.length > 0){
         productList.forEach(product=>{
                                 element += `<div class="box" id="${product.id}">
@@ -141,84 +175,69 @@ let element = '';
     console.log('last message in the function pushProductToUI() after the if() block');
 }
 
-   
-console.log('Will i also print before the populateProductList()');
+ // function to populate box_container with data from menu.json
+let menuList_container = document.getElementById('box-container');
+console.log(menuList_container);
 
+function pushMenuFoodListToUI(){    
+    console.log('In populateMenu()');
+    let html = '';
+    if(cartList2.length > 0){
+        cartList2.forEach((e)=>{
+            html +=`<div class="box" id="${e.id}">
+                        <div class="image">
+                            <img src="${e.image}" alt="">
+                        </div>
+                        <div class="content">
+                            <h3>${e.foodName}</h3>
+                            <div><i class="fas fa-naira-sign">${e.amount}</i></div>
+                            <a href="#" class="btn food" id="${e.id}">add to cart</a>
+                        </div>
+                    </div>`
+        })
+        menuList_container.innerHTML = html;
+    } 
+    else{
+        console.log('no item in cartList2 yet');
+    }
+}
 
-
-// Asynchronous operation 3: Thread of execution is weaved into this function after a click event is performed on the btn
-// adding click event listener to dishesList container
-dishesList_container.addEventListener("click", clickHandler )
 
 // click event handler
 function clickHandler(g){
     //the event parameter (g), is an object that tells us about the event 
     let clickedItem = g.target;     //using the target property to return the object where the same event occurred
     
-    if(clickedItem.classList.contains("btn")){        //if object where the clicked event occurred contains the class .btn anywhere in its parent or sibling element
-        let clickedParent = clickedItem.closest(".btn")  //
+    if(clickedItem.classList.contains("btn")){   
+        let clickedParent = clickedItem.closest(".btn") 
+        console.log(clickedParent);
         let productId = clickedParent.id;
         console.log("I have clicked on a button in the ProductContainer and the id is:", productId);
-       addProductToCart(productId)
+        console.log(typeof productId);
+        productIdToInt = parseInt(productId)
+        console.log(typeof productIdToInt);
+        productId = productIdToInt;
+
+        // passing the local storage value on click
+        
+       
     }
     else{
         console.log("You have clicked on an element that doesn't contain the class btn");
     }
 
 }
- // adding functionality to search icon
- let form = document.querySelector("#search-form"); 
- let searchIcon = document.querySelector("#icon-searchProduct"); //gets a ref to the font awesome search icon
-
- let searchInput = form["input"];
- console.log(searchInput);
- console.log(searchIcon);
-
-
-// logs value of input to console onKeyup
-searchInput.addEventListener("keyup", ()=>{
-   // console.log(searchInput.value);
-})  
-
-//  logs value of input onclick to the searchIcon
- searchIcon.addEventListener("click", ()=>{
-   // console.log(searchInput.value);
-   let filteredList =  productList.filter((newList)=>{
-       return searchInput.value.includes(newList.name)
-  
-       displayProductList(filteredList);
-   })
-   // console.log(filteredList)
-   console.log(filteredList);
-   displayProductList(filteredList)
- })
-
- console.log('Still in the thread of synchronous operation');
-
-
 
 function addProductToCart(productId){
     console.log(cartList);
     console.log(cartList.length);   //previous length of classList array
 
-    let indexofClickedItemInCartList = cartList.findIndex((value)=> value.productId == productId);    //finds the index of the object (element) whose index == the parameter passed to the function addProductToCart()
+    let indexofClickedItemInCartList = cartList.findIndex((value)=> value.id == productId);    //finds the index of the object (element) whose id == the id passed as a param to the function addProductToCart()
     console.log(indexofClickedItemInCartList);
-    //check if cartList is empty. if true, we give a default value to the product_Id and quantity to 1
-                if(cartList.length == 0){
 
-                    console.log(cartList);
-                    console.log(cartList.length);
-
-                    cartList = [{
-                        productId : productId,
-                        quantity : 1
-                    }]
-                    console.log(cartList);
-                }
-                // if cartList is not empty, i.e an item (the product clicked) we may want to increment is quantity is already in the cart or not
-                else if(indexofClickedItemInCartList < 0){    //the index of the item < 0, tells us that the item is not in the cart
-                    cartList.push({                // so we push it into the cart
-                        productId : productId,
+                if(indexofClickedItemInCartList < 0){    //the index of the item < 0, tells us that the item is not in the cart
+                    cartList.push({                           // so we push it into the cart
+                        id : productId,
                         quantity : 1
                     }) 
                     // console.log("this is the first item of this object");
@@ -231,129 +250,99 @@ function addProductToCart(productId){
     displayCartListToUI()
 }
 
-let cartListUIcontainer = document.querySelector("cartBox")
+
+// adding click event listener to products in menu and dishes container
+menuList_container.addEventListener("click", clickHandler)
+dishesList_container.addEventListener("click", clickHandler )
+
+
+// LocalStorage to save MenuFOods and DishesFoods locally in the web browser
+function setLocalStorage(){
+    let variable;
+    fetch('dishes.json')
+    .then(promiseObj => promiseObj.json())
+    .then(data => {
+        variable = data;
+        console.log(variable);
+        // stringVariable = JSON.stringify(variable)
+        // console.log(stringVariable);
+        localStorage.setItem('dishes', variable);
+    })
+    
+    
+    // return false;
+    
+}
+setLocalStorage();
+
+// retrieve local storage
+const getLocalStorage = function(){
+    let container = localStorage.getItem('dishes');
+    // container = JSON.parse(container);
+    // why does this commented line print null to the console
+    console.log(container);
+    return JSON.parse(container);
+}
+getLocalStorage();
+
+localStorage.clear();
+
+// pushing to cart.html from index.html from local storage
+let cartListUIcontainer = document.querySelector(".cartBox")
 console.log(cartListUIcontainer); 
 
 function displayCartListToUI(){
 
         let newLiInCartList = document.createElement("li");
         console.log(newLiInCartList);
-
         productList.forEach((product)=>{
-                                            newLiInCartList += `<div class="cart-container" id="${product.id}">
-                                                                    <div class="product-div"><img src="" alt=""></div>
-                                                                            <div class="product-desc">
-                                                                                <div class="product-wrapper">
-                                                                                    <h3>${product.foodName}</h3>
-                                                                                    <p>Just food</p>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="price-per-qty">
-                                                                                <div class="price-wrapper">
-                                                                                <p>Individually</p>
-                                                                                <span>Now $${cartList.amount}</span>
-                                                                            </div>
-                                                                    </div>
-                                                                    <div class="remove-item">
-                                                                        <div class="del-wrapper">
-                                                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-                                                                            </svg>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="shop-cart">
-                                                                        <div class="cart-wrapper">
-                                                                            <span class="add">
-                                                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/>
-                                                                                </svg>
-                                                                            </span>
-                                                                            <span id="amount">2</span>
-                                                                            <span class="minus">
-                                                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
-                                                                                </svg>
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="sum">
-                                                                        <div class="sum-wrapper">
-                                                                            <span><i class="fas fa-naira-sign">${cartList.amount}</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>`
+                            newLiInCartList += `<div class="cart-container" id="${product.id}">
+                                        <div class="product-div"><img src="" alt=""></div>
+                                                <div class="product-desc">
+                                                    <div class="product-wrapper">
+                                                        <h3>${product.foodName}</h3>
+                                                        <p>Just food</p>
+                                                    </div>
+                                                </div>
+                                                <div class="price-per-qty">
+                                                    <div class="price-wrapper">
+                                                    <p>Individually</p>
+                                                    <span>Now $${cartList.amount}</span>
+                                                </div>
+                                        </div>
+                                        <div class="remove-item">
+                                            <div class="del-wrapper">
+                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="shop-cart">
+                                            <div class="cart-wrapper">
+                                                <span class="add">
+                                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/>
+                                                    </svg>
+                                                </span>
+                                                <span id="amount">2</span>
+                                                <span class="minus">
+                                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                                                    </svg>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="sum">
+                                            <div class="sum-wrapper">
+                                                <span><i class="fas fa-naira-sign">${cartList.amount}</span>
+                                            </div>
+                                        </div>
+                                    </div>`
 
                                             
                                         })
-        cartListUIcontainer.innerHTML = newLiInCartList;
+
+        // cartListUIcontainer.innerHTML = newLiInCartList;
+        container.innerHTML = newLiInCartList;
 }
-
-
-
-
-// menu.json
-
-let cartList2 = [];
-// function to populate cartList2 with data from menu.json
-function fetchMenuFoods(){
-    const menuFoodItems = fetch('menu.json');
-    menuFoodItems.then((promise)=>{
-        promise.json()
-        .then(data=>{
-            cartList2 =data
-            console.log(cartList2);
-            populateMenu()
-        })
-    })
-}
-fetchMenuFoods();
-
-
-let menuList_container = document.getElementById('box-container');
-console.log(menuList_container);
-
-// function to populate box_container with data from menu.json
-console.log(cartList2);
-function populateMenu(){
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    console.log('In populateMenu()');
-    let html = '';
-    if(cartList2.length > 0){
-        cartList2.forEach((e)=>{
-            html +=`<div class="box" id="${e.id}">
-                        <div class="image">
-                            <img src="${e.image}" alt="">
-                        </div>
-                        <div class="content">
-                            <h3>${e.foodName}</h3>
-                            <div><i class="fas fa-naira-sign">${e.amount}</i></div>
-                            <a href="#" class="btn food">add to cart</a>
-                        </div>
-                    </div>`
-        })
-        menuList_container.innerHTML = html;
-    } 
-    else{
-        console.log('no item in cartList2 yet');
-    }
-}
-
-// adding click event listener to products in menuList
-menuList_container.addEventListener("click", clickHandler)
-
-
 
