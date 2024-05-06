@@ -34,7 +34,7 @@
             </form> 
             <div class="pix">
                 <div class="txt">
-                    <p id="logo">Munchino</p>.
+                    <p id="logo">Munchino</p>
                 </div>
                 <img style="height: 100px;" src="pictures/munchino-logo-3.png" alt="">
             </div>
