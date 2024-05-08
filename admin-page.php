@@ -48,6 +48,14 @@
                 background: aliceblue;
                 margin: 10px 0;
             }
+            input[type=file]{
+                padding: 20px 20px;
+                border: none;
+                outline: none;
+                border-radius: 5px;
+                background: aliceblue;
+                margin: 10px 0;
+            }
             
             input[type=submit]{
                 align-self: center;
@@ -127,33 +135,33 @@ session_start();
     </div>
     <div class="container">
     <div class="form-box">
-            <p>Edit Popular_dishes</p>
+            <p>Edit A Product</p>
             <form action="logic.php" method="post">
                 <div class="form-box--input">
                     <label for="">Product Name</label>
-                    <input type="text" name="pname" id="" placeholder="Enter Product to add">
+                    <input type="text" name="pName" id="" placeholder="Enter Product to add">
                 </div>
                 <div class="form-box--input">
                     <label for="">Product Price</label>
-                    <input type="text" name="pprice" id="" placeholder="Enter New Price">
+                    <input type="text" name="pPrice" id="" placeholder="Enter New Price">
                 </div>
                 <div class="form-box--input">
                     <label for="">Product Qty</label>
-                    <input type="text" name="pqty" id="" placeholder="Enter New Quantity" >
-                </div>
-                <div class="form-box--input">
-                    <label for="">Product Image</label>
-                    <input type="file" name="pimg" id="" placeholder="Enter New Quantity" >
+                    <input type="text" name="pQty" id="" placeholder="Enter New Quantity" >
                 </div>
                 <div class="form-box--input">
                     <label for="">Product Rating</label>
-                    <input type="text" name="rating" id="" placeholder="Enter New Product Rating" >
+                    <input type="text" name="pRating" id="" placeholder="Enter New Product Rating" >
+                </div>
+                <div class="form-box--input">
+                    <label for="">Product Image</label>
+                    <input type="file" name="pImage" id="" >
                 </div>
 
                 <div class="form-box--input">
                 <!-- <input type="hidden" name="id" value="echoed row[id]"> -->
 
-                <input type="submit" value="Save changes" name="admin-edit-product">
+                <input type="submit" value="Proceed" name="admin-edit-product">
                 </div> 
 
             </form> 

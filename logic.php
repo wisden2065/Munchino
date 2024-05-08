@@ -71,8 +71,8 @@
     }
 
 
-// sign in
-if(isset($_POST['continue-as-user'])){
+// sign in as Admin or User
+if(isset($_POST['sign-in'])){
     $email = $_POST['email'];
     $password = $_POST['password'];
     // $password = md5($password);
@@ -108,82 +108,71 @@ if(isset($_POST['continue-as-user'])){
      
     }
     else{
-        echo "No user exist in database";
+        // echo "No user exist in database";
 }
 
 
-
-
-//Sign in as Admin
-if(isset($_POST['continue-as-admin'])){
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    $sqlQuery = "SELECT * FROM admin WHERE email = '$email'";
-    $sqlResult = mysqli_query($connection, $sqlQuery) or die("Error");
-
-    $rows = mysqli_fetch_row($sqlResult);
-
-    if($rows > 0){
-
-
-        $admin = $rows[2];
-        // echo $admin;
-        session_start();
-        $_SESSION['admin-id'] = $admin;
-        header('Location: admin-edit.php');
-    }
-    else{
-        echo "Incorrect email or password";
-    }
-
-
-
-}
 
 // Admin edit Product in database
 if(isset($_POST['admin-edit-product'])){
-    $productName = $_POST['pname'];
-    $productPrice = $_POST['pprice'];
-    $productQty = $_POST['pqty'];
-    $productRating = $_POST['rating'];
+    $productName = $_POST['pName'];
+    $productPrice = $_POST['pPrice'];
+    $productQty = $_POST['pQty'];
+    $productRating = $_POST['pRating'];
+    $productImage = $_POST['pImage'];
 
 
-    $PopProdSqlQuery = "SELECT * FROM popular_dishes";
-    $result = mysqli_query($connection, $PopProdSqlQuery) or die("Error");
-    print_r($result);
+    $sqlQuery = "SELECT * FROM products";
+    $result = mysqli_query($connection, $sqlQuery) or die("Error");
+    // print_r($result);
 
-    $rowPop_dishes = mysqli_fetch_row($result);
+    $rowResult= mysqli_fetch_row($result);
 
-    if($rowPop_dishes > 2){
-        echo "Rows gotten";
-        print_r($rowPop_dishes);
-        print_r($rowPop_dishes[2]);
+    if($rowResult > 2){
 
+        mysqli_data_seek($result, 0);
+        $list = [];
+        // echo  gettype($list);
+        while($row = mysqli_fetch_assoc($result)){
+            // print_r($row['name']);
+            array_push($list, $row['name']);
+            // $list = $row['name'];
+        }
+        // echo "<br>";
+        // echo gettype($list);
+        if(in_array($productName, $list)){
+            echo $productName." found in the array";
+            echo "<br>";
+            $query = "UPDATE `products` SET `name`='$productName', `price`='$productPrice',`quantity`='$productQty', `rating`='$productRating', `image` = '$productImage' WHERE `name` = '$productName'";
+            $result = mysqli_query($connection, $query) or die("Error in updating ".$productName);
+            if($result){
+              echo "Successfully updated ".$productName." to database!";
+            }
+            else{
+                echo "Could complete update to".$productName;
+               
+            }
+        }
+        else{
+            // echo $productName." Not found in the array";
+            $query = "INSERT into `products`(`name`,`price`, `quantity`, `rating`, `image`) VALUES ('$productName','$productPrice', '$productQty', '$productRating','$productImage')";
+            $result = mysqli_query($connection, $query) or die("Error in inserting new product ".$productName." to database");
+            if($result){
+                ?>
+                    <?php
+                        header('Location: admin-page.php');
+                    ?>
+                <?php
+            }else{
+                echo "Failed to insert new product ".$productName." to database";
+                
+            }
+
+        }
         
     }
     else{
         echo "No rows gotten";
-    }
-
-    if($productName == $rowPop_dishes[2]){
-        $query = "UPDATE `popular_dishes` SET `rating` = '$productRating', `name` = '$productName', `price` = '$productPrice', `quantity` = '$productQty' WHERE `name` = '$productName'";
-        $result = mysqli_query($connection, $query) or die("Error establishing connection with database");
-
-        if($result){
-            echo "Changes made to"." ".$productName." "."complete!";
-        }
-        else{
-            echo "Error in completing changes to ".$productName;
-            // echo $productName." product may not exist in database";
-        }
-    }
-    else{
-        $query = "INSERT INTO `popular_dishes`(`rating`, `name`, `price`, `quantity`) VALUES('$productRating', '$productName', '$productPrice', '$productQty')";
-        $result = mysqli_query($connection, $query) or die('Error');
-        
-        echo '<br>';
-        echo "Product ".$productName." added to database";
     }
     
 

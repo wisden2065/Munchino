@@ -35,7 +35,7 @@ include('connect.php');
         if($row = mysqli_num_rows($result) > 0){
             $user = mysqli_fetch_array($result);
             $name = $user['firstName'];
-            $picture = $user['picture'];
+            $profilePicture = $user['picture'];
             
             // $pictureName = $picture['firstName']; //cannot access offset of type string?
             // $picturePath = $_SERVER['DOCUMENT_ROOT'].'/e-commerce/pic/'.$picture;
@@ -63,26 +63,9 @@ include('connect.php');
             <i class="fas fa-search" id="search-icon"></i>
             <span>0</span>
             <a href="cart.php" target="_blank" class="fas fa-shopping-cart" id="cart-icon"></a>
-            <a href="signin.php" class=""><div class="profile"><img src="<?php echo "pic/$picture"; ?>" alt=""></div></a>
+            <a href="signin.php" class=""><div class="profile"><img src="<?php echo "pic/$profilePicture"; ?>" alt=""></div></a>
             <a href="logout.php" class="fa-solid fa-right-from-bracket"></a>
         </div>
-
-        <!-- Bootstrap made dropdown -->
-        <!-- <div class="dropdown">
-            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Dropdown link
-            </a>
-
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-        </div> -->
-
-
-
-
 
     </header>
 
@@ -160,7 +143,7 @@ include('connect.php');
             <div class="swiper-slide slide">
                 <div class="content">
                     <span>Our special dish</span>
-                    <h3>Tasty Buger</h3>
+                    <h3>Tasty Burger</h3>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, tempora!</p>
                     <a href="#"  class="btn food">order now</a>
                 </div>

@@ -22,7 +22,7 @@
                <div class="light-text-container"><p class="light-text">Type in your email or phone number to login or create a Munchino account</p></div>
                <input class="light-input" name="email" type="text" placeholder="Enter your email*">  <br><small id="smallTag"></small><br><br>
                <input class="light-input" type="password" name="password" placeholder="Enter your password*"> <br><br>
-               <input class="btn" type="submit" name="continue-as-user" value="Continue"> <br><br>
+               <input class="btn" type="submit" name="sign-in" value="Continue"> <br><br>
               <div class="light-text-container"><p class="light-text2">By contionuing you agree to Munchino's <span style="text-decoration: underline; cursor: pointer;">Terms and Conditions</span></p></div>
                 <br>
                <div class="light-text-container"> <hr style="width: 470px;"></div> <br>
