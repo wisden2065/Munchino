@@ -173,6 +173,7 @@ include('connect.php');
 
     <div class="box-container" id="dishes-container">
         <!-- items populated with dishes.json @ index.js -->
+        
     </div>
 </section>
 <!--Dishes section ends here-->
