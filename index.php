@@ -33,18 +33,29 @@ include('connect.php');
         $query = "SELECT * FROM users WHERE email = '$session'";
         $result = mysqli_query($connection, $query) or die("Error");
         if($row = mysqli_num_rows($result) > 0){
-            $user = mysqli_fetch_array($result);
-            $name = $user['firstName'];
-            $profilePicture = $user['picture'];
+            $userField = mysqli_fetch_array($result);
+            $name = $userField['firstName'];
+            $profilePicture = $userField['picture'];
+
             
-            // $pictureName = $picture['firstName']; //cannot access offset of type string?
-            // $picturePath = $_SERVER['DOCUMENT_ROOT'].'/e-commerce/pic/'.$picture;
         }
         else{
             // echo "Else block";
         }
-    ?>
-    
+
+        $productQuery = "SELECT * FROM products";
+        $productResult = mysqli_query($connection, $productQuery) or die('Error in completing query');
+            
+        // echo mysqli_num_rows($productResult);
+        $arr = mysqli_fetch_array($productResult);
+        // print_r($arr);
+        while($arr = mysqli_fetch_array($productResult)){
+            // print_r($arr['name']);
+            // print_r($arr['image']);
+        }
+
+?>
+   
     <!--header section starts-->
     <header>
         <a href="#" class="logo"><img src="pictures/munchino-logo-3.png" alt=""><p id="logo">Munchino</p></a>
@@ -166,15 +177,45 @@ include('connect.php');
 
 <!--Home section ends here-->
 <!--Dishes section starts here-->
-
 <section class="dishes" id="dishes">
     <h3 class="sub-heading">our dishes</h3>
     <h1 class="heading">popular dishes</h1>
-
     <div class="box-container" id="dishes-container">
-        <!-- items populated with dishes.json @ index.js -->
-        
+
+        <?php
+mysqli_data_seek($productResult, 0);
+while($array = mysqli_fetch_array($productResult)){
+    $image = $array["image"];
+    $path = "pic/";
+    $pathUrl = $path.$image;
+
+    ?>
+    
+        <!-- items formerly populated with dishes.json @ index.js -->
+        <div class="box" id="<?php echo $array['id'] ?>">
+            <img src="<?php echo $pathUrl; ?>" alt="Image no available">
+                    <div class="content">
+                        <h3><?php echo $array['name'] ?></h3>
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    <div>
+            <span><i class="fas fa-naira-sign"><?php echo $array['price'] ?></i></span> 
+            <a href="#" class="btn" id="${product.id}">Add to cart</a>
+            </div>
+        </div>
     </div>
+   
+<?php
+}
+?>
+</div>
+
+        
 </section>
 <!--Dishes section ends here-->
 

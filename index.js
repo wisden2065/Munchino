@@ -112,7 +112,7 @@ const fetchDishesFood =()=>{
         console.log('Resolved data: ',data);
         console.log(productList == data);
 
-        pushProductListToUI();   //calling the fn to add list to UI
+        // pushProductListToUI();   //calling the fn to add list to UI
     }); 
 }
 
@@ -143,23 +143,23 @@ function pushProductListToUI(){
     let element = '';
     if(productList.length > 0){
         productList.forEach(product=>{
-                                element += `<div class="box" id="${product.id}">
-                                                <img src="${product.image}" alt="">
-                                                <div class="content">
-                                                    <h3>${product.foodName}</h3>
-                                                    <div class="stars">
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star-half-alt"></i>
-                                                    </div>
-                                                    <div>
-                                                        <span><i class="fas fa-naira-sign">${product.amount}</i></span> 
-                                                        <a href="#" class="btn" id="${product.id}">Add to cart</a>
-                                                    </div>
-                                                </div>
-                                            </div>`
+                                // element += `<div class="box" id="${product.id}">
+                                //                 <img src="${product.image}" alt="">
+                                //                 <div class="content">
+                                //                     <h3>${product.foodName}</h3>
+                                //                     <div class="stars">
+                                //                         <i class="fas fa-star"></i>
+                                //                         <i class="fas fa-star"></i>
+                                //                         <i class="fas fa-star"></i>
+                                //                         <i class="fas fa-star"></i>
+                                //                         <i class="fas fa-star-half-alt"></i>
+                                //                     </div>
+                                //                     <div>
+                                //                         <span><i class="fas fa-naira-sign">${product.amount}</i></span> 
+                                //                         <a href="#" class="btn" id="${product.id}">Add to cart</a>
+                                //                     </div>
+                                //                 </div>
+                                //             </div>`
                                     console.log('about to push productContainer to the UI in Idex page');
 
                                 // productContainerInIndex.innerHTML = newArray;                      
