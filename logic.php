@@ -21,10 +21,10 @@
             $pictureName = basename($_FILES['picture']['name']);
             $photo = time().$pictureName;
 
-            if($imageFileType != 'jpg' && $imageFileType != 'jpeg' && $imageFileType != 'png'){
+            if($imageFileType != 'jpg' && $imageFileType != 'jpeg' && $imageFileType != 'png' && $imageFileType != 'jfif'){
                 ?>
                     <script>
-                        alert("Please upload a photo having an extension .jpg/ .jpeg/ .png");
+                        alert("Please upload a photo having an extension .jpg/ .jpeg/ .png/ .jfif");
                     </script>
                 <?php
             }
