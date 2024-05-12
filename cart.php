@@ -3,6 +3,8 @@
     session_start();
     include('connect.php');
 
+    echo "i have clicked on a button whose id is ".$_GET['id'];
+
 ?>
 
 <!DOCTYPE html>
@@ -11,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>add to cart</title>
-    <!--font awsome cdn-------------------------------------->
+    <!--font awesome cdn-------------------------------------->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="cart.css">
     <link rel="import" href="index.html">
@@ -21,13 +23,34 @@
 <?php
     if(isset($_SESSION['session-id'])){
         $session = $_SESSION['session-id'];
-
+        $productId = $_GET['id'];
+// Query to access user info
         $query = "SELECT * FROM users WHERE email = '$session'";
-        $result = mysqli_query($connection, $query) or die("Error");
+        $result = mysqli_query($connection, $query) or die("Error in getting user info");
+
+// Query to get products
+        $query2 = "SELECT * FROM products WHERE id = $productId";
+        $result2 = mysqli_query($connection, $query2) or die("Error in getting products");
+
+        // first check if the user is in a session
         if($row = mysqli_num_rows($result) > 0){
             $user = mysqli_fetch_array($result);
             $name = $user['firstName'];
-            $picture = $user['picture'];
+            $profilePicture = $user['picture'];
+            
+            // check if product query is successful
+            if($result2){
+                echo "Product query successful";
+                $product = mysqli_fetch_array($result2);
+                $productPic = $product['image'];
+                $productName = $product['name'];
+                $productPrice = $product['price'];
+                $productQty = $product[''];
+                $productUrl = "pic/".$productPic;
+            }
+            else{
+                echo "Product query not successful";
+            }
         }
         else{
             echo "Else block";
@@ -51,7 +74,7 @@
             <i class="fas fa-search" id="search-icon"></i>
             <a href="cart.html" class="fas fa-shopping-cart" id="cart-icon"></a>
             <span id="cartTotal">0</span>
-            <a href="signin.php" class=""><div class="profile"><img src="<?php echo "pic/$picture"; ?>" alt=""></div></a>
+            <a href="signin.php" class=""><div class="profile"><img src="<?php echo "pic/$profilePicture"; ?>" alt=""></div></a>
             <a href="logout.php" class="fa-solid fa-right-from-bracket"></a>
             
         </div>
@@ -99,14 +122,14 @@
         <div class="cartBox" id ="cartBox">
           <!-- cartItems starts here -->
             <div class="cart-container">   
-                <div class="productImg"><img src="" alt=""></div>
+                <div class="productImg"><img src="<?php echo $productUrl?>" alt=""></div>
                     <div class="product-div">
-                        <h3>Grilled Chicken</h3>
+                        <h3><?php echo $productName ?></h3>
                     </div>
                     <div class="price-per-qty">
                         <div class="price-wrapper">
                             <p>Price/Qty</p>
-                            <span>$12.4</span>
+                            <span><i class="fas fa-naira-sign"><?php echo $productQty ?></i></span>
                         </div>
                     </div>
                     <div class="remove-item">

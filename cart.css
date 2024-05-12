@@ -239,7 +239,13 @@ header .icons #menu-list-icon{
   
 }
 .productImg{
-    background-color: green;
+    /* background-color: green; */
+    height: 100px;
+    width: 100px;
+}
+.productImg img{
+    height: 100%;
+    width: 100%;
 }
 .product-div{
     display: flex;
