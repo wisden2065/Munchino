@@ -3,7 +3,7 @@
     session_start();
     include('connect.php');
 
-    echo "i have clicked on a button whose id is ".$_GET['id'];
+    // echo "i have clicked on a button whose id is ".$_GET['id'];
 
 ?>
 
@@ -39,14 +39,18 @@
             $profilePicture = $user['picture'];
             
             // check if product query is successful
+            $cartList = array();   //create an empty list to contain cart items
             if($result2){
-                echo "Product query successful";
+                // echo "Product query successful";
                 $product = mysqli_fetch_array($result2);
                 $productPic = $product['image'];
                 $productName = $product['name'];
                 $productPrice = $product['price'];
-                $productQty = $product[''];
+                $availableQty = $product['quantity'];
                 $productUrl = "pic/".$productPic;
+
+                
+            
             }
             else{
                 echo "Product query not successful";
@@ -57,71 +61,93 @@
         }
     ?>
         
-        <header>
-        <a href="#" class="logo"><img src="pictures/munchino-logo-3.png" alt=""><p id="logo">Munchino</p></a>
+
+<?php
+        if(isset($_GET['id'])){
+            $cartItem = mysqli_fetch_assoc($result2);
+            array_push($cartList, $cartItem);
+            $cartItem = $_GET['id'];
+            $productQty = 0;
+            // echo gettype($cartList);
+            $cartList = [];
+            if(is_array($cartItem)){
+                $productQty = 1;
+            }
+            else{
+                // echo "The product is not in the cart";
+                array_push($cartList, $cartItem);
+                $productQty = 1;
+            }
+        }
+?>
+<header>
+    <a href="#" class="logo"><img src="pictures/munchino-logo-3.png" alt=""><p id="logo">Munchino</p></a>
         
-        <nav class="navbar">
+    <nav class="navbar">
                 <a class="bar" id="active" href="index.php">home</a> 
                 <a class="bar" href="index.html#dishes">dishes</a> 
                 <a class="bar" href="index.html#about">about</a> 
                 <a class="bar" href="index.html#menu">menu</a> 
                 <a class="bar" href="index.html#review">review</a> 
                 <a class="bar" href="#">order</a> 
-        </nav>
+    </nav>
     
-        <div class="icons">
+<div class="icons">
             <i class="fa-solid fa-list" id="menu-list-icon"></i>
             <i class="fas fa-search" id="search-icon"></i>
             <a href="cart.html" class="fas fa-shopping-cart" id="cart-icon"></a>
-            <span id="cartTotal">0</span>
+            <span id="cartTotal"><?php echo $productQty ?></span>
             <a href="signin.php" class=""><div class="profile"><img src="<?php echo "pic/$profilePicture"; ?>" alt=""></div></a>
             <a href="logout.php" class="fa-solid fa-right-from-bracket"></a>
             
-        </div>
-
+</div>
         <form action="" id="search-form">
           <input type="search" placeholder="search here..." name="input" id="search-box">
           <!-- <i class="fa-solid fa-magnifying-glass"></i> -->
           <label for="search-box"  class="fas fa-search" id="icon-searchProduct"></label>
           <i class="fas fa-times" id="close"></i>
       </form>
-    </header>
+</header>
 
     <!--header section ends-->
- 
-
+        
     <!--Ad-to-cart section starts-->
 
     <section id="cart-section">
       
-        <div class="cart-advert">
-            <div class="signIn">
-                <div id="cartTotal"> <h1></h1></div>
-                <div class="user-signin"> <i class="fas fa-star"></i><span style="text-decoration: underline; cursor: pointer;" > <a href="signin.php">sign-in</a></span> to easily redeem Rewards and for faster checkout</div>
-            </div>
-            <div class="earnBack">
-                <img  class="atm-image" src="images/card.png" alt="" style="height: 50px;">
-                <div class="earn-text" style="width: 62%; font-size: smaller;">
-                    <h3>Earn <span style="color: red;">$13.00</span> back</h3>
-                    <p>in reward dollars on this purchase and 10% back in reward dollars on purchases at <b>Pay Pass credit card.</b> <span style="text-decoration: underline;">Learn more</span> or <span style="text-decoration: underline;">Apply now</span> <span style="text-decoration: underline;">See if you qualify</span></p>
-                </div>
-            </div>
-            <div class="free"><p style="color: red;">All items in your cart marked Ships Free will ship FREE</p></div>
-        </div>
-        <div class="cart-head">
-            <div>
-                <p style = "color: #fff">Hello, <?php echo $name;?></p>
-            </div>
-            <H1 style="color: #fff;">Your Shopping Basket </H1> <a href=""><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-              <path fill-rule="evenodd" d="M14 7h-4v3a1 1 0 1 1-2 0V7H6a1 1 0 0 0-1 1L4 19.7A2 2 0 0 0 6 22h12c1 0 2-1 2-2.2L19 8c0-.5-.5-.9-1-.9h-2v3a1 1 0 1 1-2 0V7Zm-2-3a2 2 0 0 0-2 2v1H8V6a4 4 0 1 1 8 0v1h-2V6a2 2 0 0 0-2-2Z" clip-rule="evenodd"/>
-            </svg>
-            </a>
-        </div>  
+      <div class="cart-advert">
+          <div class="signIn">
+              <div id="cartTotal"> <h1></h1></div>
+              <div class="user-signin"> <i class="fas fa-star"></i><span style="text-decoration: underline; cursor: pointer;" > <a href="signin.php">sign-in</a></span> to easily redeem Rewards and for faster checkout</div>
+          </div>
+          <div class="earnBack">
+              <img  class="atm-image" src="images/card.png" alt="" style="height: 50px;">
+              <div class="earn-text" style="width: 62%; font-size: smaller;">
+                  <h3>Earn <span style="color: red;">$13.00</span> back</h3>
+                  <p>in reward dollars on this purchase and 10% back in reward dollars on purchases at <b>Pay Pass credit card.</b> <span style="text-decoration: underline;">Learn more</span> or <span style="text-decoration: underline;">Apply now</span> <span style="text-decoration: underline;">See if you qualify</span></p>
+              </div>
+          </div>
+          <div class="free"><p style="color: red;">All items in your cart marked Ships Free will ship FREE</p></div>
+      </div>
+      <div class="cart-head">
+          <div>
+              <p style = "color: #fff">Hello, <?php echo $name;?></p>
+          </div>
+          <H1 style="color: #fff;">Your Shopping Basket </H1> <a href=""><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" d="M14 7h-4v3a1 1 0 1 1-2 0V7H6a1 1 0 0 0-1 1L4 19.7A2 2 0 0 0 6 22h12c1 0 2-1 2-2.2L19 8c0-.5-.5-.9-1-.9h-2v3a1 1 0 1 1-2 0V7Zm-2-3a2 2 0 0 0-2 2v1H8V6a4 4 0 1 1 8 0v1h-2V6a2 2 0 0 0-2-2Z" clip-rule="evenodd"/>
+          </svg>
+          </a>
+      </div>  
 
 <!-- Container for cartItems and cart summary -->
-        <div class="cartBox" id ="cartBox">
-          <!-- cartItems starts here -->
-            <div class="cart-container">   
+      <div class="cartBox" id ="cartBox">
+        <!-- cartItems starts here -->
+           
+<?php
+        // display cartList to UI
+        if(count($cartList) > 0){
+            ?>
+            <div class="cart-container">  
                 <div class="productImg"><img src="<?php echo $productUrl?>" alt=""></div>
                     <div class="product-div">
                         <h3><?php echo $productName ?></h3>
@@ -129,7 +155,7 @@
                     <div class="price-per-qty">
                         <div class="price-wrapper">
                             <p>Price/Qty</p>
-                            <span><i class="fas fa-naira-sign"><?php echo $productQty ?></i></span>
+                            <span><i class="fas fa-naira-sign"><?php echo $productPrice ?></i></span>
                         </div>
                     </div>
                     <div class="remove-item">
@@ -145,7 +171,7 @@
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/></svg>  
                             </span>
-                            <span id="amount">2</span>
+                            <span id="amount"><?php echo $productQty ?></span>
                             <span class="minus">
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
@@ -154,12 +180,20 @@
                         </div>
                     </div>
                     <div class="sum">
-                          <div class="sum-wrapper">
-                            <span>$24</span>
-                          </div>
+                        <div class="sum-wrapper">
+                            <span><?php echo $productPrice ?></span>
+                        </div>
                     </div>
+            </div> 
+     
+            <?php
+        }         
+?> 
+                 
+            
                 
-            </div>  
+                
+           
             <!-- cartItems ends here -->
             <!-- cart summary starts here -->
             <div class="cart-summary">

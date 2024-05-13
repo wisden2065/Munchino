@@ -118,7 +118,7 @@ header .icons a{
     color: var(--black);
     border-radius: 50%;
     background: #eee;
-    z-index: 1000;
+    /* z-index: 1000; */
 }
 /* style for user img */
 header .icons{
@@ -151,7 +151,7 @@ header .icons span{
     width: 1.5rem;
     border-radius: 50%;
     position: absolute;
-    top: 7px; right: 150px;
+    top: -5px; right: 100px;
 }
 header .icons i:hover,
 header .icons a:hover{
@@ -233,8 +233,8 @@ header .icons #menu-list-icon{
 .cart-container{
     display: grid;
     grid-template-columns: 100px 1.5fr 1fr 80px 2fr .5fr;
+    /* grid-row-gap: 30px; */
     height: 100px;
-    /* padding: 20px; */
     background-color: #fff;
   
 }

@@ -203,7 +203,7 @@ include('connect.php');
                         </div>
                     <div>
             <span><i class="fas fa-naira-sign"><?php echo $array['price'] ?></i></span> 
-            <a href="cart.php?id=<?php echo $array['id']?>" class="btn" id="<?php echo $array['id']; ?>">Add to cart</a>
+            <a href="cart.php?id=<?php echo $array['id']?>" class="btn" id="<?php echo $array['id']; ?>" target ="blank">Add to cart</a>
             </div>
         </div>
     </div>
