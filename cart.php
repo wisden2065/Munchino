@@ -16,6 +16,7 @@
     <!--font awesome cdn-------------------------------------->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="cart.css">
+    <link rel="shortcut icon" href="pictures/munchino-logo-3.png" type="image/x-icon">
     <link rel="import" href="index.html">
 </head>
 <body>
@@ -23,63 +24,101 @@
 <?php
     if(isset($_SESSION['session-id'])){
         $session = $_SESSION['session-id'];
-        $productId = $_GET['id'];
+        $productId = $_GET['add_to_cart'];
 // Query to access user info
         $query = "SELECT * FROM users WHERE email = '$session'";
         $result = mysqli_query($connection, $query) or die("Error in getting user info");
 
-// Query to get products
-        $query2 = "SELECT * FROM products WHERE id = $productId";
-        $result2 = mysqli_query($connection, $query2) or die("Error in getting products");
+
 
         // first check if the user is in a session
         if($row = mysqli_num_rows($result) > 0){
             $user = mysqli_fetch_array($result);
             $name = $user['firstName'];
             $profilePicture = $user['picture'];
-            
-            // check if product query is successful
-            $cartList = array();   //create an empty list to contain cart items
-            if($result2){
-                // echo "Product query successful";
-                $product = mysqli_fetch_array($result2);
-                $productPic = $product['image'];
-                $productName = $product['name'];
-                $productPrice = $product['price'];
-                $availableQty = $product['quantity'];
-                $productUrl = "pic/".$productPic;
 
                 
-            
-            }
-            else{
-                echo "Product query not successful";
-            }
+            // check if product query is successful
+               
+                if(isset($_GET['add_to_cart'])){
+                      // Query to get products when user is in a session
+                    $query2 = "SELECT * FROM products WHERE id = $productId";
+                    $result2 = mysqli_query($connection, $query2) or die("Error in getting products");
+                    if($result2){
+                        $product = mysqli_fetch_array($result2);
+                        $productId = $product['id'];
+                        // echo $productId;
+                        $productName = $product['name'];
+                        $productPrice = $product['price'];
+                        $productPic = $product['image'];
+                        $productUrl = "pic/".$productPic;
+                        $availableQty = $product['quantity'];
+
+                        // create an empty cartList in session if not exist
+                        if(!isset($_SESSION['cartList'])){
+                            $_SESSION['cartList'] = [];
+                        }
+                        // function to push product to cartList
+                        function addItemToCartList($productName, $productPrice, $productUrl, $productId){
+                            echo "The id of the clicked item is ".$productId;
+                        
+                            // Increase the quantity of cartItem
+                            if(!isset($_SESSION['cartList']['product'])){
+                                echo "This cart is empty";
+                                $_SESSION['cartList']['product'] = [
+                                    "id" => $productId,
+                                    "name" => $productName,
+                                    "price" => $productPrice,
+                                    "image" => $productUrl,
+                                    "qty" => 1
+
+                                ];
+                                
+                            }
+                            else{
+                                echo "The cart is not empty";
+                                if(array_search($_SESSION['cartList']['product']['id'], $_SESSION['cartList']) >= 0){
+                                    echo "Element is in array";
+                                    $_SESSION['cartList']['product']['qty'] += 1;
+                                }
+                                else{
+                                    echo "Element is not in array";
+                                    array_push(
+                                        $_SESSION['cartList']['product'] = [
+                                            "id" => $productId,
+                                            "name" => $productName,
+                                            "price" => $productPrice,
+                                            "image" => $productUrl,
+                                            "qty" => 1
+        
+                                        ], 
+                                        $_SESSION['cartList']);
+                                    
+
+                                }
+                               
+                                // array_push($_SESSION['cartList']['product'], $_SESSION['cartList']);
+                                
+                                    
+                            }
+        
+                        }
+                        addItemToCartList($productName, $productPrice, $productUrl, $productId);
+                        print_r($_SESSION['cartList']['product']);
+                        print_r($_SESSION['cartList']['product']['qty']);
+                    }
+
+                         
+                }
+                else{
+                    echo "Product query not successful";
+                }
         }
         else{
-            echo "Else block";
+            echo "Mysqli_num_rows() < 0";
         }
     ?>
         
-
-<?php
-        if(isset($_GET['id'])){
-            $cartItem = mysqli_fetch_assoc($result2);
-            array_push($cartList, $cartItem);
-            $cartItem = $_GET['id'];
-            $productQty = 0;
-            // echo gettype($cartList);
-            $cartList = [];
-            if(is_array($cartItem)){
-                $productQty = 1;
-            }
-            else{
-                // echo "The product is not in the cart";
-                array_push($cartList, $cartItem);
-                $productQty = 1;
-            }
-        }
-?>
 <header>
     <a href="#" class="logo"><img src="pictures/munchino-logo-3.png" alt=""><p id="logo">Munchino</p></a>
         
@@ -96,7 +135,7 @@
             <i class="fa-solid fa-list" id="menu-list-icon"></i>
             <i class="fas fa-search" id="search-icon"></i>
             <a href="cart.html" class="fas fa-shopping-cart" id="cart-icon"></a>
-            <span id="cartTotal"><?php echo $productQty ?></span>
+            <span id="cartTotal"><?php echo $_SESSION['cartList']['product']['qty'] ?></span>
             <a href="signin.php" class=""><div class="profile"><img src="<?php echo "pic/$profilePicture"; ?>" alt=""></div></a>
             <a href="logout.php" class="fa-solid fa-right-from-bracket"></a>
             
@@ -144,9 +183,12 @@
         <!-- cartItems starts here -->
            
 <?php
+    // print_r($_SESSION['cart-container']);
         // display cartList to UI
-        if(count($cartList) > 0){
+        if(count($_SESSION['cartList']) > 0){
+            foreach($_SESSION['cartList'] as $cart){
             ?>
+            
             <div class="cart-container">  
                 <div class="productImg"><img src="<?php echo $productUrl?>" alt=""></div>
                     <div class="product-div">
@@ -171,7 +213,7 @@
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/></svg>  
                             </span>
-                            <span id="amount"><?php echo $productQty ?></span>
+                            <span id="amount"><?php echo $_SESSION['cartList']['product']['qty'] ?></span>
                             <span class="minus">
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
@@ -184,9 +226,11 @@
                             <span><?php echo $productPrice ?></span>
                         </div>
                     </div>
-            </div> 
+                </div>
+          
      
             <?php
+            }
         }         
 ?> 
                  
@@ -196,87 +240,90 @@
            
             <!-- cartItems ends here -->
             <!-- cart summary starts here -->
-            <div class="cart-summary">
-              <div class="summary-head">
-                  <h3><i class="fa-solid fa-lock"></i> Cart Summary</h3>
-                  <div class="summary-body">
-                      <p>Merchandise:</p>
-                      <span>$125.00</span>
-                      <p>Est. Shipping & Handling: <i class="fa-solid fa-circle-info"></i> </p>
-                      <span>$17.89</span>
-                      <p style="color: red;"">Shipping Discount:</p>
-                      <span style="color: red;">-$23.98</span>
-                      <p>Est. Tax: <i class="fa-solid fa-circle-info"></i></p>
-                      <span>$10.07</span>
-                      <p style="text-decoration: underline; cursor: pointer;;">Estimated for 60540 <i class="fa-solid fa-angle-down"></i></p>
-                  </div> <br>
-                  <hr>
-                  <div class="summary-body">
-                      <h3>Est. Order Total:</h3> 
-                      <span><h3>$304.08</h3></span>
-                  </div>
-                  <br>
-                  <hr>
-                  <h4>Apply a Promo Code</h4>
-                  <p>Remove any spaces or dishes before hitting apply</p>
-                  <input type="text" style="outline: solid 1.5px;"> <button style="border: solid 1px grey; padding: 4px 10px;">APPLY</button>
-                  <br><br><br><hr>
-                      <button href="logout.php" class="btn" style="display: block;">CHECKOUT NOW</button> <br>
-                      <p>By continuing to Checkout, you are agreeing to our <span style="text-decoration: underline;">Terms of Use</span> and <span style="text-decoration: underline;">Privacy Policy</span></p>
-                      <br><br>
-                      <hr>
-                      <br><br>
-                  <div class="payPal">
-                        <p>Or use other checkout methods:</p>
-                      <div class="payPal-btn">
-                        <button class="btn2"><img src="images/payPal.png" alt="" width="50px" height="30px"></button>
-                        <button class="btn2"><img src="images/zelle.png" alt="" width="50px"></button>
-                        <button class="btn2"><img src="images/shopify.png" alt="" width="50px" height="30px"></button>
-                      </div>
-                  </div>
-              </div>
+            <div class="cart-summary-wrapper">
+                <div class="cart-summary">
+                    <div class="summary-head">
+                        <h3><i class="fa-solid fa-lock"></i> Cart Summary</h3>
+                        <div class="summary-body">
+                            <p>Merchandise:</p>
+                            <span>$125.00</span>
+                            <p>Est. Shipping & Handling: <i class="fa-solid fa-circle-info"></i> </p>
+                            <span>$17.89</span>
+                            <p style="color: red;"">Shipping Discount:</p>
+                            <span style="color: red;">-$23.98</span>
+                            <p>Est. Tax: <i class="fa-solid fa-circle-info"></i></p>
+                            <span>$10.07</span>
+                            <p style="text-decoration: underline; cursor: pointer;;">Estimated for 60540 <i class="fa-solid fa-angle-down"></i></p>
+                        </div> <br>
+                        <hr>
+                        <div class="summary-body">
+                            <h3>Est. Order Total:</h3> 
+                            <span><h3>$304.08</h3></span>
+                        </div>
+                        <br>
+                        <hr>
+                        <h4>Apply a Promo Code</h4>
+                        <p>Remove any spaces or dishes before hitting apply</p>
+                        <input type="text" style="outline: solid 1.5px;"> <button style="border: solid 1px grey; padding: 4px 10px;">APPLY</button>
+                        <br><br><br><hr>
+                            <button href="logout.php" class="btn" style="display: block;">CHECKOUT NOW</button> <br>
+                            <p>By continuing to Checkout, you are agreeing to our <span style="text-decoration: underline;">Terms of Use</span> and <span style="text-decoration: underline;">Privacy Policy</span></p>
+                            <br><br>
+                            <hr>
+                            <br><br>
+                        <div class="payPal">
+                                <p>Or use other checkout methods:</p>
+                            <div class="payPal-btn">
+                                <button class="btn2"><img src="images/payPal.png" alt="" width="50px" height="30px"></button>
+                                <button class="btn2"><img src="images/zelle.png" alt="" width="50px"></button>
+                                <button class="btn2"><img src="images/shopify.png" alt="" width="50px" height="30px"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+ 
+                
+                <!-- car summary ends here -->
             </div>
-            <!-- car summary ends here -->
-        </div>
-          <!-- paper cutting div starts here -->
-          <div class="to-cut">
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div>
-              <div class="cut"></div> 
-              
-          </div>
+            <!-- paper cutting div starts here -->
+            <div class="to-cut">
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div>
+                <div class="cut"></div> 
+            </div>
+          
           <!-- paper cutting div ends here -->
     </section>
     <hr>

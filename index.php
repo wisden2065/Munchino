@@ -44,7 +44,7 @@ include('connect.php');
             // echo "Else block";
         }
 
-        $productQuery = "SELECT * FROM products";
+        $productQuery = "SELECT * FROM products order by rand() limit 0,8";
         $productResult = mysqli_query($connection, $productQuery) or die('Error in completing query');
             
         // echo mysqli_num_rows($productResult);
@@ -203,7 +203,7 @@ include('connect.php');
                         </div>
                     <div>
             <span><i class="fas fa-naira-sign"><?php echo $array['price'] ?></i></span> 
-            <a href="cart.php?id=<?php echo $array['id']?>" class="btn" id="<?php echo $array['id']; ?>" target ="blank">Add to cart</a>
+            <a href="cart.php?add_to_cart=<?php echo $array['id'] ?>" class="btn" id="<?php echo $array['id']; ?>" target ="blank">Add to cart</a>
             </div>
         </div>
     </div>
