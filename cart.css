@@ -228,7 +228,7 @@ header .icons #menu-list-icon{
     margin: 0 5%;
     padding: 20px 0;
 }
-.cart-ul{
+.class-container-wrapper{
     /* list-style-type: none; */
     /* padding: 10px; */
 }
@@ -237,8 +237,7 @@ header .icons #menu-list-icon{
     display: grid;
     grid-template-columns: 100px 1.5fr 1fr 80px 2fr .5fr;
     grid-area: cart-items;
-    /* grid-row-gap: 30px; */
-    height: 100px;
+    gap: 30px;
     background-color: #fff;
   
 }
@@ -371,7 +370,6 @@ header .icons #menu-list-icon{
     background-color: #fff;
     height: auto;
     padding: 10px 10px 40px 10px;
-    position: ;
     grid-area: cart-summary;
 }
 .cart-summary .payPal{

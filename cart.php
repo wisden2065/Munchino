@@ -25,99 +25,100 @@
     if(isset($_SESSION['session-id'])){
         $session = $_SESSION['session-id'];
         $productId = $_GET['add_to_cart'];
-// Query to access user info
+
+
+    // Query to get user info from database with his session id
         $query = "SELECT * FROM users WHERE email = '$session'";
         $result = mysqli_query($connection, $query) or die("Error in getting user info");
 
-
-
-        // first check if the user is in a session
         if($row = mysqli_num_rows($result) > 0){
             $user = mysqli_fetch_array($result);
             $name = $user['firstName'];
             $profilePicture = $user['picture'];
 
-                
-            // check if product query is successful
-               
+                // create the cartList array
+                if(!isset($_SESSION['cartList'])){
+                    $_SESSION['cartList'] = [];
+                }
+            // check product clicked by the current user in session
                 if(isset($_GET['add_to_cart'])){
-                      // Query to get products when user is in a session
+                      
                     $query2 = "SELECT * FROM products WHERE id = $productId";
                     $result2 = mysqli_query($connection, $query2) or die("Error in getting products");
                     if($result2){
                         $product = mysqli_fetch_array($result2);
                         $productId = $product['id'];
-                        // echo $productId;
                         $productName = $product['name'];
                         $productPrice = $product['price'];
                         $productPic = $product['image'];
                         $productUrl = "pic/".$productPic;
                         $availableQty = $product['quantity'];
 
-                        // create an empty cartList in session if not exist
-                        if(!isset($_SESSION['cartList'])){
-                            $_SESSION['cartList'] = [];
-                        }
+                       
                         // function to push product to cartList
                         function addItemToCartList($productName, $productPrice, $productUrl, $productId){
-                            echo "The id of the clicked item is ".$productId;
-                        
-                            // Increase the quantity of cartItem
-                            if(!isset($_SESSION['cartList']['product'])){
-                                echo "This cart is empty";
-                                $_SESSION['cartList']['product'] = [
-                                    "id" => $productId,
-                                    "name" => $productName,
-                                    "price" => $productPrice,
-                                    "image" => $productUrl,
-                                    "qty" => 1
-
-                                ];
-                                
+                            // echo "The id of the clicked item is ".$productId;
+                            // Add a product if cartList is empty
+                            if(empty($_SESSION['cartList'])){
+                                // echo "This cart is empty";
+                                $_SESSION['cartList'] = array(
+                                    array(
+                                                "id" => $productId,
+                                                "name" => $productName,
+                                                "price" => $productPrice,
+                                                "image" => $productUrl,
+                                                "qty" => 1
+                                    )    
+                                   );
                             }
                             else{
-                                echo "The cart is not empty";
-                                if(array_search($_SESSION['cartList']['product']['id'], $_SESSION['cartList']) >= 0){
-                                    echo "Element is in array";
-                                    $_SESSION['cartList']['product']['qty'] += 1;
+                                // echo "The cart is not empty";
+                                // That means the clicked product is either in the cartList or not
+
+                                // make a query to get the index of the clicked item, if it is false, then it is not in the cart
+                                foreach($_SESSION['cartList'] as $key => $product){
+                                    if(is_array($product)){
+                                        $index = $key;
+                                        // print_r($index);
+                                    }
+                                }
+                                if($_SESSION['cartList'][$index]['id'] == $productId){
+                                    $_SESSION['cartList'][$index]['qty'] += 1;
                                 }
                                 else{
-                                    echo "Element is not in array";
-                                    array_push(
-                                        $_SESSION['cartList']['product'] = [
+                                    echo "add...";
+                                        $newProduct = array(
                                             "id" => $productId,
                                             "name" => $productName,
                                             "price" => $productPrice,
                                             "image" => $productUrl,
                                             "qty" => 1
-        
-                                        ], 
-                                        $_SESSION['cartList']);
+                                        );
+                                        array_push($_SESSION['cartList'], $newProduct);
+    
                                     
-
                                 }
-                               
-                                // array_push($_SESSION['cartList']['product'], $_SESSION['cartList']);
                                 
-                                    
+                                // print_r($_SESSION['cartList']);
                             }
-        
-                        }
-                        addItemToCartList($productName, $productPrice, $productUrl, $productId);
-                        print_r($_SESSION['cartList']['product']);
-                        print_r($_SESSION['cartList']['product']['qty']);
-                    }
+                                
+                                
+                }
+                // addItemToCartList function ends here
 
-                         
-                }
-                else{
-                    echo "Product query not successful";
-                }
+                addItemToCartList($productName, $productPrice, $productUrl, $productId);
+            }
+
+                    
         }
         else{
-            echo "Mysqli_num_rows() < 0";
+            // echo "Product query not successful";
         }
-    ?>
+    }
+    else{
+        echo "Mysqli_num_rows() < 0";
+    }
+?>
         
 <header>
     <a href="#" class="logo"><img src="pictures/munchino-logo-3.png" alt=""><p id="logo">Munchino</p></a>
@@ -135,7 +136,13 @@
             <i class="fa-solid fa-list" id="menu-list-icon"></i>
             <i class="fas fa-search" id="search-icon"></i>
             <a href="cart.html" class="fas fa-shopping-cart" id="cart-icon"></a>
-            <span id="cartTotal"><?php echo $_SESSION['cartList']['product']['qty'] ?></span>
+            <span id="cartTotal"><?php 
+                if(count($_SESSION['cartList']) > 0){
+                    echo count($_SESSION['cartList']);
+                }else{
+                    echo 0;
+                }
+            ?></span>
             <a href="signin.php" class=""><div class="profile"><img src="<?php echo "pic/$profilePicture"; ?>" alt=""></div></a>
             <a href="logout.php" class="fa-solid fa-right-from-bracket"></a>
             
@@ -180,59 +187,60 @@
 
 <!-- Container for cartItems and cart summary -->
       <div class="cartBox" id ="cartBox">
+            <div class="class-container-wrapper">
         <!-- cartItems starts here -->
            
 <?php
-    // print_r($_SESSION['cart-container']);
         // display cartList to UI
-        if(count($_SESSION['cartList']) > 0){
-            foreach($_SESSION['cartList'] as $cart){
+        
+    foreach($_SESSION['cartList'] as $key => $cart){
+        global $index;
+    
             ?>
-            
-            <div class="cart-container">  
-                <div class="productImg"><img src="<?php echo $productUrl?>" alt=""></div>
-                    <div class="product-div">
-                        <h3><?php echo $productName ?></h3>
-                    </div>
-                    <div class="price-per-qty">
-                        <div class="price-wrapper">
-                            <p>Price/Qty</p>
-                            <span><i class="fas fa-naira-sign"><?php echo $productPrice ?></i></span>
+                    <div class="cart-container">  
+                        <div class="productImg"><img src="<?php echo $cart['image']?>" alt=""></div>
+                            <div class="product-div">
+                                <h3><?php echo $cart['name'] ?></h3>
+                            </div>
+                            <div class="price-per-qty">
+                                <div class="price-wrapper">
+                                    <p>Price/Qty</p>
+                                    <span><i class="fas fa-naira-sign"><?php echo $cart['price'] ?></i></span>
+                                </div>
+                            </div>
+                            <div class="remove-item">
+                                <div class="del-wrapper">
+                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="shop-cart">
+                                <div class="cart-wrapper">
+                                    <span class="add" >
+                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/></svg>  
+                                    </span>
+                                    <span id="amount"><?php echo $cart['qty'] ?></span>
+                                    <span class="minus">
+                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="sum">
+                                <div class="sum-wrapper">
+                                    <span><?php echo $productPrice ?></span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="remove-item">
-                        <div class="del-wrapper">
-                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="shop-cart">
-                        <div class="cart-wrapper">
-                            <span class="add" >
-                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/></svg>  
-                            </span>
-                            <span id="amount"><?php echo $_SESSION['cartList']['product']['qty'] ?></span>
-                            <span class="minus">
-                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
-                                </svg>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="sum">
-                        <div class="sum-wrapper">
-                            <span><?php echo $productPrice ?></span>
-                        </div>
-                    </div>
-                </div>
-          
+           
      
             <?php
+            echo "<br>";
             }
-        }         
-?> 
+?>          </div>
                  
             
                 
