@@ -22,6 +22,7 @@ include('connect.php');
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <!--custom css file link--> 
     <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" href="pictures/munchino-logo-3.png" type="image/x-icon">
 </head>
 
 <body>
@@ -43,16 +44,13 @@ include('connect.php');
             // echo "Else block";
         }
 
-        $productQuery = "SELECT * FROM products";
+        $productQuery = "SELECT * FROM products";   //order by rand() limit 0,8 to fetch products at random
         $productResult = mysqli_query($connection, $productQuery) or die('Error in completing query');
             
         // echo mysqli_num_rows($productResult);
         $arr = mysqli_fetch_array($productResult);
         // print_r($arr);
-        while($arr = mysqli_fetch_array($productResult)){
-            // print_r($arr['name']);
-            // print_r($arr['image']);
-        }
+
 
 ?>
    
@@ -73,8 +71,8 @@ include('connect.php');
             <i class="fa-solid fa-list" id="menu-list-icon"></i>
             <i class="fas fa-search" id="search-icon"></i>
             <span>0</span>
-            <a href="cart.php" target="_blank" class="fas fa-shopping-cart" id="cart-icon"></a>
-            <a href="signin.php" class=""><div class="profile"><img src="<?php echo "pic/$profilePicture"; ?>" alt=""></div></a>
+            <a href="cart.php" target="blank" class="fas fa-shopping-cart" id="cart-icon"></a>
+            <a href="signin.php" class=""><div class="profile dropdown"><img src="<?php echo "pic/$profilePicture"; ?>" alt=""></div></a>
             <a href="logout.php" class="fa-solid fa-right-from-bracket"></a>
         </div>
 
@@ -115,7 +113,7 @@ include('connect.php');
                 </div>
             </div>
 
-            <!-- <div class="swiper-slide slide">
+            <div class="swiper-slide slide">
                 <div class="content">
                     <span>Our special dish</span>
                     <h3>Grilled Turkey</h3>
@@ -161,7 +159,7 @@ include('connect.php');
                 <div class="image">
                     <img src="pictures/home-img-5.png" alt="">
                 </div>
-            </div> -->
+            </div>
             
         </div>
         <!-- swiper pagination -->
@@ -182,18 +180,18 @@ include('connect.php');
     <h1 class="heading">popular dishes</h1>
     <div class="box-container" id="dishes-container">
 
-        <?php
-mysqli_data_seek($productResult, 0);
-while($array = mysqli_fetch_array($productResult)){
-    $image = $array["image"];
-    $path = "pic/";
-    $pathUrl = $path.$image;
+<?php
+        mysqli_data_seek($productResult, 0);
+        while($array = mysqli_fetch_array($productResult)){
+            $image = $array["image"];
+            $path = "pic/";
+            $pathUrl = $path.$image;
 
-    ?>
+?>
     
         <!-- items formerly populated with dishes.json @ index.js -->
         <div class="box" id="<?php echo $array['id'] ?>">
-            <img src="<?php echo $pathUrl; ?>" alt="Image no available">
+            <img src="<?php echo $pathUrl; ?>" alt="Image not available">
                     <div class="content">
                         <h3><?php echo $array['name'] ?></h3>
                         <div class="stars">
@@ -205,7 +203,7 @@ while($array = mysqli_fetch_array($productResult)){
                         </div>
                     <div>
             <span><i class="fas fa-naira-sign"><?php echo $array['price'] ?></i></span> 
-            <a href="#" class="btn" id="${product.id}">Add to cart</a>
+            <a href="cart.php?add_to_cart=<?php echo $array['id'] ?>" class="btn" id="<?php echo $array['id']; ?>" target ="blank">Add to cart</a>
             </div>
         </div>
     </div>

@@ -155,6 +155,7 @@ header .icons a{
     color: var(--black);
     border-radius: 50%;
     background: #eee;
+    
 }
 /* style for user image */
 .profile{

@@ -118,7 +118,7 @@ header .icons a{
     color: var(--black);
     border-radius: 50%;
     background: #eee;
-    z-index: 1000;
+    /* z-index: 1000; */
 }
 /* style for user img */
 header .icons{
@@ -151,7 +151,7 @@ header .icons span{
     width: 1.5rem;
     border-radius: 50%;
     position: absolute;
-    top: 7px; right: 150px;
+    top: -5px; right: 100px;
 }
 header .icons i:hover,
 header .icons a:hover{
@@ -221,11 +221,14 @@ header .icons #menu-list-icon{
 .cartBox{    
     display: grid;
     grid-template-columns: 3fr 1.2fr;
+    /* grid-template-rows: repeat(100px); */
+    grid-template-areas: 
+        "cart-items" "cart-summary";
     grid-gap: 50px;
     margin: 0 5%;
     padding: 20px 0;
 }
-.cart-ul{
+.class-container-wrapper{
     /* list-style-type: none; */
     /* padding: 10px; */
 }
@@ -233,13 +236,19 @@ header .icons #menu-list-icon{
 .cart-container{
     display: grid;
     grid-template-columns: 100px 1.5fr 1fr 80px 2fr .5fr;
-    height: 100px;
-    /* padding: 20px; */
+    grid-area: cart-items;
+    gap: 30px;
     background-color: #fff;
   
 }
 .productImg{
-    background-color: green;
+    /* background-color: green; */
+    height: 100px;
+    width: 100px;
+}
+.productImg img{
+    height: 100%;
+    width: 100%;
 }
 .product-div{
     display: flex;
@@ -261,11 +270,6 @@ header .icons #menu-list-icon{
     align-content: center;
     justify-content: center;
 }
-/* .cart-wrapper{
-    display:flex;
-    align-content: center;
-    justify-content: center;
-} */
 .product-desc h3{
     font-weight: 800;
 }
@@ -310,7 +314,7 @@ header .icons #menu-list-icon{
 .shop-cart .add{
     border-radius: 10px 0 0px 10px;
 }
-.shop-cart #amount{
+.shop-cart #count{
     width: 20px;
     height: 20px;
     display: inline-block;
@@ -359,10 +363,14 @@ header .icons #menu-list-icon{
     align-content: center;
 }
     /* cart summary */
+.cart-summary-wrapper{
+    /* position: relative; */
+}
 .cart-summary{
     background-color: #fff;
     height: auto;
     padding: 10px 10px 40px 10px;
+    grid-area: cart-summary;
 }
 .cart-summary .payPal{
     display: grid;
@@ -413,11 +421,13 @@ header .icons #menu-list-icon{
 .to-cut{
     position: absolute;
     display: flex;
-    right: 80px; bottom: 10px;
+    right: 0px; bottom: -5px;
+    /* inset: 100px; */
 }
 .cut{
     height: 15px; width: 15px; border-radius: 50%;
     background-color: #eee;
+    
 }
 /* cart styling ends here */
 
