@@ -314,7 +314,7 @@ header .icons #menu-list-icon{
 .shop-cart .add{
     border-radius: 10px 0 0px 10px;
 }
-.shop-cart #amount{
+.shop-cart #count{
     width: 20px;
     height: 20px;
     display: inline-block;

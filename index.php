@@ -44,7 +44,7 @@ include('connect.php');
             // echo "Else block";
         }
 
-        $productQuery = "SELECT * FROM products order by rand() limit 0,8";
+        $productQuery = "SELECT * FROM products";   //order by rand() limit 0,8 to fetch products at random
         $productResult = mysqli_query($connection, $productQuery) or die('Error in completing query');
             
         // echo mysqli_num_rows($productResult);
@@ -191,7 +191,7 @@ include('connect.php');
     
         <!-- items formerly populated with dishes.json @ index.js -->
         <div class="box" id="<?php echo $array['id'] ?>">
-            <img src="<?php echo $pathUrl; ?>" alt="Image no available">
+            <img src="<?php echo $pathUrl; ?>" alt="Image not available">
                     <div class="content">
                         <h3><?php echo $array['name'] ?></h3>
                         <div class="stars">

@@ -24,7 +24,7 @@
 <?php
     if(isset($_SESSION['session-id'])){
         $session = $_SESSION['session-id'];
-        $productId = $_GET['add_to_cart'];
+        
 
 
     // Query to get user info from database with his session id
@@ -40,10 +40,16 @@
                 if(!isset($_SESSION['cartList'])){
                     $_SESSION['cartList'] = [];
                 }
+
+                foreach($_SESSION['cartList'] as $key => $eachProduct){
+                    $index = $key;
+                }
             // check product clicked by the current user in session
                 if(isset($_GET['add_to_cart'])){
-                      
-                    $query2 = "SELECT * FROM products WHERE id = $productId";
+                    
+                    $clickedProductId = $_GET['add_to_cart'];
+                    // echo $_GET['add_to_cart'];
+                    $query2 = "SELECT * FROM products WHERE id = $clickedProductId";
                     $result2 = mysqli_query($connection, $query2) or die("Error in getting products");
                     if($result2){
                         $product = mysqli_fetch_array($result2);
@@ -57,36 +63,47 @@
                        
                         // function to push product to cartList
                         function addItemToCartList($productName, $productPrice, $productUrl, $productId){
-                            // echo "The id of the clicked item is ".$productId;
-                            // Add a product if cartList is empty
+                            global $index;
                             if(empty($_SESSION['cartList'])){
-                                // echo "This cart is empty";
-                                $_SESSION['cartList'] = array(
-                                    array(
-                                                "id" => $productId,
-                                                "name" => $productName,
-                                                "price" => $productPrice,
-                                                "image" => $productUrl,
-                                                "qty" => 1
-                                    )    
-                                   );
+                                echo "This cart is empty";
+                                echo "The product id is".$productId;
+                                // $_SESSION['cartList'] = array();
+
+                                $product =  array(
+                                    "id" => $productId,
+                                    "name" => $productName,
+                                    "price" => $productPrice,
+                                    "image" => $productUrl,
+                                    "qty" => 1
+                                );
+                                array_push($_SESSION['cartList'], $product);
+                                print_r($_SESSION['cartList']);
+
                             }
                             else{
-                                // echo "The cart is not empty";
-                                // That means the clicked product is either in the cartList or not
+                                echo "The cart is not empty";
+                                echo "The product id is".$productId;
+                                // loop through cartList to find the product where the id == productId & increment
+                                    $array_ids = array_column($_SESSION['cartList'], "id");
+                                    // print_r($array_ids);
 
-                                // make a query to get the index of the clicked item, if it is false, then it is not in the cart
-                                foreach($_SESSION['cartList'] as $key => $product){
-                                    if(is_array($product)){
-                                        $index = $key;
-                                        // print_r($index);
+                                    // check if the productId is the ID array
+                                    if(in_array($productId , $array_ids)){
+                                        foreach($_SESSION['cartList'] as $key => $eachProduct){
+                                            $index = $key;
+                                            if($eachProduct['id'] == $productId){
+                                                $_SESSION['cartList'][$index]['qty'] += 1;
+                                            }
+                                        }
+                                        echo "The product is in the cart";
+                                        // print_r($_SESSION['cartList'][$index]);
+                                        
+                                       
                                     }
-                                }
-                                if($_SESSION['cartList'][$index]['id'] == $productId){
-                                    $_SESSION['cartList'][$index]['qty'] += 1;
-                                }
-                                else{
-                                    echo "add...";
+                                    else{
+                                        echo "In the else block";
+                                        // the clicked item is not in the cart so we push it into cartList
+                                        print_r($_SESSION['cartList'][$index]);
                                         $newProduct = array(
                                             "id" => $productId,
                                             "name" => $productName,
@@ -95,11 +112,11 @@
                                             "qty" => 1
                                         );
                                         array_push($_SESSION['cartList'], $newProduct);
-    
-                                    
-                                }
-                                
-                                // print_r($_SESSION['cartList']);
+                                        print_r($_SESSION['cartList'][$index]);
+                                    }
+                                print_r($_SESSION['cartList']);
+                         
+                            
                             }
                                 
                                 
@@ -119,7 +136,12 @@
         echo "Mysqli_num_rows() < 0";
     }
 ?>
-        
+<?php
+     function increaseProduct(){
+        $_SESSION['cartList'][$index]['qty'] += 1;
+     }
+
+?>
 <header>
     <a href="#" class="logo"><img src="pictures/munchino-logo-3.png" alt=""><p id="logo">Munchino</p></a>
         
@@ -187,29 +209,28 @@
 
 <!-- Container for cartItems and cart summary -->
       <div class="cartBox" id ="cartBox">
-            <div class="class-container-wrapper">
+            <div id="cart-container-wrapper">
         <!-- cartItems starts here -->
            
 <?php
-        // display cartList to UI
-        
+  
     foreach($_SESSION['cartList'] as $key => $cart){
         global $index;
     
             ?>
-                    <div class="cart-container">  
+                    <div class="cart-container" id="<?php echo $_SESSION['cartList'][$key]['id']?>">  
                         <div class="productImg"><img src="<?php echo $cart['image']?>" alt=""></div>
                             <div class="product-div">
-                                <h3><?php echo $cart['name'] ?></h3>
+                                <h3><?php echo $_SESSION['cartList'][$key]['name'] ?></h3>
                             </div>
                             <div class="price-per-qty">
                                 <div class="price-wrapper">
                                     <p>Price/Qty</p>
-                                    <span><i class="fas fa-naira-sign"><?php echo $cart['price'] ?></i></span>
+                                    <span><i class="fas fa-naira-sign"><?php echo $_SESSION['cartList'][$key]['price'] ?></i></span>
                                 </div>
                             </div>
                             <div class="remove-item">
-                                <div class="del-wrapper">
+                                <div class="del-wrapper" id="delBtn">
                                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
                                     </svg>
@@ -217,13 +238,16 @@
                             </div>
                             <div class="shop-cart">
                                 <div class="cart-wrapper">
-                                    <span class="add" >
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <span id="subBtn" class="add" >
+                                        <svg id="sub" class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/></svg>  
                                     </span>
-                                    <span id="amount"><?php echo $cart['qty'] ?></span>
-                                    <span class="minus">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <!-- pass each button unique id from the productId when clicked -->
+                                    <span id="count" style=" font-weight: 1000; font-size:large;">
+                                        <?php echo $_SESSION['cartList'][$key]['qty'] ?>
+                                    </span>
+                                    <span id="addBtn" class="minus">
+                                        <svg id="add" class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
                                         </svg>
                                     </span>
@@ -231,7 +255,7 @@
                             </div>
                             <div class="sum">
                                 <div class="sum-wrapper">
-                                    <span><?php echo $productPrice ?></span>
+                                    <span><?php echo $_SESSION['cartList'][$key]['price'] ?></span>
                                 </div>
                             </div>
                         </div>
@@ -353,17 +377,53 @@
 
   <!------- script tag ==index.js  ---------------------->
   <script>
-     function setStorage(){
-        let cartBox = document.getElementById("cartBox");
-        localStorage.setItem('container', cartBox);
-     }
-     setStorage();
 
-    //  will this function be in the index.js script?
-     function getStorage(){
 
-     }
+    let productCount = document.getElementById("count");
+    let addBtn = document.getElementById("addBtn");
+    // use json_encode to access the cartList in the php script as a JSON in js
+    let cartList = <?php echo json_encode($_SESSION['cartList']); ?>;
+    console.log(cartList);
+    cartList.forEach((cartList, index)=>{
 
+        })
+
+
+        let cartContainer = document.getElementById("cart-container-wrapper");
+        console.log("Hello ", cartContainer);
+        // using event bubbling, target parent to capture and add an event listener to the children
+        cartContainer.addEventListener("click", (e)=>{
+           console.log(e);
+           console.log(e.target.id);
+           console.log(e.target.tagName);
+           if(e.target.tagName == 'SPAN' && e.target.id == "addBtn"|| e.target.tagName == 'svg' && e.target.id =="add"){
+                    console.log("Increase Product count");
+                    productCount.innerHTML ++;
+
+                   
+           }
+           else if(e.target.tagName == 'SPAN'  && e.target.id == "subBtn"  || e.target.tagName == 'svg'&& e.target.id == "sub" ){
+                console.log("Decrease Product count");
+                productCounter.innerHTML --;
+           }
+        })
+  
+function increaseProduct(){
+  
+  // foreach product in the cartList, add an event Listener
+//   addBtn.addEventListener("click", (e)=>{
+//                         console.log(e);
+//                         console.log("i have clicked a button");
+//                         productCount.innerHTML ++;
+
+//             })
+
+
+
+}
+increaseProduct();
+
+          
   </script>
 
 </body>
