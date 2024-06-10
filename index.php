@@ -113,7 +113,7 @@ include('connect.php');
                 </div>
             </div>
 
-            <div class="swiper-slide slide">
+            <!-- <div class="swiper-slide slide">
                 <div class="content">
                     <span>Our special dish</span>
                     <h3>Grilled Turkey</h3>
@@ -160,7 +160,7 @@ include('connect.php');
                     <img src="pictures/home-img-5.png" alt="">
                 </div>
             </div>
-            
+             -->
         </div>
         <!-- swiper pagination -->
         <div class="swiper-pagination"></div>

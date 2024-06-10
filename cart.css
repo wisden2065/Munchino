@@ -308,11 +308,11 @@ header .icons #menu-list-icon{
     background: var(--green);
     /* letter-spacing: .1rem; */
 }
-.shop-cart .minus{
+.shop-cart .add{
     border-radius: 0 10px 10px 0;
 }
-.shop-cart .add{
-    border-radius: 10px 0 0px 10px;
+.shop-cart .minus{
+    border-radius: 10px 0 0 10px;
 }
 .shop-cart #count{
     width: 20px;

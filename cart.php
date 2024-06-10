@@ -136,12 +136,7 @@
         echo "Mysqli_num_rows() < 0";
     }
 ?>
-<?php
-     function increaseProduct(){
-        $_SESSION['cartList'][$index]['qty'] += 1;
-     }
 
-?>
 <header>
     <a href="#" class="logo"><img src="pictures/munchino-logo-3.png" alt=""><p id="logo">Munchino</p></a>
         
@@ -238,7 +233,7 @@
                             </div>
                             <div class="shop-cart">
                                 <div class="cart-wrapper">
-                                    <span id="subBtn" class="add" >
+                                    <span id="subBtn" class="minus" >
                                         <svg id="sub" class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/></svg>  
                                     </span>
@@ -246,9 +241,9 @@
                                     <span id="count" style=" font-weight: 1000; font-size:large;">
                                         <?php echo $_SESSION['cartList'][$key]['qty'] ?>
                                     </span>
-                                    <span id="addBtn" class="minus">
+                                    <span id="addBtn" class="add">
                                         <svg id="add" class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                                        <path id= "add" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
                                         </svg>
                                     </span>
                                 </div>
@@ -379,52 +374,142 @@
   <script>
 
 
-    let productCount = document.getElementById("count");
+  
+    // let productCount = 
     let addBtn = document.getElementById("addBtn");
     // use json_encode to access the cartList in the php script as a JSON in js
     let cartList = <?php echo json_encode($_SESSION['cartList']); ?>;
     console.log(cartList);
-    cartList.forEach((cartList, index)=>{
-
-        })
-
-
+    let productCount = document.querySelectorAll("#count");
+    console.log(productCount);
         let cartContainer = document.getElementById("cart-container-wrapper");
         console.log("Hello ", cartContainer);
         // using event bubbling, target parent to capture and add an event listener to the children
-        cartContainer.addEventListener("click", (e)=>{
-           console.log(e);
-           console.log(e.target.id);
-           console.log(e.target.tagName);
-           if(e.target.tagName == 'SPAN' && e.target.id == "addBtn"|| e.target.tagName == 'svg' && e.target.id =="add"){
-                    console.log("Increase Product count");
-                    productCount.innerHTML ++;
+        cartContainer.addEventListener("click", (eventObj)=>{
+           console.log(eventObj);
+           console.log(eventObj.target.id);
+           console.log(eventObj.target.tagName);
+           if(eventObj.target.tagName == 'SPAN' && eventObj.target.id == "addBtn"|| eventObj.target.tagName == 'svg' || eventObj.target.tagName == 'path' && eventObj.target.id =="add"){
 
+                    console.log("Increase Product count");
+                    console.log(eventObj.target);  //span Element
+                    let clickedElement = eventObj.target;
+                    let parent;
+                    let parent_id;
+ 
+                    // using an if statement because the clicked initial target element might be the svg and not the span element
+                    if(clickedElement.tagName == 'SPAN'){
+                        parent = clickedElement.parentElement.parentElement.parentElement;
+                        console.log("The clicked Element is a span tag");
+                        console.log(parent);
+                    }
+                    else if(clickedElement.tagName == 'svg'){
+                        parent = clickedElement.parentElement.parentElement.parentElement.parentElement;
+                        console.log("The clicked Element is an svg tag");
+                        console.log(parent);
+                    }
+                    else if(clickedElement.tagName == 'path'){
+                        parent = clickedElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+                        console.log("The clicked Element is a path tag");
+                        console.log(parent);
+                    }
+                    else{
+                        console.log("undefined tag name clicked");
+                    }
+                    // log out the parent id
+                    clickedProd_id = parent.id;  //here we have gotten the id of the clicked element
+                        console.log(clickedProd_id);
+
+                    // loop through the cartList to find product whose id == clickedItem Id and increment
+                    cartList.forEach((product, pIndex)=>{
+                        // check which element was clicked in the list
+                        if(clickedProd_id == product.id){
+                            console.log(productCount);
+                            // loop through the nodeList and increment its innerHTML. The nodeList serves as the array of all our span Element which hold the value fpr the product quantity
+                            productCount.forEach((node, nIndex)=>{
+                                if(pIndex == nIndex){
+                                    node.innerHTML ++;
+                                }
+                            })
+                           
+                            
+                        }
+                    })
                    
            }
-           else if(e.target.tagName == 'SPAN'  && e.target.id == "subBtn"  || e.target.tagName == 'svg'&& e.target.id == "sub" ){
+           else if(eventObj.target.tagName == 'SPAN'  && eventObj.target.id == "subBtn"  || eventObj.target.tagName == 'svg' || eventObj.target.tagName == 'path' && eventObj.target.id == "sub" ){
                 console.log("Decrease Product count");
-                productCounter.innerHTML --;
+                // productCount.innerHTML --;
+                let clickedElement = eventObj.target;
+                    let parent;
+                    let parent_id;
+ 
+                    // using an if statement because the clicked initial target element might be the svg and not the span element
+                    if(clickedElement.tagName == 'SPAN'){
+                        parent = clickedElement.parentElement.parentElement.parentElement;
+                        console.log("The clicked Element is a span tag");
+                        console.log(parent);
+                    }
+                    else if(clickedElement.tagName == 'svg'){
+                        parent = clickedElement.parentElement.parentElement.parentElement.parentElement;
+                        console.log("The clicked Element is an svg tag");
+                        console.log(parent);
+                    }
+                    else if(clickedElement.tagName == 'path'){
+                        parent = clickedElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+                        console.log("The clicked Element is a path tag");
+                        console.log(parent);
+                    }
+                    else{
+                        console.log("undefined tag name clicked");
+                    }
+                    // log out the parent id
+                    clickedProd_id = parent.id;  //here we have gotten the id of the clicked element
+                        console.log(clickedProd_id);
+
+                    // loop through the cartList to find product whose id == clickedItem Id and increment
+                    cartList.forEach((product, pIndex)=>{
+                        // check which element was clicked in the list
+                        if(clickedProd_id == product.id){
+                            console.log(productCount);
+                            // loop through the nodeList and increment its innerHTML. The nodeList serves as the array of all our span Element which hold the value fpr the product quantity
+                            productCount.forEach((node, nIndex)=>{
+                                if(pIndex == nIndex){
+                                    node.innerHTML --;
+                                }
+                            })
+                           
+                            
+                        }
+                    })
+
+                    console.log(node);
+                    console.log(node[0]);
+                    console.log(node[1]);
+           }
+           else{
+                console.log("this is an svg");
            }
         })
   
-function increaseProduct(){
-  
-  // foreach product in the cartList, add an event Listener
-//   addBtn.addEventListener("click", (e)=>{
-//                         console.log(e);
-//                         console.log("i have clicked a button");
-//                         productCount.innerHTML ++;
-
-//             })
 
 
 
-}
-increaseProduct();
+// fetch() function is given to us by the browser to make external calls: to servers
+
+fetch("cart.php", {
+    method : "POST",
+    header : {
+        "Content-Type" : "Applications/json",
+    },
+    body : JSON.stringify()
+})
+.then((obj)=>{
+    console.log(obj);
+})
 
           
   </script>
 
 </body>
-</html>
+</html> 
