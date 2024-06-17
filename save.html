@@ -1,0 +1,18 @@
+
+
+<script>
+  
+
+  fetch("https://pokeapi.co/api/v2/pokemon-form/132/")
+  .then((result)=>{
+    console.log(result.json());
+  })
+  .then(data=>{
+    console.log(data);
+  })
+  .catch(
+     (err)=>{
+        console.log(err);
+     }
+  )
+</script>

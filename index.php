@@ -51,6 +51,10 @@ include('connect.php');
         $arr = mysqli_fetch_array($productResult);
         // print_r($arr);
 
+           // create the cartList array so we can run the condition check to display span value
+           if(!isset($_SESSION['cartList'])){
+            $_SESSION['cartList'] = [];
+        }
 
 ?>
    
@@ -70,7 +74,13 @@ include('connect.php');
         <div class="icons">
             <i class="fa-solid fa-list" id="menu-list-icon"></i>
             <i class="fas fa-search" id="search-icon"></i>
-            <span>0</span>
+            <span id="cartTotal"><?php 
+                if(count($_SESSION['cartList']) > 0){
+                    echo count($_SESSION['cartList']);
+                }else{
+                    echo 0;
+                }
+            ?></span>
             <a href="cart.php" target="blank" class="fas fa-shopping-cart" id="cart-icon"></a>
             <a href="signin.php" class=""><div class="profile dropdown"><img src="<?php echo "pic/$profilePicture"; ?>" alt=""></div></a>
             <a href="logout.php" class="fa-solid fa-right-from-bracket"></a>

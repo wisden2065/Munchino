@@ -1,10 +1,6 @@
 <?php
-
     session_start();
     include('connect.php');
-
-    // echo "i have clicked on a button whose id is ".$_GET['id'];
-
 ?>
 
 <!DOCTYPE html>
@@ -20,14 +16,18 @@
     <link rel="import" href="index.html">
 </head>
 <body>
-
+<!-- testing the new cartList received from the fetch function -->
 <?php
-    if(isset($_SESSION['session-id'])){
+
+    // $cart = json_encode(cartList);
+    // print_r($cart);
+?>
+<?php
+// if a user is in a session then we proceed to display the cart page
+if(isset($_SESSION['session-id'])){
         $session = $_SESSION['session-id'];
-        
-
-
-    // Query to get user info from database with his session id
+        // print_r($cartList);
+    // Query database to get all user info from the database with his session id
         $query = "SELECT * FROM users WHERE email = '$session'";
         $result = mysqli_query($connection, $query) or die("Error in getting user info");
 
@@ -36,7 +36,8 @@
             $name = $user['firstName'];
             $profilePicture = $user['picture'];
 
-                // create the cartList array
+
+                // create an empty List for all his cartItems if not exist
                 if(!isset($_SESSION['cartList'])){
                     $_SESSION['cartList'] = [];
                 }
@@ -44,11 +45,10 @@
                 foreach($_SESSION['cartList'] as $key => $eachProduct){
                     $index = $key;
                 }
-            // check product clicked by the current user in session
-                if(isset($_GET['add_to_cart'])){
-                    
+                // when he wants to add an item to his list we want to get the item clicked details from the database
+            if(isset($_GET['add_to_cart'])){
                     $clickedProductId = $_GET['add_to_cart'];
-                    // echo $_GET['add_to_cart'];
+                    
                     $query2 = "SELECT * FROM products WHERE id = $clickedProductId";
                     $result2 = mysqli_query($connection, $query2) or die("Error in getting products");
                     if($result2){
@@ -61,13 +61,14 @@
                         $availableQty = $product['quantity'];
 
                        
-                        // function to push product to cartList
-                        function addItemToCartList($productName, $productPrice, $productUrl, $productId){
+                        // after getting the item, we add it to his list
+                function addItemToCartList($productName, $productPrice, $productUrl, $productId){
                             global $index;
+
+                            // we check if this item is the first product or he already has an item to the cart
                             if(empty($_SESSION['cartList'])){
                                 echo "This cart is empty";
                                 echo "The product id is".$productId;
-                                // $_SESSION['cartList'] = array();
 
                                 $product =  array(
                                     "id" => $productId,
@@ -80,15 +81,15 @@
                                 print_r($_SESSION['cartList']);
 
                             }
-                            else{
+                            else{  //if the list is not empty, then the item he wants might be in his list or not
                                 echo "The cart is not empty";
                                 echo "The product id is".$productId;
-                                // loop through cartList to find the product where the id == productId & increment
+                                // we create a list of the id_s of all the items in his list to know if the new item is there or not
                                     $array_ids = array_column($_SESSION['cartList'], "id");
-                                    // print_r($array_ids);
-
-                                    // check if the productId is the ID array
-                                    if(in_array($productId , $array_ids)){
+                                    print_r($array_ids);
+                                    // check if the new item he wants to add is in the list by checking if the id is in the id list of all items in his list
+                                    if(in_array($productId, $array_ids)){
+                                        // if the item is there, we increase the item quantity
                                         foreach($_SESSION['cartList'] as $key => $eachProduct){
                                             $index = $key;
                                             if($eachProduct['id'] == $productId){
@@ -97,10 +98,8 @@
                                         }
                                         echo "The product is in the cart";
                                         // print_r($_SESSION['cartList'][$index]);
-                                        
-                                       
                                     }
-                                    else{
+                                    else{ //if not we add the new item to his list with a quantity of 1
                                         echo "In the else block";
                                         // the clicked item is not in the cart so we push it into cartList
                                         print_r($_SESSION['cartList'][$index]);
@@ -112,20 +111,15 @@
                                             "qty" => 1
                                         );
                                         array_push($_SESSION['cartList'], $newProduct);
-                                        print_r($_SESSION['cartList'][$index]);
                                     }
                                 print_r($_SESSION['cartList']);
-                         
-                            
                             }
-                                
-                                
                 }
                 // addItemToCartList function ends here
 
                 addItemToCartList($productName, $productPrice, $productUrl, $productId);
             }
-
+            // use adding an item ends here
                     
         }
         else{
@@ -136,7 +130,9 @@
         echo "Mysqli_num_rows() < 0";
     }
 ?>
-
+<?php
+//fetch.php
+?>
 <header>
     <a href="#" class="logo"><img src="pictures/munchino-logo-3.png" alt=""><p id="logo">Munchino</p></a>
         
@@ -208,12 +204,14 @@
         <!-- cartItems starts here -->
            
 <?php
-  
+    if(empty($_SESSION['cartList'])){
+        echo "<h3 class='btn'>Your cart is empty</h3>";
+    }
     foreach($_SESSION['cartList'] as $key => $cart){
         global $index;
     
             ?>
-                    <div class="cart-container" id="<?php echo $_SESSION['cartList'][$key]['id']?>">  
+                    <div class="cart-container"  id="<?php echo $_SESSION['cartList'][$key]['id']?>">  
                         <div class="productImg"><img src="<?php echo $cart['image']?>" alt=""></div>
                             <div class="product-div">
                                 <h3><?php echo $_SESSION['cartList'][$key]['name'] ?></h3>
@@ -223,19 +221,23 @@
                                     <p>Price/Qty</p>
                                     <span><i class="fas fa-naira-sign"><?php echo $_SESSION['cartList'][$key]['price'] ?></i></span>
                                 </div>
-                            </div>
-                            <div class="remove-item">
-                                <div class="del-wrapper" id="delBtn">
-                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-                                    </svg>
-                                </div>
+                            </div>      
+                            <!-- pass the id of the cartItem to the delBtn -->
+                            <div class="remove-item" id="">
+                                <!-- wrapping the del btn in an a tag to link it with delete.php -->
+                                <a href="delete.php?prod_id=<?php echo $_SESSION['cartList'][$key]['id']; ?>">
+                                    <div class="del-wrapper delBtn" id="">
+                                        <svg  id="" class="w-6 h-6 text-gray-800 dark:text-white " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <path id="" stroke="currentColor" class="del" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                        </svg>
+                                    </div>
+                                </a>
                             </div>
                             <div class="shop-cart">
                                 <div class="cart-wrapper">
                                     <span id="subBtn" class="minus" >
                                         <svg id="sub" class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/></svg>  
+                                        <path id="sub" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/></svg>  
                                     </span>
                                     <!-- pass each button unique id from the productId when clicked -->
                                     <span id="count" style=" font-weight: 1000; font-size:large;">
@@ -254,11 +256,11 @@
                                 </div>
                             </div>
                         </div>
-           
-     
+
             <?php
             echo "<br>";
             }
+        
 ?>          </div>
                  
             
@@ -308,11 +310,7 @@
                         </div>
                     </div>
                 </div>
- 
-                
-                <!-- car summary ends here -->
-            </div>
-            <!-- paper cutting div starts here -->
+                 <!-- paper cutting div starts here -->
             <div class="to-cut">
                 <div class="cut"></div>
                 <div class="cut"></div>
@@ -352,6 +350,10 @@
             </div>
           
           <!-- paper cutting div ends here -->
+                
+            <!-- cart summary ends here -->
+        </div>
+           
     </section>
     <hr>
     <div class="box" style="height: 300px;"></div>
@@ -373,10 +375,6 @@
   <!------- script tag ==index.js  ---------------------->
   <script>
 
-
-  
-    // let productCount = 
-    let addBtn = document.getElementById("addBtn");
     // use json_encode to access the cartList in the php script as a JSON in js
     let cartList = <?php echo json_encode($_SESSION['cartList']); ?>;
     console.log(cartList);
@@ -384,60 +382,65 @@
     console.log(productCount);
         let cartContainer = document.getElementById("cart-container-wrapper");
         console.log("Hello ", cartContainer);
+
         // using event bubbling, target parent to capture and add an event listener to the children
         cartContainer.addEventListener("click", (eventObj)=>{
            console.log(eventObj);
            console.log(eventObj.target.id);
            console.log(eventObj.target.tagName);
-           if(eventObj.target.tagName == 'SPAN' && eventObj.target.id == "addBtn"|| eventObj.target.tagName == 'svg' || eventObj.target.tagName == 'path' && eventObj.target.id =="add"){
+
+            // target the addButton and make product increment
+           if(eventObj.target.tagName == 'SPAN' && eventObj.target.id == "addBtn"|| eventObj.target.tagName == 'svg' && eventObj.target.id =="add" || eventObj.target.tagName == 'path' && eventObj.target.id =="add"){
 
                     console.log("Increase Product count");
                     console.log(eventObj.target);  //span Element
                     let clickedElement = eventObj.target;
-                    let parent;
                     let parent_id;
  
                     // using an if statement because the clicked initial target element might be the svg and not the span element
                     if(clickedElement.tagName == 'SPAN'){
                         parent = clickedElement.parentElement.parentElement.parentElement;
                         console.log("The clicked Element is a span tag");
-                        console.log(parent);
                     }
                     else if(clickedElement.tagName == 'svg'){
                         parent = clickedElement.parentElement.parentElement.parentElement.parentElement;
                         console.log("The clicked Element is an svg tag");
-                        console.log(parent);
                     }
                     else if(clickedElement.tagName == 'path'){
                         parent = clickedElement.parentElement.parentElement.parentElement.parentElement.parentElement;
                         console.log("The clicked Element is a path tag");
-                        console.log(parent);
                     }
                     else{
                         console.log("undefined tag name clicked");
                     }
                     // log out the parent id
                     clickedProd_id = parent.id;  //here we have gotten the id of the clicked element
-                        console.log(clickedProd_id);
 
                     // loop through the cartList to find product whose id == clickedItem Id and increment
                     cartList.forEach((product, pIndex)=>{
                         // check which element was clicked in the list
                         if(clickedProd_id == product.id){
-                            console.log(productCount);
                             // loop through the nodeList and increment its innerHTML. The nodeList serves as the array of all our span Element which hold the value fpr the product quantity
                             productCount.forEach((node, nIndex)=>{
                                 if(pIndex == nIndex){
+                                    // increase the product by its nideIndex to reflect innerHTML
                                     node.innerHTML ++;
+                                    // increase the product count in js script so i can get it in the cartList array 
+                                    cartList[pIndex].qty ++;
+                                    // call the function to save this local change in the cartList
+                                    updateProductQty();
+
                                 }
                             })
-                           
-                            
                         }
+                       
+                        // this should log the cartList array with the new product count 
+                        console.log(cartList);
                     })
                    
            }
-           else if(eventObj.target.tagName == 'SPAN'  && eventObj.target.id == "subBtn"  || eventObj.target.tagName == 'svg' || eventObj.target.tagName == 'path' && eventObj.target.id == "sub" ){
+        //    Target the subButton and made a decrement
+           else if(eventObj.target.tagName == 'SPAN'  && eventObj.target.id == "subBtn"  || eventObj.target.tagName == 'svg' && eventObj.target.id == "sub" || eventObj.target.tagName == 'path' && eventObj.target.id == "sub" ){
                 console.log("Decrease Product count");
                 // productCount.innerHTML --;
                 let clickedElement = eventObj.target;
@@ -448,67 +451,110 @@
                     if(clickedElement.tagName == 'SPAN'){
                         parent = clickedElement.parentElement.parentElement.parentElement;
                         console.log("The clicked Element is a span tag");
-                        console.log(parent);
                     }
                     else if(clickedElement.tagName == 'svg'){
                         parent = clickedElement.parentElement.parentElement.parentElement.parentElement;
                         console.log("The clicked Element is an svg tag");
-                        console.log(parent);
                     }
                     else if(clickedElement.tagName == 'path'){
                         parent = clickedElement.parentElement.parentElement.parentElement.parentElement.parentElement;
                         console.log("The clicked Element is a path tag");
-                        console.log(parent);
                     }
                     else{
                         console.log("undefined tag name clicked");
                     }
                     // log out the parent id
                     clickedProd_id = parent.id;  //here we have gotten the id of the clicked element
-                        console.log(clickedProd_id);
 
                     // loop through the cartList to find product whose id == clickedItem Id and increment
                     cartList.forEach((product, pIndex)=>{
                         // check which element was clicked in the list
                         if(clickedProd_id == product.id){
-                            console.log(productCount);
                             // loop through the nodeList and increment its innerHTML. The nodeList serves as the array of all our span Element which hold the value fpr the product quantity
                             productCount.forEach((node, nIndex)=>{
                                 if(pIndex == nIndex){
+                                     // increase the product by its nideIndex to reflect innerHTML
                                     node.innerHTML --;
+                                    // increase the product count in js script so i can get it in the cartList array 
+                                    cartList[pIndex].qty --;
+                                    // call the function to save this local change in the cartList
+                                    updateProductQty();
                                 }
                             })
-                           
-                            
                         }
                     })
+                    console.log(cartList);
+           }
+        //    target the delete button and remove productItem from cartList
+           else if(eventObj.target.tagName == 'DIV' && event.target.classList.contains("delBtn") || eventObj.target.tagName == 'svg' && event.target.classList.contains("del") || event.target.tagName == 'path' && event.classList.contains("del")){
+                console.log("delete button");
+                // get the clickedItem
+                let clickedProd;
+                if(eventObj.target.tagName == 'svg'){
+                    clickedProd = eventObj.target.parentElement.parentElement.parentElement;
+                    console.log(clickedProd);
+                }
+                else if(eventObj.target.tagName == 'DIV'){
+                    clickedProd = eventObj.target.parentElement.parentElement;
+                    console.log(clickedProd);
+                }
+                // get the id of the clickedItem
+                let clickedProd_id = clickedProd.id;
+                console.log(clickedProd_id);
+                
+                // loop through the carList and delete cartItem where the button was clicked
+                cartList.forEach((product, index)=>{
+                    // console.log(index, "=>", product);
+                    if(product.id == clickedProd_id){
+                        //delete product where its Id matches that of the clickedProd_id matches
+                        console.log(product); 
+                        console.log(index);
+                        cartList.splice(1, index);
+                        console.log("Product at index ", index, "deleted from cartList");
+                        updateProductQty();
 
-                    console.log(node);
-                    console.log(node[0]);
-                    console.log(node[1]);
+                    }
+                })
+                // after deleting the product in the cartList, check to see available products in the cartList
+                cartList.forEach((product, index)=>{
+                    console.log(product);
+                })
+                
            }
            else{
-                console.log("this is an svg");
+                console.log("this is not an button");
            }
         })
-  
 
 
+// define a function that will UPDATE the cartList when the add or sub button of any product is clicked
+function updateProductQty(){
 
-// fetch() function is given to us by the browser to make external calls: to servers
-
-fetch("cart.php", {
-    method : "POST",
-    header : {
-        "Content-Type" : "Applications/json",
-    },
-    body : JSON.stringify()
-})
-.then((obj)=>{
-    console.log(obj);
-})
-
-          
+    // This fetch call makes an update to the cartList in the sgv
+    fetch("fetch.php", {
+        method : "PUT",
+        headers : {
+            "Content-Type" : "application/json",
+        },
+        body : JSON.stringify({cartList})  //converts the cartList array to one long string-JSON
+    })  //after we call the fetch api it returns with a response which is a promise object
+    .then((res)=>{
+        if(!res.ok){
+            console.log("Error");
+        }
+        else{  // if the reolved data from the promise is successful we want to do something with that data
+            console.log(res);  //This res is the response object
+            return res.json();   // in our case, we want to convert it to a json format. This also returns a promise
+        }
+    })
+    .then((data)=>{  //data here is the response that is sent back by the server
+        console.log("The response data : ", data);
+        return data
+    })
+    .then((cartList)=>{
+        console.log(cartList['cartList']);
+    })
+}
   </script>
 
 </body>
