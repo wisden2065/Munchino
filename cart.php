@@ -205,7 +205,7 @@ if(isset($_SESSION['session-id'])){
            
 <?php
     if(empty($_SESSION['cartList'])){
-        echo "<h3 class='btn'>Your cart is empty</h3>";
+        echo "<img src='pic/emptycart.png'; style='display: flex; justify-contents: center; align-items:center'>";
     }
     foreach($_SESSION['cartList'] as $key => $cart){
         global $index;

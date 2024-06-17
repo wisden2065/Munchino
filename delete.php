@@ -18,12 +18,13 @@ if(isset($_GET['prod_id'])){ //get the clicked item by its id
             $_SESSION['cartList'] = array_filter($_SESSION['cartList'], function($item) use ($product) {
                 return $item !== $product;
             });
+            echo "<script>alert('Product deleted successfully')</script>";
             
         }
-        // then redirect page back to the cart.php
-        header("Location: cart.php");
+        
     }
 
-
+    // then redirect page back to the cart.php
+    header("Location: cart.php");
     
 }
