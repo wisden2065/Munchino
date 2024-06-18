@@ -192,167 +192,168 @@ if(isset($_SESSION['session-id'])){
           <div>
               <p style = "color: #fff">Hello, <?php echo $name;?></p>
           </div>
-          <H1 style="color: #fff;">Your Shopping Basket </H1> <a href=""><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+          <H1 style="color: #fff;"><?php if(empty($_SESSION['cartList'])){echo "Oops! nothing in your Basket";}else{echo "Your Shopping Basket";}  ?> </H1> <a href=""><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
             <path fill-rule="evenodd" d="M14 7h-4v3a1 1 0 1 1-2 0V7H6a1 1 0 0 0-1 1L4 19.7A2 2 0 0 0 6 22h12c1 0 2-1 2-2.2L19 8c0-.5-.5-.9-1-.9h-2v3a1 1 0 1 1-2 0V7Zm-2-3a2 2 0 0 0-2 2v1H8V6a4 4 0 1 1 8 0v1h-2V6a2 2 0 0 0-2-2Z" clip-rule="evenodd"/>
           </svg>
           </a>
       </div>  
 
-<!-- Container for cartItems and cart summary -->
+<!-- Container for cart-container-wrapper which contains cart-container/cartItems and cart summary -->
       <div class="cartBox" id ="cartBox">
-            <div id="cart-container-wrapper">
-        <!-- cartItems starts here -->
-           
-<?php
-    if(empty($_SESSION['cartList'])){
-        echo "<img src='pic/emptycart.png'; style='display: flex; justify-contents: center; align-items:center'>";
-    }
-    foreach($_SESSION['cartList'] as $key => $cart){
-        global $index;
-    
-            ?>
-                    <div class="cart-container"  id="<?php echo $_SESSION['cartList'][$key]['id']?>">  
-                        <div class="productImg"><img src="<?php echo $cart['image']?>" alt=""></div>
-                            <div class="product-div">
-                                <h3><?php echo $_SESSION['cartList'][$key]['name'] ?></h3>
-                            </div>
-                            <div class="price-per-qty">
-                                <div class="price-wrapper">
-                                    <p>Price/Qty</p>
-                                    <span><i class="fas fa-naira-sign"><?php echo $_SESSION['cartList'][$key]['price'] ?></i></span>
-                                </div>
-                            </div>      
-                            <!-- pass the id of the cartItem to the delBtn -->
-                            <div class="remove-item" id="">
-                                <!-- wrapping the del btn in an a tag to link it with delete.php -->
-                                <a href="delete.php?prod_id=<?php echo $_SESSION['cartList'][$key]['id']; ?>">
-                                    <div class="del-wrapper delBtn" id="">
-                                        <svg  id="" class="w-6 h-6 text-gray-800 dark:text-white " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <path id="" stroke="currentColor" class="del" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-                                        </svg>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="shop-cart">
-                                <div class="cart-wrapper">
-                                    <span id="subBtn" class="minus" >
-                                        <svg id="sub" class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <path id="sub" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/></svg>  
-                                    </span>
-                                    <!-- pass each button unique id from the productId when clicked -->
-                                    <span id="count" style=" font-weight: 1000; font-size:large;">
-                                        <?php echo $_SESSION['cartList'][$key]['qty'] ?>
-                                    </span>
-                                    <span id="addBtn" class="add">
-                                        <svg id="add" class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <path id= "add" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
-                                        </svg>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="sum">
-                                <div class="sum-wrapper">
-                                    <span><?php echo $_SESSION['cartList'][$key]['price'] ?></span>
-                                </div>
-                            </div>
-                        </div>
-
             <?php
-            echo "<br>";
-            }
-        
-?>          </div>
-                 
-            
-                
-                
-           
-            <!-- cartItems ends here -->
-            <!-- cart summary starts here -->
-            <div class="cart-summary-wrapper">
-                <div class="cart-summary">
-                    <div class="summary-head">
-                        <h3><i class="fa-solid fa-lock"></i> Cart Summary</h3>
-                        <div class="summary-body">
-                            <p>Merchandise:</p>
-                            <span>$125.00</span>
-                            <p>Est. Shipping & Handling: <i class="fa-solid fa-circle-info"></i> </p>
-                            <span>$17.89</span>
-                            <p style="color: red;"">Shipping Discount:</p>
-                            <span style="color: red;">-$23.98</span>
-                            <p>Est. Tax: <i class="fa-solid fa-circle-info"></i></p>
-                            <span>$10.07</span>
-                            <p style="text-decoration: underline; cursor: pointer;;">Estimated for 60540 <i class="fa-solid fa-angle-down"></i></p>
-                        </div> <br>
-                        <hr>
-                        <div class="summary-body">
-                            <h3>Est. Order Total:</h3> 
-                            <span><h3>$304.08</h3></span>
-                        </div>
-                        <br>
-                        <hr>
-                        <h4>Apply a Promo Code</h4>
-                        <p>Remove any spaces or dishes before hitting apply</p>
-                        <input type="text" style="outline: solid 1.5px;"> <button style="border: solid 1px grey; padding: 4px 10px;">APPLY</button>
-                        <br><br><br><hr>
-                            <button href="logout.php" class="btn" style="display: block;">CHECKOUT NOW</button> <br>
-                            <p>By continuing to Checkout, you are agreeing to our <span style="text-decoration: underline;">Terms of Use</span> and <span style="text-decoration: underline;">Privacy Policy</span></p>
-                            <br><br>
-                            <hr>
-                            <br><br>
-                        <div class="payPal">
-                                <p>Or use other checkout methods:</p>
-                            <div class="payPal-btn">
-                                <button class="btn2"><img src="images/payPal.png" alt="" width="50px" height="30px"></button>
-                                <button class="btn2"><img src="images/zelle.png" alt="" width="50px"></button>
-                                <button class="btn2"><img src="images/shopify.png" alt="" width="50px" height="30px"></button>
+                    if(empty($_SESSION['cartList'])){ //we do not want to show anything in the cartBox except the 
+                    echo "<div style='display: flex; justify-contents: center; align-items:center; height: 200px; width: 200px' ><img src='pic/emptycart.png'; ></div>";
+                    }
+                    else{  //display the cartItems and the summary
+                        ?>
+                            <div id="cart-container-wrapper">
+                            <!-- cartItems starts here -->
+                                <?php
+                                    foreach($_SESSION['cartList'] as $key => $cart){
+                                        global $index;
+                                            ?>
+                                            <div class="cart-container"  id="<?php echo $_SESSION['cartList'][$key]['id']?>">  
+                                                <div class="productImg"><img src="<?php echo $cart['image']?>" alt=""></div>
+                                                    <div class="product-div">
+                                                        <h3><?php echo $_SESSION['cartList'][$key]['name'] ?></h3>
+                                                    </div>
+                                                    <div class="price-per-qty">
+                                                        <div class="price-wrapper">
+                                                            <p>Price/Qty</p>
+                                                            <span><i class="fas fa-naira-sign"><?php echo $_SESSION['cartList'][$key]['price'] ?></i></span>
+                                                        </div>
+                                                    </div>      
+                                                    <!-- pass the id of the cartItem to the delBtn -->
+                                                    <div class="remove-item" id="">
+                                                        <!-- wrapping the del btn in an a tag to link it with delete.php -->
+                                                        <a href="delete.php?prod_id=<?php echo $_SESSION['cartList'][$key]['id']; ?>">
+                                                            <div class="del-wrapper delBtn" id="">
+                                                                <svg  id="" class="w-6 h-6 text-gray-800 dark:text-white " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                                <path id="" stroke="currentColor" class="del" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                                                </svg>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="shop-cart">
+                                                        <div class="cart-wrapper">
+                                                            <span id="subBtn" class="minus" >
+                                                                <svg id="sub" class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                                <path id="sub" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/></svg>  
+                                                            </span>
+                                                            <!-- pass each button unique id from the productId when clicked -->
+                                                            <span id="count" style=" font-weight: 1000; font-size:large;">
+                                                                <?php echo $_SESSION['cartList'][$key]['qty'] ?>
+                                                            </span>
+                                                            <span id="addBtn" class="add">
+                                                                <svg id="add" class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                                <path id= "add" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                                                                </svg>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="sum">
+                                                        <div class="sum-wrapper">
+                                                            <span><?php echo $_SESSION['cartList'][$key]['price'] ?></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            <?php
+                                            echo "<br>";
+                                            }
+                                    ?>    
+                            <!-- cartItems ends here -->
                             </div>
+                            <!-- cart summary starts here -->
+                            <div class="cart-summary-wrapper">
+                                <div class="cart-summary">
+                                    <div class="summary-head">
+                                        <h3><i class="fa-solid fa-lock"></i> Cart Summary</h3>
+                                        <div class="summary-body">
+                                            <p>Merchandise:</p>
+                                            <span>$125.00</span>
+                                            <p>Est. Shipping & Handling: <i class="fa-solid fa-circle-info"></i> </p>
+                                            <span>$17.89</span>
+                                            <p style="color: red;"">Shipping Discount:</p>
+                                            <span style="color: red;">-$23.98</span>
+                                            <p>Est. Tax: <i class="fa-solid fa-circle-info"></i></p>
+                                            <span>$10.07</span>
+                                            <p style="text-decoration: underline; cursor: pointer;;">Estimated for 60540 <i class="fa-solid fa-angle-down"></i></p>
+                                        </div> <br>
+                                        <hr>
+                                        <div class="summary-body">
+                                            <h3>Est. Order Total:</h3> 
+                                            <span><h3>$304.08</h3></span>
+                                        </div>
+                                        <br>
+                                        <hr>
+                                        <h4>Apply a Promo Code</h4>
+                                        <p>Remove any spaces or dishes before hitting apply</p>
+                                        <input type="text" style="outline: solid 1.5px;"> <button style="border: solid 1px grey; padding: 4px 10px;">APPLY</button>
+                                        <br><br><br><hr>
+                                            <button href="logout.php" class="btn" style="display: block;">CHECKOUT NOW</button> <br>
+                                            <p>By continuing to Checkout, you are agreeing to our <span style="text-decoration: underline;">Terms of Use</span> and <span style="text-decoration: underline;">Privacy Policy</span></p>
+                                            <br><br>
+                                            <hr>
+                                            <br><br>
+                                        <div class="payPal">
+                                                <p>Or use other checkout methods:</p>
+                                            <div class="payPal-btn">
+                                                <button class="btn2"><img src="images/payPal.png" alt="" width="50px" height="30px"></button>
+                                                <button class="btn2"><img src="images/zelle.png" alt="" width="50px"></button>
+                                                <button class="btn2"><img src="images/shopify.png" alt="" width="50px" height="30px"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                    <!-- paper cutting div starts here -->
+                            <div class="to-cut">
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div>
+                                <div class="cut"></div> 
+                            </div>
+                            
+                            <!-- paper cutting div ends here -->
+                                
+                            <!-- cart summary ends here -->
                         </div>
-                    </div>
-                </div>
-                 <!-- paper cutting div starts here -->
-            <div class="to-cut">
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div>
-                <div class="cut"></div> 
-            </div>
-          
-          <!-- paper cutting div ends here -->
-                
-            <!-- cart summary ends here -->
-        </div>
+                        <?php  
+                    }
+
+            ?>
+
            
     </section>
     <hr>
@@ -489,40 +490,11 @@ if(isset($_SESSION['session-id'])){
            else if(eventObj.target.tagName == 'DIV' && event.target.classList.contains("delBtn") || eventObj.target.tagName == 'svg' && event.target.classList.contains("del") || event.target.tagName == 'path' && event.classList.contains("del")){
                 console.log("delete button");
                 // get the clickedItem
-                let clickedProd;
-                if(eventObj.target.tagName == 'svg'){
-                    clickedProd = eventObj.target.parentElement.parentElement.parentElement;
-                    console.log(clickedProd);
-                }
-                else if(eventObj.target.tagName == 'DIV'){
-                    clickedProd = eventObj.target.parentElement.parentElement;
-                    console.log(clickedProd);
-                }
-                // get the id of the clickedItem
-                let clickedProd_id = clickedProd.id;
-                console.log(clickedProd_id);
-                
-                // loop through the carList and delete cartItem where the button was clicked
-                cartList.forEach((product, index)=>{
-                    // console.log(index, "=>", product);
-                    if(product.id == clickedProd_id){
-                        //delete product where its Id matches that of the clickedProd_id matches
-                        console.log(product); 
-                        console.log(index);
-                        cartList.splice(1, index);
-                        console.log("Product at index ", index, "deleted from cartList");
-                        updateProductQty();
-
-                    }
-                })
-                // after deleting the product in the cartList, check to see available products in the cartList
-                cartList.forEach((product, index)=>{
-                    console.log(product);
-                })
+         
                 
            }
            else{
-                console.log("this is not an button");
+                console.log("this is not a button");
            }
         })
 
@@ -555,6 +527,11 @@ function updateProductQty(){
         console.log(cartList['cartList']);
     })
 }
+
+// define a function to update cartSummary
+    function updateCartSummary(){
+        
+    }
   </script>
 
 </body>
