@@ -19,7 +19,7 @@
 <!-- testing the new cartList received from the fetch function -->
 <?php
 
-    // $cart = json_encode(cartList);
+    // $dhdcart = json_encode(cartList);
     // print_r($cart);
 ?>
 <?php
@@ -253,7 +253,7 @@ if(isset($_SESSION['session-id'])){
                                                     </div>
                                                     <div class="sum">
                                                         <div class="sum-wrapper">
-                                                            <span><?php echo $_SESSION['cartList'][$key]['price'] ?></span>
+                                                            <span id="productAmount"><?php echo $_SESSION['cartList'][$key]['price'] * $_SESSION['cartList'][$key]['qty'];  ?></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -271,7 +271,7 @@ if(isset($_SESSION['session-id'])){
                                         <h3><i class="fa-solid fa-lock"></i> Cart Summary</h3>
                                         <div class="summary-body">
                                             <p>Merchandise:</p>
-                                            <span>$125.00</span>
+                                            <span id="merchandise">$125.00</span>
                                             <p>Est. Shipping & Handling: <i class="fa-solid fa-circle-info"></i> </p>
                                             <span>$17.89</span>
                                             <p style="color: red;"">Shipping Discount:</p>
@@ -371,7 +371,7 @@ if(isset($_SESSION['session-id'])){
 ?>
      <!--header section starts-->
  
-
+   
 
   <!------- script tag ==index.js  ---------------------->
   <script>
@@ -529,9 +529,26 @@ function updateProductQty(){
 }
 
 // define a function to update cartSummary
+let total = 0;  //initialize a total amount to zero
+
+// get the span counter in the dom
+let total_product_amount = document.getElementById("productAmount");
+
     function updateCartSummary(){
         
+        cartList.forEach((product)=>{
+            // get the total_product_amount for each and add as we loop through the entire cartList
+            console.log(total_product_amount);
+        })
     }
+
+    // add an event listener to the cart_head to see cart-summary
+    let cartHead = document.querySelector(".cart-head");
+    cartHead.addEventListener("click", ()=>{
+        console.log("I want to see the cart_summary");
+        
+        updateCartSummary()
+    })
   </script>
 
 </body>
