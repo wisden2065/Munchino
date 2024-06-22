@@ -385,17 +385,7 @@ if(isset($_SESSION['session-id'])){
   <!------- script tag == cart.js  ---------------------->
   <script src="cart.js"></script>
   <script>
-        //check for Navigation Timing API support
-        if (window.performance) {
-        console.info("window.performance works fine on this browser");
-            
-        }
-        console.info(performance.navigation.type);
-        if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
-        console.info( "This page is reloaded" );
-        } else {
-        console.info( "This page is not reloaded");
-}
+       
 
     // use json_encode to get the cartList array in the php script as a JSON in js
     // we will need to modify the product quantity whwn a user clicks an add or sub button on any of the products in the cartList
@@ -421,6 +411,7 @@ if(isset($_SESSION['session-id'])){
            console.log(eventObj);
            console.log(eventObj.target.id);
            console.log(eventObj.target.tagName);
+          
 
             // if the area clicked within the cart container is an addButton, we make a product increment
            if(eventObj.target.tagName == 'SPAN' && eventObj.target.id == "addBtn"|| eventObj.target.tagName == 'svg' && eventObj.target.id =="add" || eventObj.target.tagName == 'path' && eventObj.target.id =="add"){
@@ -463,9 +454,7 @@ if(isset($_SESSION['session-id'])){
                                     // increase the product count in js script so i can get it in the cartList array 
                                     cartList[pIndex].qty ++;
                                     // call the function to update cart summary
-                                    updateTotalProdPrice(); 
-                                    // call the function to save this local change in the cartList
-                                    updateProductSession();
+                                    updateProdPrice(parent); 
 
                                 }
                             })
@@ -517,7 +506,7 @@ if(isset($_SESSION['session-id'])){
                                     // call the function that will update the individual product amountTotal in the HTMLspanELement
                                     updateProductAmount();
                                     // call the function to update cart summary
-                                    updateTotalProdPrice();
+                                    getTotalProdPrice();
                                     // call the function to save this local change in the cartList
                                     updateProductSession();
                                 }
@@ -538,39 +527,8 @@ if(isset($_SESSION['session-id'])){
 
         
 
-// define a function that will UPDATE the cartList when the add or sub button of any product is clicked
-function updateProductSession(){
-    // This fetch call makes an update to the cartList in the Session sgv
-    fetch("fetch.php", 
-    {
-        method : "PUT",
-        headers : {
-            "Content-Type" : "application/json",
-        },
-        body : JSON.stringify({cartList}), //in this request body, we converts the cartList array to one long string-JSON
-    })  //after we call the fetch api it returns with a response which is a promise object
-    .then((response)=>{
-        if(!response.ok){
-            console.log("Error");
-        }
-        else{  // if the reolved data from the promise is successful we want to do something with that data
-            console.log("The raw response is :", response);  //This res is the response object
-            return response.json();   // in our case, we want to convert it to a json format. This also returns a promise
-        }
-    })
-    .then((data)=>{  //data here is the response that is sent back by the server
-        console.log("The response data : ", data);
-        return data;
-    })
-  
-    
-}
-
-// define a function to update cartSummary
-
-
 // make a function that would calculate the accumulated cost of all items in the cartList
-    function updateTotalProdPrice(){
+    function getTotalProdPrice(){
         // the total value of the items in the cart would be stored in a variable called total
         let total = cartList.reduce((currentTotal, product)=>{
                 return ((product.price * product.qty) + currentTotal);
@@ -581,39 +539,70 @@ function updateProductSession(){
     //   then call the function fetch to update this local change to the session sgv
         console.log(totalProdPrice); //the totalProdPrice holds the value of the total product amount but was initialized to zero and initialized at top of script
         // set the session sgv holding the total to the current total
-        totalProdPrice = total;
+        totalProdPrice = total;  //set the total pice in s session to this total
         console.log("The new total in session sgv :", totalProdPrice);
-        // updateProductSession();
+
+        //  call the function that will update this change
+        // updateProdPrice();
 
     }
 
 
 // get a nodeList of all th HTMLspanElement that holds the value of the total of each product.
-    let total_product_amount = document.querySelectorAll("#productAmount");
-    console.log("The total product amount is ", total_product_amount);
+    let prodTotalPrice_nodes = document.querySelectorAll("#productAmount");
+    console.log("The total product amount is ", prodTotalPrice_nodes);  //returns a nodeList of all the span for each product total
 
     // function definition to update product amount
-    function updateProductAmount(){
-        // loop through the cartList to know the product we want to update its amount
-        cartList.forEach((product, pIndex)=>{
-            //loop through the nodeList of spn elements conatining the total for each product
-            // make total logic where nodeList index matches the product index
-            total_product_amount.forEach((node, nIndex) => {
-                if(nIdex == pIndex){
-                    console.log("asdf");
-                    console.log(product.index.price);
-                }
-            })
+    function updateProdPrice(target){
+        // loop through the cartList to know the product that was clicked
+                cartList.forEach((product, pIndex)=>{
 
-        })
+                    // find the product whose id matches the id of the target object and increment its spanElement
+                    if(product.id == target.id){
+                        console.log(product.id);
+                        prodTotalPrice_nodes.forEach((node, nIndex)=>{
+                            // update the span element
+                            if(nIndex == pIndex){
+                                console.log("The node is :", node, "and its content is", node.innerHTML);
+                                node.innerHTML = product.price * product.qty;
+                            }
+                        })
+                    }
+                    else{
+                        console.log("not found");
+                    }
+                })
     }
-    // add an event listener to the cart_head to see cart-summary
-    let cartHead = document.querySelector(".cart-head");
-    cartHead.addEventListener("click", ()=>{
-        console.log("I want to see the cart_summary");
-        console.log("The total product price is ", totalProdPrice);
-        updateCartSummary()
-    })
+
+
+        // define a function that will UPDATE the cartList when the add or sub button of any product is clicked
+    function updateProductSession(){
+        // This fetch call makes an update to the cartList in the Session sgv
+        fetch("fetch.php", 
+        {
+            method : "PUT",
+            headers : {
+                "Content-Type" : "application/json",
+            },
+            body : JSON.stringify({cartList}), //in this request body, we converts the cartList array to one long string-JSON
+        })  //after we call the fetch api it returns with a response which is a promise object
+        .then((response)=>{
+            if(!response.ok){
+                console.log("Error");
+            }
+            else{  // if the reolved data from the promise is successful we want to do something with that data
+                console.log("The raw response is :", response);  //This res is the response object
+                return response.json();   // in our case, we want to convert it to a json format. This also returns a promise
+            }
+        })
+        .then((data)=>{  //data here is the response that is sent back by the server
+            console.log("The response data : ", data);
+            return data;
+        })
+    
+        
+    }
+
   </script>
 
 </body>

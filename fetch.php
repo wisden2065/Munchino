@@ -4,7 +4,10 @@
 include('connect.php');
 // start the session to make the cartList in the sgv available on this page
 session_start();
-
+// print_r($_SESSION['totalProduct_price']);
+// print_r($_SESSION['cartList']);
+// check to see if the value of the session sgv ($_SESSION['cartList])
+// print_r($_SESSION['cartList']);  // and yes! it is available here..
 // The SERVER RESPONSE TO AN UPDATE REQUEST
     if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
         header('Content-Type: application/json'); // Set the content type to JSON
