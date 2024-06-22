@@ -40,15 +40,22 @@ if(isset($_SESSION['session-id'])){
                 // create an empty List for all his cartItems if not exist
                 if(!isset($_SESSION['cartList'])){
                     $_SESSION['cartList'] = [];
+                    // $_SESSION['cartList']['totalPrice'] = 0;
+                    
                 }
-
+                // sets the variable the will hold the totalProduct amount in the session sgv so we can access it anywhere and in the js script 
+                // when we access it in the js script, we can update it to the server after there has been an increment on a particular product 
+                if(!isset($_SESSION['totalProduct_price'])){
+                    $_SESSION['totalProduct_price'] = 0;
+                }
+                // initialize an empty element for the totalPrice
                 foreach($_SESSION['cartList'] as $key => $eachProduct){
                     $index = $key;
                 }
                 // when he wants to add an item to his list we want to get the item clicked details from the database
             if(isset($_GET['add_to_cart'])){
                     $clickedProductId = $_GET['add_to_cart'];
-                    
+                    // make a query to fetch product from database
                     $query2 = "SELECT * FROM products WHERE id = $clickedProductId";
                     $result2 = mysqli_query($connection, $query2) or die("Error in getting products");
                     if($result2){
@@ -59,7 +66,6 @@ if(isset($_SESSION['session-id'])){
                         $productPic = $product['image'];
                         $productUrl = "pic/".$productPic;
                         $availableQty = $product['quantity'];
-
                        
                         // after getting the item, we add it to his list
                 function addItemToCartList($productName, $productPrice, $productUrl, $productId){
@@ -69,13 +75,16 @@ if(isset($_SESSION['session-id'])){
                             if(empty($_SESSION['cartList'])){
                                 echo "This cart is empty";
                                 echo "The product id is".$productId;
-
+                                // echo "The totalProduct is :". $_SESSION['totalProduct_price']. "<br>";
                                 $product =  array(
                                     "id" => $productId,
                                     "name" => $productName,
                                     "price" => $productPrice,
                                     "image" => $productUrl,
-                                    "qty" => 1
+                                    "qty" => 1,
+                                    // add a variable that will account for totalPrice of the products in the cart
+                                    // "totalPrice" => 0
+                                    // this totalPrice will be updated with Js with user addition of productsQty with the totalAmount
                                 );
                                 array_push($_SESSION['cartList'], $product);
                                 print_r($_SESSION['cartList']);
@@ -108,7 +117,7 @@ if(isset($_SESSION['session-id'])){
                                             "name" => $productName,
                                             "price" => $productPrice,
                                             "image" => $productUrl,
-                                            "qty" => 1
+                                            "qty" => 1,
                                         );
                                         array_push($_SESSION['cartList'], $newProduct);
                                     }
@@ -253,7 +262,7 @@ if(isset($_SESSION['session-id'])){
                                                     </div>
                                                     <div class="sum">
                                                         <div class="sum-wrapper">
-                                                            <span id="productAmount"><?php echo $_SESSION['cartList'][$key]['price'] * $_SESSION['cartList'][$key]['qty'];  ?></span>
+                                                            <span id="productAmount"><?php echo ($_SESSION['cartList'][$key]['price'] * $_SESSION['cartList'][$key]['qty']); ?></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -271,7 +280,7 @@ if(isset($_SESSION['session-id'])){
                                         <h3><i class="fa-solid fa-lock"></i> Cart Summary</h3>
                                         <div class="summary-body">
                                             <p>Merchandise:</p>
-                                            <span id="merchandise">$125.00</span>
+                                            <span id="merchandise">$<?php echo $_SESSION['totalProduct_price']; ?></span>
                                             <p>Est. Shipping & Handling: <i class="fa-solid fa-circle-info"></i> </p>
                                             <span>$17.89</span>
                                             <p style="color: red;"">Shipping Discount:</p>
@@ -373,24 +382,47 @@ if(isset($_SESSION['session-id'])){
  
    
 
-  <!------- script tag ==index.js  ---------------------->
+  <!------- script tag == cart.js  ---------------------->
+  <script src="cart.js"></script>
   <script>
+        //check for Navigation Timing API support
+        if (window.performance) {
+        console.info("window.performance works fine on this browser");
+            
+        }
+        console.info(performance.navigation.type);
+        if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+        console.info( "This page is reloaded" );
+        } else {
+        console.info( "This page is not reloaded");
+}
 
-    // use json_encode to access the cartList in the php script as a JSON in js
+    // use json_encode to get the cartList array in the php script as a JSON in js
+    // we will need to modify the product quantity whwn a user clicks an add or sub button on any of the products in the cartList
     let cartList = <?php echo json_encode($_SESSION['cartList']); ?>;
-    console.log(cartList);
+
+    // initialize a variable that would hold the value of all the products in the cartList and store it in the the session sgv available in the this script
+    // so it will reflect in the php script
+    let totalProdPrice = <?php echo json_encode($_SESSION['totalProduct_price']) ?>;
+
+    // initialize a variable that would hold the value, which is an array of the HTMLspanElements that holds each products quantity
+    // the essence is to loop through it so we can modify the innerHTML of each HTMLspanElement for each product as the add/sub btn is clicked
     let productCount = document.querySelectorAll("#count");
-    console.log(productCount);
-        let cartContainer = document.getElementById("cart-container-wrapper");
+    console.log(productCount);  //contains a NodeList of HTMLspanElements depending on the number of products in the cartList.
+    
+    // get the container that would hold all the items in the cart. 
+    // we can then perform operations like looping through it, since it would serve as our array of products
+    let cartContainer = document.getElementById("cart-container-wrapper");
         console.log("Hello ", cartContainer);
 
-        // using event bubbling, target parent to capture and add an event listener to the children
+        // Target the add, sub, del btn, make a function that handles each of their functionalities
+        // using event bubbling, target parent which is the main container, then the children subsequently
         cartContainer.addEventListener("click", (eventObj)=>{
            console.log(eventObj);
            console.log(eventObj.target.id);
            console.log(eventObj.target.tagName);
 
-            // target the addButton and make product increment
+            // if the area clicked within the cart container is an addButton, we make a product increment
            if(eventObj.target.tagName == 'SPAN' && eventObj.target.id == "addBtn"|| eventObj.target.tagName == 'svg' && eventObj.target.id =="add" || eventObj.target.tagName == 'path' && eventObj.target.id =="add"){
 
                     console.log("Increase Product count");
@@ -417,26 +449,30 @@ if(isset($_SESSION['session-id'])){
                     // log out the parent id
                     clickedProd_id = parent.id;  //here we have gotten the id of the clicked element
 
+                    // at this point we only know the product id. So with this id we can know which of the exact product that its add btn was clicked
                     // loop through the cartList to find product whose id == clickedItem Id and increment
                     cartList.forEach((product, pIndex)=>{
-                        // check which element was clicked in the list
+                        // check which particular product in our cartList where its id matches the id of the product that was clicked
                         if(clickedProd_id == product.id){
-                            // loop through the nodeList and increment its innerHTML. The nodeList serves as the array of all our span Element which hold the value fpr the product quantity
+                            // when we get that product, we increase its own quantity by targeting its own HTMLspanElement in the NodeList 
+                            // loop through the nodeList and increment its innerHTML. The nodeList serves as the array of all our span Element which hold the value for the product quantity
                             productCount.forEach((node, nIndex)=>{
                                 if(pIndex == nIndex){
                                     // increase the product by its nideIndex to reflect innerHTML
                                     node.innerHTML ++;
                                     // increase the product count in js script so i can get it in the cartList array 
                                     cartList[pIndex].qty ++;
+                                    // call the function to update cart summary
+                                    updateTotalProdPrice(); 
                                     // call the function to save this local change in the cartList
-                                    updateProductQty();
+                                    updateProductSession();
 
                                 }
                             })
                         }
                        
-                        // this should log the cartList array with the new product count 
-                        console.log(cartList);
+                        // this should log the cartList array with the new product count made by clicking the add btn
+                        // console.log(cartList);
                     })
                    
            }
@@ -478,8 +514,12 @@ if(isset($_SESSION['session-id'])){
                                     node.innerHTML --;
                                     // increase the product count in js script so i can get it in the cartList array 
                                     cartList[pIndex].qty --;
+                                    // call the function that will update the individual product amountTotal in the HTMLspanELement
+                                    updateProductAmount();
+                                    // call the function to update cart summary
+                                    updateTotalProdPrice();
                                     // call the function to save this local change in the cartList
-                                    updateProductQty();
+                                    updateProductSession();
                                 }
                             })
                         }
@@ -490,66 +530,91 @@ if(isset($_SESSION['session-id'])){
            else if(eventObj.target.tagName == 'DIV' && event.target.classList.contains("delBtn") || eventObj.target.tagName == 'svg' && event.target.classList.contains("del") || event.target.tagName == 'path' && event.classList.contains("del")){
                 console.log("delete button");
                 // get the clickedItem
-         
-                
            }
            else{
                 console.log("this is not a button");
            }
         })
 
+        
 
 // define a function that will UPDATE the cartList when the add or sub button of any product is clicked
-function updateProductQty(){
-
-    // This fetch call makes an update to the cartList in the sgv
-    fetch("fetch.php", {
+function updateProductSession(){
+    // This fetch call makes an update to the cartList in the Session sgv
+    fetch("fetch.php", 
+    {
         method : "PUT",
         headers : {
             "Content-Type" : "application/json",
         },
-        body : JSON.stringify({cartList})  //converts the cartList array to one long string-JSON
+        body : JSON.stringify({cartList}), //in this request body, we converts the cartList array to one long string-JSON
     })  //after we call the fetch api it returns with a response which is a promise object
-    .then((res)=>{
-        if(!res.ok){
+    .then((response)=>{
+        if(!response.ok){
             console.log("Error");
         }
         else{  // if the reolved data from the promise is successful we want to do something with that data
-            console.log(res);  //This res is the response object
-            return res.json();   // in our case, we want to convert it to a json format. This also returns a promise
+            console.log("The raw response is :", response);  //This res is the response object
+            return response.json();   // in our case, we want to convert it to a json format. This also returns a promise
         }
     })
     .then((data)=>{  //data here is the response that is sent back by the server
         console.log("The response data : ", data);
-        return data
+        return data;
     })
-    .then((cartList)=>{
-        console.log(cartList['cartList']);
-    })
+  
+    
 }
 
 // define a function to update cartSummary
-let total = 0;  //initialize a total amount to zero
 
-// get the span counter in the dom
-let total_product_amount = document.getElementById("productAmount");
 
-    function updateCartSummary(){
-        
-        cartList.forEach((product)=>{
-            // get the total_product_amount for each and add as we loop through the entire cartList
-            console.log(total_product_amount);
-        })
+// make a function that would calculate the accumulated cost of all items in the cartList
+    function updateTotalProdPrice(){
+        // the total value of the items in the cart would be stored in a variable called total
+        let total = cartList.reduce((currentTotal, product)=>{
+                return ((product.price * product.qty) + currentTotal);
+        }, 0)
+
+     //   After we get this total value, we would want to update the value by calling this function whenever a new item is added/deleted from the cartList
+        console.log("This total ", total);
+    //   then call the function fetch to update this local change to the session sgv
+        console.log(totalProdPrice); //the totalProdPrice holds the value of the total product amount but was initialized to zero and initialized at top of script
+        // set the session sgv holding the total to the current total
+        totalProdPrice = total;
+        console.log("The new total in session sgv :", totalProdPrice);
+        // updateProductSession();
+
     }
 
+
+// get a nodeList of all th HTMLspanElement that holds the value of the total of each product.
+    let total_product_amount = document.querySelectorAll("#productAmount");
+    console.log("The total product amount is ", total_product_amount);
+
+    // function definition to update product amount
+    function updateProductAmount(){
+        // loop through the cartList to know the product we want to update its amount
+        cartList.forEach((product, pIndex)=>{
+            //loop through the nodeList of spn elements conatining the total for each product
+            // make total logic where nodeList index matches the product index
+            total_product_amount.forEach((node, nIndex) => {
+                if(nIdex == pIndex){
+                    console.log("asdf");
+                    console.log(product.index.price);
+                }
+            })
+
+        })
+    }
     // add an event listener to the cart_head to see cart-summary
     let cartHead = document.querySelector(".cart-head");
     cartHead.addEventListener("click", ()=>{
         console.log("I want to see the cart_summary");
-        
+        console.log("The total product price is ", totalProdPrice);
         updateCartSummary()
     })
   </script>
 
 </body>
-</html> 
+</html>
