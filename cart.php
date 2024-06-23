@@ -504,11 +504,8 @@ if(isset($_SESSION['session-id'])){
                                     // increase the product count in js script so i can get it in the cartList array 
                                     cartList[pIndex].qty --;
                                     // call the function that will update the individual product amountTotal in the HTMLspanELement
-                                    updateProductAmount();
-                                    // call the function to update cart summary
-                                    getTotalProdPrice();
-                                    // call the function to save this local change in the cartList
-                                    updateProductSession();
+                                    updateProdPrice(parent);
+                                   
                                 }
                             })
                         }
