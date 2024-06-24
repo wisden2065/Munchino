@@ -52,6 +52,9 @@ if(isset($_SESSION['session-id'])){
                 foreach($_SESSION['cartList'] as $key => $eachProduct){
                     $index = $key;
                 }
+            ?>
+         
+            <?php
                 // when he wants to add an item to his list we want to get the item clicked details from the database
             if(isset($_GET['add_to_cart'])){
                     $clickedProductId = $_GET['add_to_cart'];
@@ -175,6 +178,7 @@ if(isset($_SESSION['session-id'])){
           <label for="search-box"  class="fas fa-search" id="icon-searchProduct"></label>
           <i class="fas fa-times" id="close"></i>
       </form>
+
 </header>
 
     <!--header section ends-->
@@ -280,7 +284,7 @@ if(isset($_SESSION['session-id'])){
                                         <h3><i class="fa-solid fa-lock"></i> Cart Summary</h3>
                                         <div class="summary-body">
                                             <p>Merchandise:</p>
-                                            <span id="merchandise">$<?php echo $_SESSION['totalProduct_price']; ?></span>
+                                            <span id="merchandise">$<?php echo $_SESSION['totalProduct']; ?></span>
                                             <p>Est. Shipping & Handling: <i class="fa-solid fa-circle-info"></i> </p>
                                             <span>$17.89</span>
                                             <p style="color: red;"">Shipping Discount:</p>
@@ -300,7 +304,7 @@ if(isset($_SESSION['session-id'])){
                                         <p>Remove any spaces or dishes before hitting apply</p>
                                         <input type="text" style="outline: solid 1.5px;"> <button style="border: solid 1px grey; padding: 4px 10px;">APPLY</button>
                                         <br><br><br><hr>
-                                            <button href="logout.php" class="btn" style="display: block;">CHECKOUT NOW</button> <br>
+                                            <a href="payment.php"><button class="btn" style="display: block;">CHECKOUT NOW</button></a> <br>
                                             <p>By continuing to Checkout, you are agreeing to our <span style="text-decoration: underline;">Terms of Use</span> and <span style="text-decoration: underline;">Privacy Policy</span></p>
                                             <br><br>
                                             <hr>
@@ -383,9 +387,26 @@ if(isset($_SESSION['session-id'])){
    
 
   <!------- script tag == cart.js  ---------------------->
-  <script src="cart.js"></script>
+  <!-- <script src="cart.js"></script> -->
   <script>
-       
+    // check if the page was reloaded to stop increment of product quantity
+    window.onload = function (){
+        
+        if(sessionStorage.getItem("reloaded")){
+            console.log("The page was just reloaded");
+            sessionStorage.removeItem("reloaded");
+        }
+        else{  //we set the key reloaded with the value true to indicate that the page was reload and not loaded by the default means
+            sessionStorage.setItem("reloaded", true);
+            <?php if(isset($_GET['add_to_cart'])): ?>
+                // remove the GET query parameter in the url and set it to the url on reload
+                window.location.href = window.location.href.split('?')[0];
+            <?php endif; ?>
+        }
+    }
+
+
+
 
     // use json_encode to get the cartList array in the php script as a JSON in js
     // we will need to modify the product quantity whwn a user clicks an add or sub button on any of the products in the cartList
@@ -522,29 +543,6 @@ if(isset($_SESSION['session-id'])){
            }
         })
 
-        
-
-// make a function that would calculate the accumulated cost of all items in the cartList
-    function getTotalProdPrice(){
-        // the total value of the items in the cart would be stored in a variable called total
-        let total = cartList.reduce((currentTotal, product)=>{
-                return ((product.price * product.qty) + currentTotal);
-        }, 0)
-
-     //   After we get this total value, we would want to update the value by calling this function whenever a new item is added/deleted from the cartList
-        console.log("This total ", total);
-    //   then call the function fetch to update this local change to the session sgv
-        console.log(totalProdPrice); //the totalProdPrice holds the value of the total product amount but was initialized to zero and initialized at top of script
-        // set the session sgv holding the total to the current total
-        totalProdPrice = total;  //set the total pice in s session to this total
-        console.log("The new total in session sgv :", totalProdPrice);
-
-        //  call the function that will update this change
-        // updateProdPrice();
-
-    }
-
-
 // get a nodeList of all th HTMLspanElement that holds the value of the total of each product.
     let prodTotalPrice_nodes = document.querySelectorAll("#productAmount");
     console.log("The total product amount is ", prodTotalPrice_nodes);  //returns a nodeList of all the span for each product total
@@ -569,25 +567,53 @@ if(isset($_SESSION['session-id'])){
                         console.log("not found");
                     }
                 })
+                // after updating individual product, we want to see sum of all products in the cartList
+                get_allProdTotalPrice();
     }
 
+// make a function that would calculate the accumulated cost of all items in the cartList
+function get_allProdTotalPrice(){
+        // the total value of the items in the cart would be stored in a variable called total
+        let total = cartList.reduce((currentTotal, product)=>{
+                return ((product.price * product.qty) + currentTotal);
+        }, 0)
+
+     //   After we get this total value, we would want to update the value by calling this function whenever a new item is added/deleted from the cartList
+        console.log("This total ", total);
+    //   then call the function fetch to update this local change to the session sgv
+        console.log(totalProdPrice); //the totalProdPrice holds the value of the total product amount but was initialized to zero and initialized at top of script
+        // set the session sgv holding the total to the current total
+        totalProdPrice = total;  //set the total pice in s session to this total
+        console.log("The new total in session sgv :", totalProdPrice);
+
+        //  call the function that will update this change, passing the currentProductTotal
+        updateChanges_toSession(total);
+
+}
 
         // define a function that will UPDATE the cartList when the add or sub button of any product is clicked
-    function updateProductSession(){
+    function updateChanges_toSession(total){
+        // add a timestamp to make request unique and avoid caching in browser
+        let url = "fetch.php?t=" + new Date().getTime();
         // This fetch call makes an update to the cartList in the Session sgv
-        fetch("fetch.php", 
+        fetch(url, 
         {
             method : "PUT",
             headers : {
                 "Content-Type" : "application/json",
             },
-            body : JSON.stringify({cartList}), //in this request body, we converts the cartList array to one long string-JSON
+            body : JSON.stringify(
+                {
+                    cartList: cartList,
+                    totalProduct: total
+
+                }), //in this request body, we converts the cartList array to one long string-JSON
         })  //after we call the fetch api it returns with a response which is a promise object
         .then((response)=>{
             if(!response.ok){
                 console.log("Error");
             }
-            else{  // if the reolved data from the promise is successful we want to do something with that data
+            else{  // if the resolved data from the promise is successful we want to do something with that data
                 console.log("The raw response is :", response);  //This res is the response object
                 return response.json();   // in our case, we want to convert it to a json format. This also returns a promise
             }
@@ -595,6 +621,11 @@ if(isset($_SESSION['session-id'])){
         .then((data)=>{  //data here is the response that is sent back by the server
             console.log("The response data : ", data);
             return data;
+        })
+        .then((data)=>{
+            console.log(data['cartList']);
+            // location.reload();
+            
         })
     
         

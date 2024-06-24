@@ -44,7 +44,7 @@
                         <p style="color: #2e8500;"><i class="fa-solid fa-rectangle-ad" style="color: #2e8500;"></i> Got a Promo code?</p>
                     </div>
                     <div class="bill-today">
-                        <strong>Billed Today</strong> <h3>$ 60</h3>
+                        <strong>Billed Today</strong> <h3>$ <?php echo $_SESSION['totalProduct']?></h3>
                         <hr>
                         <p>Renews for $60 every year</p>
                     </div>

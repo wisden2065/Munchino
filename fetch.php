@@ -18,21 +18,23 @@ session_start();
         $data = json_decode($json, true);
         // check if there is an array cartList in the decoded request body and its not empty
         // this array contains the updated cartList
-        if (isset($data['cartList'])) {
+        if (isset($data['cartList']) && isset($data['totalProduct'])) {
             // store the updated cartList in the cartList which is in the session sgv
             // This will update the state of the cartList in the session sgv
             $_SESSION['cartList'] = $data['cartList'];
+            $_SESSION['totalProduct'] = $data['totalProduct'];
             // Process the response object that the client can see how the request went
             $response = [
                 'status' => 'success',
                 'message' => 'Cart updated successfully',
                 'cartList' => $_SESSION['cartList'],
+                'totalProduct' => $_SESSION['totalProduct'] 
             ];
         } 
         else {
             $response = [
                 'status' => 'error',
-                'message' => 'No cartList found in the request'
+                'message' => 'Could not update cart info'
             ];
         }
         echo json_encode($response); // Return the response as JSON

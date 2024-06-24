@@ -198,7 +198,7 @@ include('connect.php');
             $pathUrl = $path.$image;
 
 ?>
-    
+
         <!-- items formerly populated with dishes.json @ index.js -->
         <div class="box" id="<?php echo $array['id'] ?>">
             <img src="<?php echo $pathUrl; ?>" alt="Image not available">
