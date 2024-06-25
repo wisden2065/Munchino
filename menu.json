@@ -1,14 +1,14 @@
 [
-    {"id": 1, "image": "pictures/food-item-8.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
-    {"id": 2, "image": "pictures/food-item-9.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
-    {"id": 3, "image": "pictures/home-img-7.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
+    {"id": 1, "image": "pictures/food-item-8.png", "foodName": "Grilled chicken", "rating": 2, "amount": 1550},
+    {"id": 2, "image": "pictures/food-item-9.png", "foodName": "Chicken and Chips", "rating": 2, "amount": 1550},
+    {"id": 3, "image": "pictures/home-img-7.png", "foodName": "Fried chicken", "rating": 2, "amount": 1550},
     {"id": 4, "image": "pictures/food-item-8.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
-    {"id": 5, "image": "pictures/food-item-5.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
+    {"id": 5, "image": "pictures/food-item-5.png", "foodName": "Veg chicken", "rating": 2, "amount": 1550},
     {"id": 6, "image": "pictures/food-item-10.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
-    {"id": 7, "image": "pictures/food-item-8.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
-    {"id": 8, "image": "pictures/food-item-10.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
-    {"id": 9, "image": "pictures/home-img-7.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
-    {"id": 10, "image": "pictures/food-item-9.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
-    {"id": 11, "image": "pictures/home-img-7.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
-    {"id": 12, "image": "pictures/food-item-8.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550}
+    {"id": 7, "image": "pictures/food-item-8.png", "foodName": "Sauce chicken", "rating": 2, "amount": 1550},
+    {"id": 8, "image": "pictures/food-item-10.png", "foodName": "Plato chicken", "rating": 2, "amount": 1550},
+    {"id": 9, "image": "pictures/home-img-7.png", "foodName": "French chicken", "rating": 2, "amount": 1550},
+    {"id": 10, "image": "pictures/food-item-9.png", "foodName": "Soup chicken", "rating": 2, "amount": 1550},
+    {"id": 11, "image": "pictures/home-img-7.png", "foodName": "Whole chicken", "rating": 2, "amount": 1550},
+    {"id": 12, "image": "pictures/food-item-8.png", "foodName": "Meaty chicken", "rating": 2, "amount": 1550}
 ]

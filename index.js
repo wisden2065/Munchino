@@ -8,24 +8,6 @@ console.log(searchInput);
 console.log(searchIcon);
 
 
-// logs value of input to console onKeyup
-searchInput.addEventListener("keyup", ()=>{
-  // console.log(searchInput.value);
-})  
-
-//  logs value of input onclick to the searchIcon
-searchIcon.addEventListener("click", ()=>{
-  // console.log(searchInput.value);
-  let filteredList =  productList.filter((newList)=>{
-      return searchInput.value.includes(newList.name)
- 
-      displayProductList(filteredList);
-  })
-  // console.log(filteredList)
-  console.log(filteredList);
-  displayProductList(filteredList)
-})
-
 //navbar toggle to activeBtn-- onCLick
 let allBtn = document.querySelectorAll(".navbar a")
 
@@ -128,11 +110,38 @@ function fetchMenuFoods(){
         .then(data=>{
             cartList2 =data
             console.log(cartList2);
-            pushMenuFoodListToUI()
+            pushMenuFoodListToUI(cartList2)
         })
     })
 }
 fetchMenuFoods();
+
+// function to search products
+function searchFood(){
+    let foodName = searchInput.value;
+    if(foodName !== ""){
+        // console.log(cartList2);
+        // when we filter the movies, this returns a new array
+        let searchedFood = cartList2.filter((product)=>{
+                console.log(product.foodName);
+                return product.foodName.toUpperCase().includes(foodName.toUpperCase());
+           
+        })
+
+        console.log(searchedFood);
+        pushMenuFoodListToUI(searchedFood);
+    }
+}
+
+
+// logs value of input to console onKeyup
+searchInput.addEventListener("keyup", ()=>{
+
+// call the function that will log the food name
+    searchFood();
+
+})  
+
 
 // Asynchronous operation 2 :Displays the Product List to the UI
 const dishesList_container = document.querySelector(".box-container");   
@@ -179,28 +188,28 @@ function pushProductListToUI(){
 let menuList_container = document.getElementById('box-container');
 console.log(menuList_container);
 
-function pushMenuFoodListToUI(){    
+function pushMenuFoodListToUI(foodArray){    
     console.log('In populateMenu()');
-    let html = '';
-    if(cartList2.length > 0){
-        cartList2.forEach((e)=>{
-            html +=`<div class="box" id="${e.id}">
-                        <div class="image">
-                            <img src="${e.image}" alt="">
-                        </div>
-                        <div class="content">
-                            <h3>${e.foodName}</h3>
-                            <div><i class="fas fa-naira-sign">${e.amount}</i></div>
-                            <a href="#" class="btn food" id="${e.id}">add to cart</a>
-                        </div>
-                    </div>`
-        })
-        menuList_container.innerHTML = html;
-    } 
-    else{
-        console.log('no item in cartList2 yet');
-    }
-}
+ 
+        let html = '';
+            foodArray.forEach((food)=>{
+                html +=`<div class="box" id="${food.id}">
+                            <div class="image">
+                                <img src="${food.image}" alt="">
+                            </div>
+                            <div class="content">
+                                <h3>${food.foodName}</h3>
+                                <div><i class="fas fa-naira-sign">${food.amount}</i></div>
+                                <a href="#" class="btn food" id="${food.id}">add to cart</a>
+                            </div>
+                        </div>`
+            })
+            menuList_container.innerHTML = html;
+} 
+      
+
+        
+    
 
 
 // click event handler

@@ -284,7 +284,7 @@ if(isset($_SESSION['session-id'])){
                                         <h3><i class="fa-solid fa-lock"></i> Cart Summary</h3>
                                         <div class="summary-body">
                                             <p>Merchandise:</p>
-                                            <span id="merchandise">$<?php echo $_SESSION['totalProduct']; ?></span>
+                                            <span id="merchandise">$22,000</span>
                                             <p>Est. Shipping & Handling: <i class="fa-solid fa-circle-info"></i> </p>
                                             <span>$17.89</span>
                                             <p style="color: red;"">Shipping Discount:</p>
