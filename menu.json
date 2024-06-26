@@ -1,6 +1,6 @@
 [
-    {"id": 1, "image": "pictures/food-item-8.png", "foodName": "Grilled chicken", "rating": 2, "amount": 1550},
-    {"id": 2, "image": "pictures/food-item-9.png", "foodName": "Chicken and Chips", "rating": 2, "amount": 1550},
+    {"id": 1, "image": "pictures/food-item-8.png", "foodName": "Grilled chicken", "rating": 2, "amount": 1050},
+    {"id": 2, "image": "pictures/food-item-9.png", "foodName": "Chicken and Chips", "rating": 2, "amount": 650},
     {"id": 3, "image": "pictures/home-img-7.png", "foodName": "Fried chicken", "rating": 2, "amount": 1550},
     {"id": 4, "image": "pictures/food-item-8.png", "foodName": "tasty chicken", "rating": 2, "amount": 1550},
     {"id": 5, "image": "pictures/food-item-5.png", "foodName": "Veg chicken", "rating": 2, "amount": 1550},

@@ -113,7 +113,7 @@ if(isset($_POST['sign-in'])){
 
 
 
-// Admin edit Product in database
+// Allow Admin to edit Product in database
 if(isset($_POST['admin-edit-product'])){
     $productName = $_POST['pName'];
     $productPrice = $_POST['pPrice'];

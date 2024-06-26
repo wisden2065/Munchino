@@ -28,9 +28,11 @@ include('connect.php');
 <body>
 
 <?php
+// if the user is signed in as a valid account holder, we let him see all the pages in the index
     if(isset($_SESSION['session-id'])){
         $session = $_SESSION['session-id'];
-
+        
+        // get all the user info from db to properly sign him in
         $query = "SELECT * FROM users WHERE email = '$session'";
         $result = mysqli_query($connection, $query) or die("Error");
         if($row = mysqli_num_rows($result) > 0){
@@ -44,6 +46,7 @@ include('connect.php');
             // echo "Else block";
         }
 
+        // after he is signed in, we make a query to db to show user all the products
         $productQuery = "SELECT * FROM products";   //order by rand() limit 0,8 to fetch products at random
         $productResult = mysqli_query($connection, $productQuery) or die('Error in completing query');
             
@@ -274,9 +277,35 @@ include('connect.php');
         <h3 class="sub-heading">Our menu</h3>
         <h1 class="heading">Today's Delicay</h1>
     </div>
-
+    <!-- the box-container is the div that houses the products rendered in our menu Items -->
     <div id="box-container">
-        <!-- Populated with menu.json @ index.js  -->
+        <!-- formerly Populated with menu.json @ index.js  -->
+        <?php
+        mysqli_data_seek($productResult, 0);
+        while($array = mysqli_fetch_array($productResult)){
+            $image = $array["image"];
+            $path = "pic/";
+            $pathUrl = $path.$image;
+
+?>
+
+        <!-- items formerly populated with dishes.json @ index.js -->
+        <div class="box" id="<?php echo $array['id'] ?>">
+            <img src="<?php echo $pathUrl; ?>" alt="Image not available">
+                    <div class="content">
+                        <h3><?php echo $array['name'] ?></h3>
+                        <div class="stars">
+                        <span><i class="fas fa-naira-sign"><?php echo $array['price'] ?></i></span> 
+                        </div>
+                    <div>
+            <a href="cart.php?add_to_cart=<?php echo $array['id'] ?>" class="btn" id="<?php echo $array['id']; ?>" target ="_blank">Add to cart</a>
+            </div>
+        </div>
+    </div>
+   
+<?php
+}
+?>
     </div>
 
 </section>

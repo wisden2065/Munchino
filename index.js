@@ -110,7 +110,8 @@ function fetchMenuFoods(){
         .then(data=>{
             cartList2 =data
             console.log(cartList2);
-            pushMenuFoodListToUI(cartList2)
+            // commented this call function to display product. The products will be later displayed with php
+            // pushMenuFoodListToUI(cartList2)
         })
     })
 }
@@ -130,6 +131,10 @@ function searchFood(){
 
         console.log(searchedFood);
         pushMenuFoodListToUI(searchedFood);
+    }
+    else{
+        // display all the default product
+        // pushMenuFoodListToUI(cartList2);
     }
 }
 
@@ -188,9 +193,9 @@ function pushProductListToUI(){
 let menuList_container = document.getElementById('box-container');
 console.log(menuList_container);
 
-function pushMenuFoodListToUI(foodArray){    
-    console.log('In populateMenu()');
- 
+function pushMenuFoodListToUI(foodArray){   
+    // let the display be blank as soon as this function is called  
+    document.innerHTML = "";
         let html = '';
             foodArray.forEach((food)=>{
                 html +=`<div class="box" id="${food.id}">
