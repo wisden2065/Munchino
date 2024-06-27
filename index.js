@@ -56,8 +56,8 @@ cartIcon.onclick=()=>{
 //swiper js begins here
 const swiper = new Swiper('.swiper', {
     // Optional parameters
-    loop: true ,
-    speed: 2000, 
+    loop: true,
+    speed: 2500, 
     autoplay:{
       delay:3000,
       disableOnInteraction:false,

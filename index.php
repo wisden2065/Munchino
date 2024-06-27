@@ -46,14 +46,6 @@ include('connect.php');
             // echo "Else block";
         }
 
-        // after he is signed in, we make a query to db to show user all the products
-        $productQuery = "SELECT * FROM products";   //order by rand() limit 0,8 to fetch products at random
-        $productResult = mysqli_query($connection, $productQuery) or die('Error in completing query');
-            
-        // echo mysqli_num_rows($productResult);
-        $arr = mysqli_fetch_array($productResult);
-        // print_r($arr);
-
            // create the cartList array so we can run the condition check to display span value
            if(!isset($_SESSION['cartList'])){
             $_SESSION['cartList'] = [];
@@ -114,66 +106,39 @@ include('connect.php');
     
     <div class="home-carousel swiper">
         <div class="wrapper swiper-wrapper">
-            <div class="slide swiper-slide">
-                <div class="content">
-                    <span>Our special dish</span>
-                    <h3>Noodles</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo minus beatae perferendis.</p>
-                    <a href="#"  class="btn food">order now</a>
-                </div>
-                <div class="image">
-                    <img src="pictures/home-img-2.png" loading="lazy" alt="">
-                </div>
-            </div>
+            <!-- main slide contents starts here -->
+            <?php
+              // after he is signed in, we make a query to db to show user all the best selling products. These products will be displayed in the carousel in landing page
+                $sliderProdQuery = "SELECT * FROM products WHERE type = 3";   //order by rand() limit 0,8 to fetch products at random
+                $sliderProdResult = mysqli_query($connection, $sliderProdQuery) or die('Error in completing query');
+                
+            // echo mysqli_num_rows($productResult);
+            // while($arr = mysqli_fetch_array($sliderProdResult)){
+            //     print_r($arr);
+            //     echo "<br>";
+            // }
+            // loop through all the products in the result from the sliderQuery and display each product one at a time
+                mysqli_data_seek($sliderProdResult, 0);
+                while($product = mysqli_fetch_array($sliderProdResult)){
+                    $image = $product['image'];
+                    $imagePath = "pic/";
+                    $imageUrl = $imagePath.$image;
+                    ?>
+                          <div class="slide swiper-slide">
+                            <div class="content">
+                                <span>Our special dish</span>
+                                <h3><?php echo $product['name']; ?></h3>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo minus beatae perferendis.</p>
+                                <a href="#"  class="btn food">order now</a>
+                            </div>
+                            <div class="image">
+                                <img src="<?php echo $imageUrl; ?>" loading="lazy" alt="">
+                            </div>
+                        </div>
+                    <?php
+                }
 
-            <!-- <div class="swiper-slide slide">
-                <div class="content">
-                    <span>Our special dish</span>
-                    <h3>Grilled Turkey</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, quod?</p>
-                    <a href="#"  class="btn food">order now</a>
-                </div>
-                <div class="image">
-                    <img src="pictures/home-img-4.png" loading="lazy " alt="">
-                </div>
-            </div>
-
-            <div class="swiper-slide slide">
-                <div class="content">
-                    <span>Our special dish</span>
-                    <h3>Rasp Salad</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla, alias.</p>
-                    <a href="#"  class="btn food">order now</a>
-                </div>
-                <div class="image">
-                    <img src="pictures/home-img-8.png" alt="" >
-                </div>
-            </div>
-
-            <div class="swiper-slide slide">
-                <div class="content">
-                    <span>Our special dish</span>
-                    <h3>Spiced Chicken</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, facere!</p>
-                    <a href="#"  class="btn food">order now</a>
-                </div>
-                <div class="image">
-                    <img src="pictures/home-img-7.png" alt="">
-                </div>
-            </div>
-
-            <div class="swiper-slide slide">
-                <div class="content">
-                    <span>Our special dish</span>
-                    <h3>Tasty Burger</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, tempora!</p>
-                    <a href="#"  class="btn food">order now</a>
-                </div>
-                <div class="image">
-                    <img src="pictures/home-img-5.png" alt="">
-                </div>
-            </div>
-             -->
+            ?>
         </div>
         <!-- swiper pagination -->
         <div class="swiper-pagination"></div>
@@ -194,8 +159,17 @@ include('connect.php');
     <div class="box-container" id="dishes-container">
 
 <?php
-        mysqli_data_seek($productResult, 0);
-        while($array = mysqli_fetch_array($productResult)){
+          // after he is signed in, we make a query to db to show user popular products.
+          $popProdQuery = "SELECT * FROM products WHERE type = 2";   //order by rand() limit 0,8 to fetch products at random
+          $popProdResult = mysqli_query($connection, $popProdQuery) or die('Error in completing query');
+              
+          // echo mysqli_num_rows($productResult);
+          // while($arr = mysqli_fetch_array($sliderProdResult)){
+          //     print_r($arr);
+          //     echo "<br>";
+          // }
+        mysqli_data_seek($popProdResult, 0);
+        while($array = mysqli_fetch_array($popProdResult)){
             $image = $array["image"];
             $path = "pic/";
             $pathUrl = $path.$image;
@@ -281,9 +255,14 @@ include('connect.php');
     <div id="box-container">
         <!-- formerly Populated with menu.json @ index.js  -->
         <?php
-        mysqli_data_seek($productResult, 0);
-        while($array = mysqli_fetch_array($productResult)){
-            $image = $array["image"];
+
+        // make a query to get products from db that will be populated in this menu section
+        $menuProdQuery = "SELECT * FROM products WHERE type = 1";
+        $menuProdResult = mysqli_query($connection, $menuProdQuery);
+
+        mysqli_data_seek($menuProdResult, 0);
+        while($menuProducts = mysqli_fetch_array($menuProdResult)){
+            $image = $menuProducts["image"];
             $path = "pic/";
             $pathUrl = $path.$image;
 
@@ -293,12 +272,12 @@ include('connect.php');
         <div class="box" id="<?php echo $array['id'] ?>">
             <img src="<?php echo $pathUrl; ?>" alt="Image not available">
                     <div class="content">
-                        <h3><?php echo $array['name'] ?></h3>
+                        <h3><?php echo $menuProducts['name'] ?></h3>
                         <div class="stars">
-                        <span><i class="fas fa-naira-sign"><?php echo $array['price'] ?></i></span> 
+                        <span><i class="fas fa-naira-sign"><?php echo $menuProducts['price'] ?></i></span> 
                         </div>
                     <div>
-            <a href="cart.php?add_to_cart=<?php echo $array['id'] ?>" class="btn" id="<?php echo $array['id']; ?>" target ="_blank">Add to cart</a>
+            <a href="cart.php?add_to_cart=<?php echo $array['id'] ?>" class="btn" id="<?php echo $menuProducts['id']; ?>" target ="_blank">Add to cart</a>
             </div>
         </div>
     </div>
@@ -556,13 +535,10 @@ include('connect.php');
 
 <!--swiper script link-->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<!-- link to index.js -->
+<script src="index.js"></script>
 
-<!-- custom js file link -->
-<script src="index.js" ></script>
 
-<!-----Add-to-cart script link-->
-
-<!-- <script src="cart.js"></script> -->
 <?php
     }
     else{
