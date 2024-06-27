@@ -3,7 +3,7 @@
     include('connect.php');
     // print_r($_POST['$firstName']);
 
-    //for signup
+    //when the user submits with the signup button
     if(isset($_POST['signup'])){
         $firstName = $_POST['firstname'];
         $lastName = $_POST['lastname'];
@@ -12,19 +12,22 @@
         $password = $_POST['password'];
         // $password = md5($password);
         $pictureName = $_FILES['picture']['name'];    
-        $picture_uploaded = 0;
+
+        
+        $picture_uploaded = 0;   //this variable would account for if the the user picture is successfully uploaded. Without it we wouldn't proceed to upload his other info
     // images/videos/files are 2x2 matrix/array
 
+        // move uploaded file to server
         if(move_uploaded_file($_FILES['picture']['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/e-commerce/pic/'.$pictureName)){
             $target_file = $_SERVER['DOCUMENT_ROOT'].'/e-commerce/pic/'.$pictureName;
             $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
             $pictureName = basename($_FILES['picture']['name']);
             $photo = time().$pictureName;
 
-            if($imageFileType != 'jpg' && $imageFileType != 'jpeg' && $imageFileType != 'png' && $imageFileType != 'jfif'){
+            if($imageFileType != 'jpg' && $imageFileType != 'jpeg' && $imageFileType != 'png' && $imageFileType != 'jif'){
                 ?>
                     <script>
-                        alert("Please upload a photo having an extension .jpg/ .jpeg/ .png/ .jfif");
+                        alert("Please upload a photo having an extension .jpg/ .jpeg/ .png/ .jif");
                     </script>
                 <?php
             }
@@ -92,9 +95,11 @@ if(isset($_POST['sign-in'])){
             session_start();
             $_SESSION['session-id'] = $user[5];
             if($userType == 0){
+                // if the user is an USER, redirect to product page
                 header('Location: load.php');
             }
             else if($userType == 1){
+                // else redirect to admin panel
                 header('Location: admin-page.php');
             }
             else{
@@ -121,25 +126,31 @@ if(isset($_POST['admin-edit-product'])){
     $productRating = $_POST['pRating'];
     $productImage = $_POST['pImage'];
 
-
+//after the admin has made a submission to edit a product we query the db to fetch all the products and see if the product name already exist in db
     $sqlQuery = "SELECT * FROM products";
+    // result is the variable that stores all the products fetched from db
     $result = mysqli_query($connection, $sqlQuery) or die("Error");
     // print_r($result);
 
+    // when we fetch all products, we get the number of all the products we have fetched in the variable rowResult.Each product is an associative array
     $rowResult= mysqli_fetch_row($result);
 
+    // confirm if we have fetched more than one product we check if the product the admin wants to add is already in the db or not by its product name
     if($rowResult > 2){
 
         mysqli_data_seek($result, 0);
+        // we create an empty list were we will extract and store all the products in the db in. This will help us check the new product name if it already in the db 
         $list = [];
-        // echo  gettype($list);
+
+        // mysqli_fetch_assoc($result) should return each product row one after the other.
+        // hence the expression in the while loop will continue to evaluate to true while there is still a row in the variable result of total products in the db
+        // while there a product in the result variable, we get the name of the product and push it into the list 
         while($row = mysqli_fetch_assoc($result)){
-            // print_r($row['name']);
+
             array_push($list, $row['name']);
-            // $list = $row['name'];
         }
-        // echo "<br>";
-        // echo gettype($list);
+       
+        // update the product if its name already exist in the db and/ or push the product as a new product into the db if the name is not found in the db
         if(in_array($productName, $list)){
             echo $productName." found in the array";
             echo "<br>";
@@ -172,7 +183,7 @@ if(isset($_POST['admin-edit-product'])){
         
     }
     else{
-        echo "No rows gotten";
+        echo "No products gotten in the database";
     }
     
 
