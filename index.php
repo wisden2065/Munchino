@@ -62,12 +62,28 @@ include('connect.php');
                 <a  href="#dishes">dishes</a> 
                 <a  href="#about">about</a> 
                 <a  href="#menu">menu</a> 
-                <a  href="#review">review</a> 
-                <a  href="#order">order</a> 
+                <!-- <a  href="#review">review</a>  -->
+                <!-- <a  href="#order">order</a>  -->
         </nav>
     
         <div class="icons">
+            <!-- hamburger icon that will display at mediaquery -->
             <i class="fa-solid fa-list" id="menu-list-icon"></i>
+            <!-- extended search icon -->
+            <div id="search-form">
+                <form action="" id="form">
+                    <input type="search" placeholder="search a delicacy" name="input" id="search-box">
+                    <!-- <i class="fa-solid fa-magnifying-glass"></i> -->
+                </form>
+                <div class="label">
+                    <i class="fas fa-search" id="search"></i>
+                    <!-- <label for="search-box"  class="fas fa-search" id="icon-searchProduct"></label> -->
+                    <i class="fas fa-times" id="close"></i>
+                </div>
+            </div>
+                <!-- search icon cancel button -->
+                <!-- <i class="fas fa-times" id=""></i> -->
+            <!-- search icon when clicked will show the above search-form -->
             <i class="fas fa-search" id="search-icon"></i>
             <span id="cartTotal"><?php 
                 if(count($_SESSION['cartList']) > 0){
@@ -87,12 +103,7 @@ include('connect.php');
 
 <!---------- Search form--------------------------------------------- -->
 
-<form action="" id="search-form">
-    <input type="search" placeholder="search here..." name="input" id="search-box">
-    <!-- <i class="fa-solid fa-magnifying-glass"></i> -->
-    <label for="search-box"  class="fas fa-search" id="icon-searchProduct"></label>
-    <i class="fas fa-times" id="close"></i>
-</form>
+
 <!--------search form ends here---------------------------------------------------->
 
 <!---------cart form ends here------------------------------------------------->
@@ -124,12 +135,12 @@ include('connect.php');
                     $imagePath = "pic/";
                     $imageUrl = $imagePath.$image;
                     ?>
-                          <div class="slide swiper-slide">
+                          <div class="slide swiper-slide" id="<?php echo $product["id"]; ?>">
                             <div class="content">
                                 <span>Our special dish</span>
                                 <h3><?php echo $product['name']; ?></h3>
                                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo minus beatae perferendis.</p>
-                                <a href="#"  class="btn food">order now</a>
+                                <a href="cart.php?add_to_cart=<?php echo $product["id"]; ?>"  class="btn food">order now</a>
                             </div>
                             <div class="image">
                                 <img src="<?php echo $imageUrl; ?>" loading="lazy" alt="">
@@ -277,7 +288,7 @@ include('connect.php');
                         <span><i class="fas fa-naira-sign"><?php echo $menuProducts['price'] ?></i></span> 
                         </div>
                     <div>
-            <a href="cart.php?add_to_cart=<?php echo $array['id'] ?>" class="btn" id="<?php echo $menuProducts['id']; ?>" target ="_blank">Add to cart</a>
+            <a href="cart.php?add_to_cart=<?php echo $menuProducts['id'] ?>" class="btn" id="<?php echo $menuProducts['id']; ?>" target ="_blank">Add to cart</a>
             </div>
         </div>
     </div>

@@ -16,7 +16,7 @@ session_start();
 
         //this line decodes the json string stored on the POST request body into a php array b/c of the true
         $data = json_decode($json, true);
-        // check if there is an array cartList in the decoded request body and its not empty
+         // check if there is an array cartList in the decoded request body and its not empty
         // this array contains the updated cartList
         if (isset($data['cartList']) && isset($data['totalProduct'])) {
             // store the updated cartList in the cartList which is in the session sgv

@@ -1,6 +1,6 @@
 
 // adding functionality to search icon
-let form = document.querySelector("#search-form"); 
+let form = document.querySelector("#form"); 
 let searchIcon = document.querySelector("#icon-searchProduct"); //gets a ref to the font awesome search icon
 
 let searchInput = form["input"];
@@ -33,7 +33,11 @@ let search = document.querySelector("#search-icon");
 let searchToggle = document.querySelector("#search-form");
 
 search.onclick =()=>{
+        // when the button is clicked, we show the search bar 
     searchToggle.classList.toggle("activate-searchForm");
+       // then we the classList that has the visible search cancel available
+    
+
 }
 
 // Search cancel functionality 
@@ -122,15 +126,21 @@ function searchFood(){
     let foodName = searchInput.value;
     if(foodName !== ""){
         // console.log(cartList2);
-        // when we filter the movies, this returns a new array
-        let searchedFood = cartList2.filter((product)=>{
-                console.log(product.foodName);
-                return product.foodName.toUpperCase().includes(foodName.toUpperCase());
-           
-        })
 
-        console.log(searchedFood);
-        pushMenuFoodListToUI(searchedFood);
+        // make a function to return filtered products on keypress
+        // when we filter the movies, this returns a new array
+        // let searchedFood = cartList2.filter((product)=>{
+        //         console.log(product.foodName);
+        //         return product.foodName.toUpperCase().includes(foodName.toUpperCase());
+           
+        // })
+        // console.log(searchedFood); //outputs the array of food searched in the searchInput
+        // pushMenuFoodListToUI(searchedFood); //pushes this array to the UI
+        // call the function that will a request to search.php that will return filtered products on keypress with php
+        callFilteredProduct(foodName);  //pass the value foodName to the this function
+       
+
+        
     }
     else{
         // display all the default product
@@ -360,3 +370,27 @@ function displayCartListToUI(){
         container.innerHTML = newLiInCartList;
 }
 
+
+
+// function definition that will call the server search.php
+
+function callFilteredProduct(foodName){
+
+    fetch("search.php", 
+      {
+        method : "PUT",
+        headers : {
+            "Content-Type" : "application/json",
+        },
+        body : JSON.stringify({foodName}),
+      }
+    )
+    .then((res)=>{
+        console.log(res);
+        return res.json();
+    })
+    .then((prod)=>{
+        console.log(prod);
+        console.log(prod['searchedProductList']);
+    })
+}
