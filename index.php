@@ -62,28 +62,19 @@ include('connect.php');
                 <a  href="#dishes">dishes</a> 
                 <a  href="#about">about</a> 
                 <a  href="#menu">menu</a> 
-                <!-- <a  href="#review">review</a>  -->
-                <!-- <a  href="#order">order</a>  -->
         </nav>
     
         <div class="icons">
             <!-- hamburger icon that will display at mediaquery -->
             <i class="fa-solid fa-list" id="menu-list-icon"></i>
             <!-- extended search icon -->
-            <div id="search-form">
+            <div id="search-icon-box">
                 <form action="" id="form">
                     <input type="search" placeholder="search a delicacy" name="input" id="search-box">
-                    <!-- <i class="fa-solid fa-magnifying-glass"></i> -->
+                    <!-- div for search options display -->
                 </form>
-                <div class="label">
-                    <i class="fas fa-search" id="search"></i>
-                    <!-- <label for="search-box"  class="fas fa-search" id="icon-searchProduct"></label> -->
-                    <i class="fas fa-times" id="close"></i>
-                </div>
+                <i class="fas fa-search" id="search"></i>
             </div>
-                <!-- search icon cancel button -->
-                <!-- <i class="fas fa-times" id=""></i> -->
-            <!-- search icon when clicked will show the above search-form -->
             <i class="fas fa-search" id="search-icon"></i>
             <span id="cartTotal"><?php 
                 if(count($_SESSION['cartList']) > 0){

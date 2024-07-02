@@ -17,13 +17,13 @@ if($_SERVER['REQUEST_METHOD'] === "PUT"){
 
         // it the query was successful and returned at least a row from the products table
         // create a variable tha we will pass to the failure of the response if false
-        // if($row = mysqli_fetch_row($prodSearchResult) > 0){
-        //     $success = "The query was successful";
-        // }
-        // else{
-        //     $failure = "The query was not successful";
+        if($row = mysqli_fetch_row($prodSearchResult) > 0){
+            $success = "The query was successful";
+        }
+        else{
+            $failure = "The query was not successful";
         
-        // }
+        }
         
 
         while($product = mysqli_fetch_array($prodSearchResult)){

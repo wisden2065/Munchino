@@ -145,21 +145,7 @@ header .icons span{
 }
 header .icons i,
 header .icons a,
-header .icons #search-form .label i{
-    cursor: pointer;
-    margin-left: .5rem;
-    height: 3rem;
-    line-height: 3rem;
-    width: 3rem;
-    text-align: center;
-    font-size: 1.2rem;
-    color: var(--black);
-    border-radius: 50%;
-    background: #eee;
-    
-}
-
-header .icons #search-form .label i{
+header .icons #search-icon-box .label i{
     cursor: pointer;
     margin-left: .5rem;
     height: 3rem;
@@ -588,68 +574,36 @@ menu #box-container .box .content span{
     display: flex;
     background-color: red;
 }
-#search-form{
-    position: fixed;
-    top: -100%; left: 0;
-    height: auto; width: 200px;
-    z-index: 1004;
-    background: rgba(0,0,0,0.8);
-    display: flex;
-    /* align-items: center; */
-    /* justify-content: center; */
-    padding: 0 1rem;
+#search-icon-box{
+    display: none;
+    
 }
-#search-form.activate-searchForm{
-    position: fixed;
-    top: 2.1%; left: 65.2%;
+header .icons #search-icon-box.activate{
+    display: flex;
+    background-color: red;
+    /* position: absolute; */
     height: 3rem; 
-    width: 300px;
+    width: 200px;
     z-index: 1004;
     /* background: rgba(0,0,0,.8); */
     background: #eee;
     border-radius: 30px;
-    display: flex;
+    /* display: flex; */
     /* align-items: center; */
-    justify-content: space-between;
-    /* padding: 1rem; */
+    /* justify-content: space-between; */
 }
-#search-form #search-box{
-    width: 200px; height: 3rem;
-    border-bottom: .1rem solid #eee;
-    /* padding: 100px; */
-    color: #282626;
-    font-size: 1.5rem;
-    text-transform: none;
-    text-indent: 5px;
-    background: none;
+#search-box{
+    height: 3rem;
+    background-color: #eee;
+    color: #000;
+    text-indent: 1rem;
+    border-radius: 30px;
 }
-#search-form #search-box::placeholder{
-    color: #635f5f;
+#search-box::placeholder{
+    color: #000;
 }
-#search-form #search-box::-webkit-search-cancel-button{
+#search-box::-webkit-search-cancel-button{
     -webkit-appearance: none;
-}
-#search-form .label{
-    color: #fff;
-    cursor: pointer;
-    width: auto;
-    display: flex;
-    /* font-size: 3rem; */
-}
-#search-form label:hover{
-    color: var(--green);
-}
-#search-form #close{
-    /* position: absolute; */
-    /* top: 0; left: 70%; */
-    /* top: 2.1%; left: 57.3%; */
-    color: #fff;
-    cursor: pointer;
-    /* top: 2rem; right: 3rem; */
-    /* font-size: 3rem; */
-}
-#search-form #close:hover{
-    color: var(--green );
 }
 form .btnWrapper{
     display: flex;

@@ -1,11 +1,8 @@
 
 // adding functionality to search icon
 let form = document.querySelector("#form"); 
-let searchIcon = document.querySelector("#icon-searchProduct"); //gets a ref to the font awesome search icon
-
 let searchInput = form["input"];
 console.log(searchInput);
-console.log(searchIcon);
 
 
 //navbar toggle to activeBtn-- onCLick
@@ -30,11 +27,14 @@ menu.onclick = ()=>{
 
 //functionality for search-icon
 let search = document.querySelector("#search-icon");
-let searchToggle = document.querySelector("#search-form");
+let searchIconBox = document.querySelector("#search-icon-box");
+
+
 
 search.onclick =()=>{
         // when the button is clicked, we show the search bar 
-    searchToggle.classList.toggle("activate-searchForm");
+    searchIconBox.classList.toggle("activate");
+    search.classList.toggle("fa-xmark");
        // then we the classList that has the visible search cancel available
     
 
@@ -149,13 +149,35 @@ function searchFood(){
 }
 
 
-// logs value of input to console onKeyup
-searchInput.addEventListener("keyup", ()=>{
+// get the div for the search dropdown value
+let searchDropDown = document.getElementById("search-box-dropDown");
 
-// call the function that will log the food name
-    searchFood();
+// logs value of input to console onKeyup
+searchInput.addEventListener("keyup", (e)=>{
+    console.log(searchInput.value);
+    let lengthValue = e.target.value.length;
+    // create a list of dummy text for the dropdown
+    let searchList = document.createElement("ul");
+    let list = document.createElement("li");
+    list.style.listStyleType = "none";
+    list.style.backgroundColor = "#eee";
+    searchDropDown.style.borderRadius = "30px";
+
+        // remove all the contents in the dropDown as soon as there is nothing in the search bar
+        if(e.target.value == ""){
+            searchDropDown.innerHTML = "";
+        }
+        if(lengthValue > 2){
+            for(let i = 0; i < 5; i++){
+                list.innerHTML = e.target.value;
+                searchList.appendChild(list);
+            }
+            searchDropDown.appendChild(searchList)
+        }
+  ;
 
 })  
+
 
 
 // Asynchronous operation 2 :Displays the Product List to the UI
@@ -279,101 +301,7 @@ function addProductToCart(productId){
 menuList_container.addEventListener("click", clickHandler)
 dishesList_container.addEventListener("click", clickHandler )
 
-
-// LocalStorage to save MenuFOods and DishesFoods locally in the web browser
-function setLocalStorage(){
-    let variable;
-    fetch('dishes.json')
-    .then(promiseObj => promiseObj.json())
-    .then(data => {
-        variable = data;
-        console.log(variable);
-        // stringVariable = JSON.stringify(variable)
-        // console.log(stringVariable);
-        localStorage.setItem('dishes', variable);
-    })
-    
-    
-    // return false;
-    
-}
-setLocalStorage();
-
-// retrieve local storage
-const getLocalStorage = function(){
-    let container = localStorage.getItem('dishes');
-    // container = JSON.parse(container);
-    // why does this commented line print null to the console
-    console.log(container);
-    return JSON.parse(container);
-}
-getLocalStorage();
-
-localStorage.clear();
-
-// pushing to cart.html from index.html from local storage
-let cartListUIcontainer = document.querySelector(".cartBox")
-console.log(cartListUIcontainer); 
-
-function displayCartListToUI(){
-
-        let newLiInCartList = document.createElement("li");
-        console.log(newLiInCartList);
-        productList.forEach((product)=>{
-                            newLiInCartList += `<div class="cart-container" id="${product.id}">
-                                        <div class="product-div"><img src="" alt=""></div>
-                                                <div class="product-desc">
-                                                    <div class="product-wrapper">
-                                                        <h3>${product.foodName}</h3>
-                                                        <p>Just food</p>
-                                                    </div>
-                                                </div>
-                                                <div class="price-per-qty">
-                                                    <div class="price-wrapper">
-                                                    <p>Individually</p>
-                                                    <span>Now $${cartList.amount}</span>
-                                                </div>
-                                        </div>
-                                        <div class="remove-item">
-                                            <div class="del-wrapper">
-                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <div class="shop-cart">
-                                            <div class="cart-wrapper">
-                                                <span class="add">
-                                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/>
-                                                    </svg>
-                                                </span>
-                                                <span id="amount">2</span>
-                                                <span class="minus">
-                                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
-                                                    </svg>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="sum">
-                                            <div class="sum-wrapper">
-                                                <span><i class="fas fa-naira-sign">${cartList.amount}</span>
-                                            </div>
-                                        </div>
-                                    </div>`
-
-                                            
-                                        })
-
-        // cartListUIcontainer.innerHTML = newLiInCartList;
-        container.innerHTML = newLiInCartList;
-}
-
-
-
 // function definition that will call the server search.php
-
 function callFilteredProduct(foodName){
 
     fetch("search.php", 
