@@ -68,12 +68,18 @@ include('connect.php');
             <!-- hamburger icon that will display at mediaquery -->
             <i class="fa-solid fa-list" id="menu-list-icon"></i>
             <!-- extended search icon -->
-            <div id="search-icon-box">
-                <form action="" id="form">
-                    <input type="search" placeholder="search a delicacy" name="input" id="search-box">
-                    <!-- div for search options display -->
-                </form>
-                <i class="fas fa-search" id="search"></i>
+            <div id="search-icon-box_wrapper">
+                <div id="search-icon-box">
+                    <form action="" id="form">
+                        <input type="search" placeholder="search a delicacy" name="input" id="search-box">
+                        <!-- div for search options display -->
+                    </form>
+                    <i class="fas fa-search" id="searchIcon"></i>
+                </div>
+                <!-- div for searched Items display -->
+                 <div class="searchDropDown">
+                    <!-- value populated from result of search query -->
+                </div>
             </div>
             <i class="fas fa-search" id="search-icon"></i>
             <span id="cartTotal"><?php 

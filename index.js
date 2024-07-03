@@ -1,7 +1,6 @@
 
 // adding functionality to search icon
-let form = document.querySelector("#form"); 
-let searchInput = form["input"];
+let searchInput = document.getElementById("search-box");
 console.log(searchInput);
 
 
@@ -26,26 +25,19 @@ menu.onclick = ()=>{
 }
 
 //functionality for search-icon
-let search = document.querySelector("#search-icon");
+let openSearchIcon = document.querySelector("#search-icon");
+let searchIcon = document.getElementById("searchIcon")
 let searchIconBox = document.querySelector("#search-icon-box");
 
 
 
-search.onclick =()=>{
+openSearchIcon.onclick =()=>{
         // when the button is clicked, we show the search bar 
     searchIconBox.classList.toggle("activate");
-    search.classList.toggle("fa-xmark");
+    openSearchIcon.classList.toggle("fa-xmark");
        // then we the classList that has the visible search cancel available
-    
-
 }
 
-// Search cancel functionality 
-let searchCancel = document.querySelector("#close");
-console.log(searchCancel);
-searchCancel.onclick =()=>{
-    searchToggle.classList.remove("activate-searchForm");
-}
 
 //functionality for cart-icon
 let cartIcon = document.querySelector("#cart-icon");
@@ -82,45 +74,6 @@ const swiper = new Swiper('.swiper', {
 
 // swiper JS ends
 
-
-
-let productList = [];    //To be populated with data from dishes.json by fetchDishesFood()
-
-let cartList = [];  //empty list to store individual cartItems. The CartItem  would be added to the list after a click event is triggered on the btn 
-
-
-//Asynchronous operation 1:  - populates the empty ProductList
-const fetchDishesFood =()=>{
-    fetch("dishes.json")  //fetch food data from products.json file 
-    .then(promiseObj => promiseObj.json())   // the fetch() returns an object which is a promise Object and that Object is converted to JSON with the .then()
-    .then((data) => {productList = data;     //JSON assigned to the array productList
-        console.log('completed fetching data');
-        console.log('Resolved data: ',data);
-        console.log(productList == data);
-
-        // pushProductListToUI();   //calling the fn to add list to UI
-    }); 
-}
-
-fetchDishesFood();
-
-let cartList2 = [];  //To be populated with menu.json by fetchMenuFoods()
-
-// function to populate cartList2 with data from menu.json
-function fetchMenuFoods(){
-    const menuFoodItems = fetch('menu.json');
-    menuFoodItems.then((promise)=>{
-        promise.json()
-        .then(data=>{
-            cartList2 =data
-            console.log(cartList2);
-            // commented this call function to display product. The products will be later displayed with php
-            // pushMenuFoodListToUI(cartList2)
-        })
-    })
-}
-fetchMenuFoods();
-
 // function to search products
 function searchFood(){
     let foodName = searchInput.value;
@@ -148,10 +101,7 @@ function searchFood(){
     }
 }
 
-
-// get the div for the search dropdown value
-let searchDropDown = document.getElementById("search-box-dropDown");
-
+let searchDropDown = document.querySelector(".searchDropDown");
 // logs value of input to console onKeyup
 searchInput.addEventListener("keyup", (e)=>{
     console.log(searchInput.value);
@@ -166,6 +116,7 @@ searchInput.addEventListener("keyup", (e)=>{
         // remove all the contents in the dropDown as soon as there is nothing in the search bar
         if(e.target.value == ""){
             searchDropDown.innerHTML = "";
+            // searchIconBox.classList.toggle("activate")
         }
         if(lengthValue > 2){
             for(let i = 0; i < 5; i++){
@@ -173,10 +124,15 @@ searchInput.addEventListener("keyup", (e)=>{
                 searchList.appendChild(list);
             }
             searchDropDown.appendChild(searchList)
+            
         }
-  ;
 
 })  
+// toggle the class for searchInput box to change border-radius
+searchInput.addEventListener("click", ()=>{
+    searchIconBox.classList.toggle("change");
+    // then populate the list in the searchInput with recent search of user stored locally
+})
 
 
 
