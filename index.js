@@ -105,104 +105,96 @@ let searchDropDown = document.querySelector(".searchDropDown");
 // logs value of input to console onKeyup
 searchInput.addEventListener("keyup", (e)=>{
     console.log(searchInput.value);
+    let typedValue = e.target.value;
     let lengthValue = e.target.value.length;
+
     // create a list of dummy text for the dropdown
     let searchList = document.createElement("ul");
     let list = document.createElement("li");
     list.style.listStyleType = "none";
     list.style.backgroundColor = "#eee";
-    searchDropDown.style.borderRadius = "30px";
+    // searchDropDown.style.borderRadius = "30px";
 
         // remove all the contents in the dropDown as soon as there is nothing in the search bar
-        if(e.target.value == ""){
+        if(searchInput.innerHTML == ""){
+            list.innerHTML = "";
             searchDropDown.innerHTML = "";
             // searchIconBox.classList.toggle("activate")
         }
-        if(lengthValue > 2){
-            for(let i = 0; i < 5; i++){
-                list.innerHTML = e.target.value;
+
+        console.log(lengthValue);
+        // if the length of the product the user inputs is an even number, make a query to db to fetch product
+        if(lengthValue % 2 === 0){
+            console.log(lengthValue);
+                list.innerHTML = typedValue;
                 searchList.appendChild(list);
-            }
-            searchDropDown.appendChild(searchList)
-            
+                console.log(searchList);
+                searchDropDown.appendChild(searchList);
+                // call fetch function
+                getSearchedProduct(typedValue, e);
         }
 
 })  
+// function to get searched Products definition that will call the server search.php
+function getSearchedProduct(foodName, e){
+    console.log("In the getSearchedProduct function");
+
+    fetch(`search.php?food=${foodName}`, 
+      {
+        method : "GET",
+        headers : {
+            "Content-Type" : "application/json",
+        },
+        // body : JSON.stringify({foodName}),
+      }
+    )
+    .then((res)=>{
+        console.log(res);
+        return res.json();
+    })
+    .then((prod)=>{
+        console.log(prod);
+        console.log(prod['foundProducts']);
+        return prod['foundProducts'];
+    })
+    .then((result)=>{
+        displaySearchProduct(result, e);
+    })
+
+}
+// function to display searched products
+function displaySearchProduct(foodList, e){
+    let searchList = document.createElement("ul");
+    let typedValue = e.target.value;
+    let lengthValue = e.target.value.length;
+    searchDropDown.style.borderRadius = "30px";
+    console.log(foodList);
+    // loop though the array of food returned from the search query and insert each into the list in the dropdown
+   foodList.forEach((food)=>{
+    let list = document.createElement("li");
+    list.style.listStyleType = "none";
+    list.style.backgroundColor = "#eee";
+    list.style.padding = "5px";
+    
+        // remove all the contents in the dropDown as soon as there is nothing in the search bar
+        if(typedValue == ""){
+            list.innerHTML = "";
+            searchDropDown.innerHTML = "";
+            // searchIconBox.classList.toggle("activate")
+        }
+        list.innerHTML = food;
+        searchList.appendChild(list);
+        console.log(searchList);
+        searchDropDown.appendChild(searchList);
+        // call fetch function
+   })
+}
+
 // toggle the class for searchInput box to change border-radius
 searchInput.addEventListener("click", ()=>{
     searchIconBox.classList.toggle("change");
     // then populate the list in the searchInput with recent search of user stored locally
 })
-
-
-
-// Asynchronous operation 2 :Displays the Product List to the UI
-const dishesList_container = document.querySelector(".box-container");   
-console.log(dishesList_container); 
-
-function pushProductListToUI(){    
-    console.log(productList.length);  // logs 12
-    let element = '';
-    if(productList.length > 0){
-        productList.forEach(product=>{
-                                // element += `<div class="box" id="${product.id}">
-                                //                 <img src="${product.image}" alt="">
-                                //                 <div class="content">
-                                //                     <h3>${product.foodName}</h3>
-                                //                     <div class="stars">
-                                //                         <i class="fas fa-star"></i>
-                                //                         <i class="fas fa-star"></i>
-                                //                         <i class="fas fa-star"></i>
-                                //                         <i class="fas fa-star"></i>
-                                //                         <i class="fas fa-star-half-alt"></i>
-                                //                     </div>
-                                //                     <div>
-                                //                         <span><i class="fas fa-naira-sign">${product.amount}</i></span> 
-                                //                         <a href="#" class="btn" id="${product.id}">Add to cart</a>
-                                //                     </div>
-                                //                 </div>
-                                //             </div>`
-                                    console.log('about to push productContainer to the UI in Idex page');
-
-                                // productContainerInIndex.innerHTML = newArray;                      
-                            })
-        
-        let newArray = [];
-        newArray.push(element)
-        dishesList_container.innerHTML = newArray;
-    }
-    else{
-        console.log('No Item in productList');
-    }
-    console.log('last message in the function pushProductToUI() after the if() block');
-}
-
- // function to populate box_container with data from menu.json
-let menuList_container = document.getElementById('box-container');
-console.log(menuList_container);
-
-function pushMenuFoodListToUI(foodArray){   
-    // let the display be blank as soon as this function is called  
-    document.innerHTML = "";
-        let html = '';
-            foodArray.forEach((food)=>{
-                html +=`<div class="box" id="${food.id}">
-                            <div class="image">
-                                <img src="${food.image}" alt="">
-                            </div>
-                            <div class="content">
-                                <h3>${food.foodName}</h3>
-                                <div><i class="fas fa-naira-sign">${food.amount}</i></div>
-                                <a href="#" class="btn food" id="${food.id}">add to cart</a>
-                            </div>
-                        </div>`
-            })
-            menuList_container.innerHTML = html;
-} 
-      
-
-        
-    
 
 
 // click event handler
@@ -254,27 +246,6 @@ function addProductToCart(productId){
 
 
 // adding click event listener to products in menu and dishes container
-menuList_container.addEventListener("click", clickHandler)
-dishesList_container.addEventListener("click", clickHandler )
+// menuList_container.addEventListener("click", clickHandler)
+// dishesList_container.addEventListener("click", clickHandler )
 
-// function definition that will call the server search.php
-function callFilteredProduct(foodName){
-
-    fetch("search.php", 
-      {
-        method : "PUT",
-        headers : {
-            "Content-Type" : "application/json",
-        },
-        body : JSON.stringify({foodName}),
-      }
-    )
-    .then((res)=>{
-        console.log(res);
-        return res.json();
-    })
-    .then((prod)=>{
-        console.log(prod);
-        console.log(prod['searchedProductList']);
-    })
-}

@@ -2,38 +2,43 @@
 include('connect.php');
 session_start();
 
-if($_SERVER['REQUEST_METHOD'] === "PUT"){
-    $json_data = file_get_contents('php://input');
-
-    $decoded_json_data =json_decode($json_data, true);
-    
-    if(isset($decoded_json_data['foodName'])){
+if($_SERVER['REQUEST_METHOD'] === "GET"){
+    // $json_data = file_get_contents('php://input');
+    $json_data = $_GET['food'];
+    // $decoded_json_data =json_decode($json_data, true);
+    if(isset($json_data)){
         // this searchedFood holds the current value of the product searched in the input 
-        $searchedFood = $decoded_json_data['foodName'];
+        $searchedFood = $json_data;
 
         // make a query to dg to fetch all products that contains the searchedFod value
-        $prodSearchQuery = "SELECT * FROM products WHERE name LIKE '%$searchedFood%'";
+        $prodSearchQuery = "SELECT name FROM products WHERE name LIKE '%$searchedFood%'";
         $prodSearchResult = mysqli_query($connection, $prodSearchQuery);
+        
+        if($rows = mysqli_fetch_array($prodSearchResult) > 0){
 
-        // it the query was successful and returned at least a row from the products table
-        // create a variable tha we will pass to the failure of the response if false
-        if($row = mysqli_fetch_row($prodSearchResult) > 0){
-            $success = "The query was successful";
+            // initialize an empty array that will hold values of all the product names
+            $foodNames = [];
+            mysqli_data_seek($prodSearchResult, 0);
+            // loop through the array[This array is an associative array i.e holds it value ref by index number and name] and push each name to $foodNames
+            while($rows = mysqli_fetch_array($prodSearchResult)){
+                // print_r($rows[0]);
+                array_push($foodNames, $rows[0]);
+                
+            }
+           
+            $response = [
+                'status' => 'success',
+                'message' => 'search query successful',
+                'foundProducts' => $foodNames
+            ];
+
+            
         }
         else{
             $failure = "The query was not successful";
         
         }
         
-
-        while($product = mysqli_fetch_array($prodSearchResult)){
-            $response = [
-                'status' => 'success',
-                'message' => 'search query successful',
-                'searchedProductList' => $searchedFood
-            ];
-        }
-
     }
     else{
         $response = [
