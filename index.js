@@ -112,7 +112,13 @@ searchInput.addEventListener("keyup", (e)=>{
     let searchList = document.createElement("ul");
     let list = document.createElement("li");
     list.style.listStyleType = "none";
-    list.style.backgroundColor = "#eee";
+    // Listen to a
+    list.forEach((li)=>{
+        li.addEventListener("mouseenter", ()=>{
+            list.style.cursor = "pointer";
+            list.backgroundColor = "#afadb3";
+        })
+    })
     // searchDropDown.style.borderRadius = "30px";
 
         // remove all the contents in the dropDown as soon as there is nothing in the search bar
@@ -149,8 +155,14 @@ function getSearchedProduct(foodName, e){
       }
     )
     .then((res)=>{
-        console.log(res);
-        return res.json();
+        if(!res == null){
+            console.log(res);
+            return res.json();
+        }
+        else{
+            throw new Error("Product not found");
+        }
+        
     })
     .then((prod)=>{
         console.log(prod);
@@ -159,6 +171,10 @@ function getSearchedProduct(foodName, e){
     })
     .then((result)=>{
         displaySearchProduct(result, e);
+    })
+    .catch((error)=>{
+        // call the function that will display the list items and pass the error message to it
+        displaySearchProduct(error, e);
     })
 
 }

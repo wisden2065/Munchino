@@ -284,7 +284,11 @@ if(isset($_SESSION['session-id'])){
                                         <h3><i class="fa-solid fa-lock"></i> Cart Summary</h3>
                                         <div class="summary-body">
                                             <p>Merchandise:</p>
-                                            <span id="merchandise">$22,000</span>
+                                            <span id="merchandise">
+                                                <!-- $22,000 -->
+                                                <!--  run a loop to calculate all the product total for each item in the cart -->
+
+                                            </span>
                                             <p>Est. Shipping & Handling: <i class="fa-solid fa-circle-info"></i> </p>
                                             <span>$17.89</span>
                                             <p style="color: red;"">Shipping Discount:</p>
@@ -304,7 +308,23 @@ if(isset($_SESSION['session-id'])){
                                         <p>Remove any spaces or dishes before hitting apply</p>
                                         <input type="text" style="outline: solid 1.5px;"> <button style="border: solid 1px grey; padding: 4px 10px;">APPLY</button>
                                         <br><br><br><hr>
-                                            <a href="payment.php"><button class="btn" style="display: block;">CHECKOUT NOW</button></a> <br>
+                                        <!-- Add variables that  will hold the values of all the users info to be passed to the paystack -->
+                                         
+                                         <form id="paymentForm">
+                                            <label for="name" style="display: none;">Name:</label>
+                                            <input id="name" type="text" value="<?php echo $name; ?>" style="display: none;"><br><br>
+                                            <label for="email" style="display: none;">Email:</label>
+                                            <input id="email-address" type="text" value="<?php echo $_SESSION['session-id']; ?>" style="display: none;"><br><br>
+                                            <label for="amount" style="display: none;">Amount:</label>
+                                            <input id="amount" type="Amount" value="<?php echo $_SESSION['cartList'][$key]['price'] * $_SESSION['cartList'][$key]['qty']; ?>" style="display: none;"><br><br>
+                                            <!-- <input onclick="payWithPaystack()" type="submit" value="Submit"> -->
+                                            <a href=""><input type="submit" value="CHECKOUT NOW" onclick="payWithPaystack()" class="btn" style="display: block;"></a> <br>
+                                         </form>
+                                           <!-- paystack script -->
+                                            <script src="https://js.paystack.co/v1/inline.js"></script>
+                                            <!-- <script src="https://js.paystack.com/v1/inline.js"></script> -->
+                                            <script src="payment.js"></script>
+
                                             <p>By continuing to Checkout, you are agreeing to our <span style="text-decoration: underline;">Terms of Use</span> and <span style="text-decoration: underline;">Privacy Policy</span></p>
                                             <br><br>
                                             <hr>
@@ -389,6 +409,8 @@ if(isset($_SESSION['session-id'])){
   <!------- script tag == cart.js  ---------------------->
   <!-- <script src="cart.js"></script> -->
   <script>
+    let email = document.getElementById("paymentForm");
+    console.log("The id of the email is :", email)
     // check if the page was reloaded to stop increment of product quantity
     window.onload = function (){
         
@@ -632,6 +654,6 @@ function get_allProdTotalPrice(){
     }
 
   </script>
-
+  
 </body>
 </html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <form action="" id="paymentForm">
+        <Span>Name</Span><input type="text">
+        <br>
+        <Span>Email</Span><input id="email-address" type="text">
+        <br>
+        <span>Amount</span><input id="amount" type="text">
+        <input onclick="payWithPaystack()" type="submit" value="Submit">
+    </form>
+
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script src="payment.js"></script>
+</body>
+</html>

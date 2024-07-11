@@ -1,8 +1,3 @@
-<?php
-    session_start();
-    include('connect.php');
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,24 +45,22 @@
                     </div>
                     <hr>
                     <h3>Payment details <i class="fa-solid fa-lock"></i></h3>
-                    <form action="logic.php" method="post">
+                    <form id="paymentForm">
                         <div class="input">
                             <i class="fa-regular fa-credit-card" style="color: #e0e0e1;"></i>
-                            <input type="text" class="card" placeholder="Credit Card Number">
+                            <input required type="text" class="card" placeholder="Credit Card Number">
                         </div><br>
                         <div class="card-details">
                             <div class="card1">
-                                <input type="date" value="Expiring">
+                                <input required type="date" value="Expiring">
                             </div>
                             <div class="card2">
                                 <i class="fa-solid fa-lock" style="color: #ebebeb;"></i>
-                                <input type="text" name="cvv" placeholder="CVV">
+                                <input required type="text" name="cvv" placeholder="CVV">
                             </div>
                         </div><br>
-                        <input type="text" placeholder="Postal code" class="card1"><br>
-                        <input class="btn" type="submit" value="Pay Now">
-        
-        
+                        <input required type="text" placeholder="Postal code" class="card1"><br>
+                        <input class="btn" type="submit" value="Pay Now" onclick="payWithPaystack()">
                     </form>
                   
         
@@ -97,5 +90,11 @@
 
         </div>
     </div>
+
+
+    <!-- paystack script -->
+     <script src="https://js.paystack.co/v1/inline.js"></script>
+     <script src="https://js.paystack.com/v1/inline.js"></script>
+     <script src="payment.js"></script>
 </body>
 </html>
