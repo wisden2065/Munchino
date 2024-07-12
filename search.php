@@ -32,14 +32,17 @@ if($_SERVER['REQUEST_METHOD'] === "GET"){
                 'foundProducts' => $foodNames
             ];
             // if the query does not return any data we show an errr
-            if($row = mysqli_num_rows($prodSearchQuery) <= 0){
-                $response = null;
-            }
+            // if($row = mysqli_num_rows($prodSearchQuery) <= 0){
+            //     $response = null;
+            // }
             
         }
         else{
-            $failure = "The query was not successful";
-        
+            $response = [
+                'status' => 'success',
+                'message' => 'search query successful',
+                'foundProducts' => "empty"
+            ];
         }
         
     }

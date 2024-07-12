@@ -159,7 +159,7 @@ if(isset($_SESSION['session-id'])){
     
 <div class="icons">
             <i class="fa-solid fa-list" id="menu-list-icon"></i>
-            <i class="fas fa-search" id="search-icon"></i>
+            <!-- <i class="fas fa-search" id="search-icon"></i> -->
             <a href="cart.html" class="fas fa-shopping-cart" id="cart-icon"></a>
             <span id="cartTotal"><?php 
                 if(count($_SESSION['cartList']) > 0){

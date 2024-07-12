@@ -1,22 +1,23 @@
 
-// adding functionality to search icon
+// getting the search icon
 let searchInput = document.getElementById("search-box");
 console.log(searchInput);
-
-
-//navbar toggle to activeBtn-- onCLick
+let typedValue = searchInput.value;
+let lengthValue = searchInput.value.length;
+// get the div containing all the navigation icons
+let navbar = document.querySelector(".navbar");
+//get all the buttons in navbar to toggle class which has the green color -- onCLick
 let allBtn = document.querySelectorAll(".navbar a")
 
 allBtn.forEach((activeBtn) => { 
   activeBtn.addEventListener("click", ()=>{
     allBtn.forEach((e)=> e.classList.remove("active"));
-    activeBtn.classList.add("active")
+    activeBtn.classList.add("active");
   })
 });
 
-// functionality for menu-list
+// get the hamburger icon for menu-list and add functionality to hide and show the tab
 let menu = document.querySelector("#menu-list-icon");
-let navbar = document.querySelector(".navbar");
 
 menu.onclick = ()=>{
   menu.classList.toggle("fa-xmark");
@@ -35,6 +36,7 @@ openSearchIcon.onclick =()=>{
         // when the button is clicked, we show the search bar 
     searchIconBox.classList.toggle("activate");
     openSearchIcon.classList.toggle("fa-xmark");
+    // searchDropDown.classList.toggle("remove");
        // then we the classList that has the visible search cancel available
 }
 
@@ -101,46 +103,42 @@ function searchFood(){
     }
 }
 
+// get the div to display the result of product search
 let searchDropDown = document.querySelector(".searchDropDown");
-// logs value of input to console onKeyup
+
+// create a list for the the product result for search query
+let searchList = document.createElement("ul");
+let list = document.createElement("li");
+list.style.listStyleType = "none";
+
+// listen to keypress in the search bar and run product search query
 searchInput.addEventListener("keyup", (e)=>{
-    console.log(searchInput.value);
     let typedValue = e.target.value;
+    console.log(typedValue);
     let lengthValue = e.target.value.length;
 
-    // create a list of dummy text for the dropdown
-    let searchList = document.createElement("ul");
-    let list = document.createElement("li");
-    list.style.listStyleType = "none";
-    // Listen to a
-    list.forEach((li)=>{
-        li.addEventListener("mouseenter", ()=>{
-            list.style.cursor = "pointer";
-            list.backgroundColor = "#afadb3";
-        })
-    })
-    // searchDropDown.style.borderRadius = "30px";
-
         // remove all the contents in the dropDown as soon as there is nothing in the search bar
-        if(searchInput.innerHTML == ""){
+        if(typedValue.length == 0){
             list.innerHTML = "";
             searchDropDown.innerHTML = "";
-            // searchIconBox.classList.toggle("activate")
+            searchDropDown.classList.toggle("remove");
         }
 
         console.log(lengthValue);
         // if the length of the product the user inputs is an even number, make a query to db to fetch product
         if(lengthValue % 2 === 0){
             console.log(lengthValue);
-                list.innerHTML = typedValue;
-                searchList.appendChild(list);
-                console.log(searchList);
-                searchDropDown.appendChild(searchList);
+                // list.innerHTML = typedValue;
+                // searchList.appendChild(list);
+                // console.log(searchList);
+                // searchDropDown.appendChild(searchList);
                 // call fetch function
                 getSearchedProduct(typedValue, e);
         }
+    })
 
-})  
+        
+
 // function to get searched Products definition that will call the server search.php
 function getSearchedProduct(foodName, e){
     console.log("In the getSearchedProduct function");
@@ -155,14 +153,8 @@ function getSearchedProduct(foodName, e){
       }
     )
     .then((res)=>{
-        if(!res == null){
             console.log(res);
             return res.json();
-        }
-        else{
-            throw new Error("Product not found");
-        }
-        
     })
     .then((prod)=>{
         console.log(prod);
@@ -170,45 +162,59 @@ function getSearchedProduct(foodName, e){
         return prod['foundProducts'];
     })
     .then((result)=>{
-        displaySearchProduct(result, e);
+        if(result !== "empty"){
+            displaySearchProduct(result, e);
+        }
+        else{
+            // displaySearchProduct()
+            console.log("Product nut found");
+            // call the function to show that product not found
+            displayProductNotFound(result);
+
+        }
     })
     .catch((error)=>{
         // call the function that will display the list items and pass the error message to it
-        displaySearchProduct(error, e);
+        console.error(error)
     })
 
 }
 // function to display searched products
 function displaySearchProduct(foodList, e){
-    let searchList = document.createElement("ul");
-    let typedValue = e.target.value;
-    let lengthValue = e.target.value.length;
-    searchDropDown.style.borderRadius = "30px";
-    console.log(foodList);
+    // let searchList = document.createElement("ul");
+    // let typedValue = e.target.value;
+    // let lengthValue = e.target.value.length;
+    // searchDropDown.style.borderRadius = "30px";
+    console.log(foodList, 'AND ', e);
     // loop though the array of food returned from the search query and insert each into the list in the dropdown
-   foodList.forEach((food)=>{
-    let list = document.createElement("li");
-    list.style.listStyleType = "none";
-    list.style.backgroundColor = "#eee";
-    list.style.padding = "5px";
-    
-        // remove all the contents in the dropDown as soon as there is nothing in the search bar
-        if(typedValue == ""){
-            list.innerHTML = "";
-            searchDropDown.innerHTML = "";
-            // searchIconBox.classList.toggle("activate")
-        }
-        list.innerHTML = food;
-        searchList.appendChild(list);
-        console.log(searchList);
-        searchDropDown.appendChild(searchList);
-        // call fetch function
-   })
+//    if(foodList !== ""){
+        foodList.forEach((food)=>{
+            let list = document.createElement("li");
+            list.style.listStyleType = "none";
+            list.style.backgroundColor = "#eee";
+            list.style.padding = "5px";
+            
+                list.innerHTML = food;
+                searchList.appendChild(list);
+                console.log(searchList);
+                searchDropDown.appendChild(searchList);
+                // call fetch function
+        })
+   }
+ 
+function displayProductNotFound(){
+            list.style.listStyleType = "none";
+            list.style.backgroundColor = "#eee";
+            list.style.padding = "5px";
+    list.innerHTML = "Product not Found";
+    searchList.appendChild(list);
+    console.log(searchList);
+    searchDropDown.appendChild(searchList);
 }
 
 // toggle the class for searchInput box to change border-radius
 searchInput.addEventListener("click", ()=>{
-    searchIconBox.classList.toggle("change");
+    // searchIconBox.classList.toggle("change");
     // then populate the list in the searchInput with recent search of user stored locally
 })
 
