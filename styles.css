@@ -29,7 +29,7 @@
     outline: none; border: none;
     text-transform: capitalize;
     transition: all .2s linear;
-    text-decoration: none;
+    text-decoration: none !important;
 }
 html, body{
     height: 100%;
@@ -141,10 +141,11 @@ header .icons span{
     width: 1.5rem;
     border-radius: 50%;
     position: absolute;
-    top: -5px; right: 100px;
+    top: -5px; right: 60px;
 }
 header .icons i,
 header .icons a,
+header .icons .dropdown,
 header .icons #search-icon-box{
     cursor: pointer;
     margin-left: .5rem;
@@ -167,12 +168,18 @@ header .icons #search-icon-box{
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 .profile img{
     width: 100%;
     height: 100%;
     
+}
+.dropdown ul li{
+    padding: 10px;
+}
+.dropdown ul li:hover{
+    color: var(--green);
 }
 header .icons i:hover,
 header .icons a:hover{
@@ -196,14 +203,14 @@ header .icons #menu-list-icon{
     display: inline-block;
 }
 .btn{
-    margin-top: 1rem;
-    color: white;
-    background: var(--black);
-    display: inline-block;
-    font-size: 1.5rem;
-    border-radius: .5rem;
-    padding: .8rem 3rem;
-    cursor: pointer;
+    margin-top: 1rem !important;
+    color: white !important;
+    background: var(--black) !important;
+    display: inline-block !important;
+    font-size: 1.5rem !important;
+    border-radius: .5rem !important;
+    padding: .8rem 3rem !important;
+    cursor: pointer !important;
 }
 .btn:hover{
     background: var(--green);

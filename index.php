@@ -23,6 +23,8 @@ include('connect.php');
 <!--custom css file link--> 
     <link rel="stylesheet" href="styles.css">
     <link rel="shortcut icon" href="pictures/munchino-logo-3.png" type="image/x-icon">
+<!-- bootstrap link -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -90,8 +92,19 @@ include('connect.php');
                 }
             ?></span>
             <a href="cart.php" target="blank" class="fas fa-shopping-cart" id="cart-icon"></a>
-            <a href="signin.php" class=""><div class="profile dropdown"><img src="<?php echo "pic/$profilePicture"; ?>" alt=""></div></a>
-            <a href="logout.php" class="fa-solid fa-right-from-bracket"></a>
+            <!-- added a bootstrap to implement dropdown -->
+                <div class="dropdown">
+                    <!-- <a > -->
+                    <img href="" class="profile btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="" src="<?php echo "pic/$profilePicture"; ?>" alt="">
+                    <!-- </a> -->
+                    <ul class="dropdown-menu">
+                        <li>Hi <?php echo $name; ?>!</li>
+                        <li>Sign out <a href="logout.php" class="fa-solid fa-right-from-bracket"></a></li>
+                        <li>Account Settings</li>
+                    </ul>
+                </div>
+           
+            
         </div>
 
     </header>
@@ -545,6 +558,8 @@ include('connect.php');
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <!-- link to index.js -->
 <script src="index.js"></script>
+<!-- bootstrap js -->
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
 <?php
