@@ -24,7 +24,7 @@ include('connect.php');
     <link rel="stylesheet" href="styles.css">
     <link rel="shortcut icon" href="pictures/munchino-logo-3.png" type="image/x-icon">
 <!-- bootstrap link -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"> -->
 </head>
 
 <body>
@@ -559,7 +559,7 @@ include('connect.php');
 <!-- link to index.js -->
 <script src="index.js"></script>
 <!-- bootstrap js -->
- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+ <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
 
 
 <?php

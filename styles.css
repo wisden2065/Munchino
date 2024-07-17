@@ -22,7 +22,7 @@
         --swiper-pagination-bullet-vertical-gap: 6px;
 }
 *{
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Nunito', sans-serif ;
     margin: 0; padding: 0;
     text-decoration: none;
     box-sizing: border-box;
@@ -175,11 +175,26 @@ header .icons #search-icon-box{
     height: 100%;
     
 }
-.dropdown ul li{
-    padding: 10px;
+.dropdown-menu{
+    display: none;
 }
-.dropdown ul li:hover{
+.dropdown-menu.active{
+    display: block;
+    position: absolute;
+    right: 5%;
+    padding: 20px;
+    background-color: var(--review);
+    box-shadow: var(--box-shadow);
+    border-radius: 8px;
+}
+.dropdown-menu.active li{
+    padding: 10px;
+    list-style-type: none;
+}
+.dropdown-menu.active li:hover{
     color: var(--green);
+    background-color: #eee;
+    border-radius: 10px;
 }
 header .icons i:hover,
 header .icons a:hover{
@@ -213,8 +228,8 @@ header .icons #menu-list-icon{
     cursor: pointer !important;
 }
 .btn:hover{
-    background: var(--green);
-    letter-spacing: .1rem;
+    background: var(--green) !important;
+    letter-spacing: .1rem !important;
 }
 
 /* Home section starts here */

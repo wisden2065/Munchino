@@ -39,7 +39,14 @@ openSearchIcon.onclick =()=>{
     // searchDropDown.classList.toggle("remove");
        // then we the classList that has the visible search cancel available
 }
-
+// get the ul on picture to active dropdown onclick
+let picture = document.querySelector(".profile");
+let pictureDropdown = document.querySelector(".dropdown-menu");
+picture.addEventListener("click", ()=>{
+    // toggle to change the ul class
+    pictureDropdown.classList.toggle("active");
+    console.log("TOGGLING");
+})
 
 //functionality for cart-icon
 let cartIcon = document.querySelector("#cart-icon");
