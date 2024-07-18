@@ -58,16 +58,15 @@ cartIcon.onclick=()=>{
 }
 
 
-//swiper js begins here
+//swiper js for landing page begins here
 const swiper = new Swiper('.swiper', {
     // Optional parameters
     loop: true,
-    speed: 2500, 
+    speed: 1500, 
     autoplay:{
       delay:3000,
       disableOnInteraction:false,
     },
-  
     // If we need pagination
     pagination: {
       el: '.swiper-pagination',
@@ -81,7 +80,6 @@ const swiper = new Swiper('.swiper', {
   
   });
 
-// swiper JS ends
 
 // function to search products
 function searchFood(){

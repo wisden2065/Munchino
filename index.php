@@ -319,128 +319,41 @@ include('connect.php');
     <h3 class="sub-heading">Customer's review</h3>
     <h1 class="heading">what they say about us</h1>
 
-    <div class="review-container swiper">
+    <!-- grid container for customer review -->
+     <div id="review">
+        <!-- review -->
+        <!-- <div class="review-container"> -->
+        <div class="review-container swiper">
 
-        <div class="review-wrapper swiper-wrapper">
-            <div class="review-slide swiper-slide">
-                <div class="user">
-                    <img src="pictures/testimonial-1.jpg" class="review-image">
-                    <div class="user-info">
-                        <h1>Olu Johnson</h3>
-                        <p>4 reviews</p>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half"></i>
-                        </div>
-                        <p>2 months ago</p>
-                        <div class="comment">
-                            <h3>Verified customer</h3>
-                            <p>Lorem ipsum dolor sit amet.</p>
+            <div class="review-wrapper swiper-wrapper">
+                <div class="wrapper">
+                    <div class="review-slide swiper-slide">
+                        <div class="user">
+                            <div id="white" class="review-image"></div>
+                            <img src="pictures/testimonial-1.jpg" class="review-image">
+                            <div class="user-info">
+                                <h1>Olu Johnson</h3>
+                                <p>4 reviews</p>
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half"></i>
+                                </div>
+                                <p>2 months ago</p>
+                                <div class="comment">
+                                    <h3>Verified customer</h3>
+                                    <p>Lorem ipsum dolor sit amet.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    
                 </div>
+
             </div>
-
-            <div class="review-slide swiper-slide">
-                <div class="user">
-                    <img src="pictures/testimonial-2.jpg" class="review-image">
-                    <div class="user-info">
-                        <h1>Olu Johnson</h3>
-                        <p>4 reviews</p>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half"></i>
-                        </div>
-                        <p>2 months ago</p>
-                        <div class="comment">
-                            <h3>Verified customer</h3>
-                            <p>Lorem ipsum dolor sit amet consectetur.</p>
-                        </div>
-                    </div>
-                    
-                </div>
             </div>
-
-            <div class="review-slide swiper-slide">
-                <div class="user">
-                    <img src="pictures/testimonial-3.jpeg" class="review-image">
-                    <div class="user-info">
-                        <h1>Olu Johnson</h3>
-                        <p>4 reviews</p>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half"></i>
-                        </div>
-                        <p>2 months ago</p>
-                        <div class="comment">
-                            <h3>Verified customer</h3>
-                            <p>Lorem, ipsum dolor.</p>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-
-            <div class="review-slide swiper-slide">
-                <div class="user">
-                    <img src="pictures/testimonial-4.jpg" class="review-image">
-                    <div class="user-info">
-                        <h1>Akaeruo Becca</h3>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half"></i>
-                        </div>
-                        <p>2 months ago</p>
-                        <div class="comment">
-                            <h3>Verified customer</h3>
-                            <p>Lorem ipsum, dolor sit amet consectetur.</p>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-
-            <div class="review-slide swiper-slide">
-                <div class="user">
-                    <img src="pictures/testimonial-5.jpeg" class="review-image">
-                    <div class="user-info">
-                        <h1>Olu Johnson</h3>
-                        <p>4 reviews</p>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half"></i>
-                        </div>
-                        <p>2 months ago</p>
-                        <div class="comment">
-                            <h3>Verified customer</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit..</p>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-
-            
-    
-
-        </div>
-    </div>
+     </div>
 
 </section>
 
@@ -544,15 +457,14 @@ include('connect.php');
         </div>
         <div class="box">
             <h3>follow us</h3>
-            <a href="#">facebook</a>
-            <a href="#">twitter</a>
-            <a href="#">instagra</a>
+            <a href="#">facebook <i class="fa fa-facebook" aria-hidden="true"></i></a>
+            <a href="#">twitter <i class="fa fa-twitter" aria-hidden="true"></i></a>
+            <a href="#">instagram <i class="fa fa-instagram" aria-hidden="true"></i></a>
         </div>
     </div>
     <div class="credit"> copyright @ 2024 by <span> Nnanyereugo</span></div>
 </section>
 <!--footer section ends here-->
-<div class="cartDiv"></div>
 
 <!--swiper script link-->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
