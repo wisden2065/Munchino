@@ -123,53 +123,59 @@ include('connect.php');
 
 <!--Home section starts here-->
 <section class="home" id="home" >
-    <div class="hero-section"></div>
-    
-    <div class="home-carousel swiper">
-        <div class="wrapper swiper-wrapper">
-            <!-- main slide contents starts here -->
-            <?php
-              // after he is signed in, we make a query to db to show user all the best selling products. These products will be displayed in the carousel in landing page
-                $sliderProdQuery = "SELECT * FROM products WHERE type = 3";   //order by rand() limit 0,8 to fetch products at random
-                $sliderProdResult = mysqli_query($connection, $sliderProdQuery) or die('Error in completing query');
-                
-            // echo mysqli_num_rows($productResult);
-            // while($arr = mysqli_fetch_array($sliderProdResult)){
-            //     print_r($arr);
-            //     echo "<br>";
-            // }
-            // loop through all the products in the result from the sliderQuery and display each product one at a time
-                mysqli_data_seek($sliderProdResult, 0);
-                while($product = mysqli_fetch_array($sliderProdResult)){
-                    $image = $product['image'];
-                    $imagePath = "pic/";
-                    $imageUrl = $imagePath.$image;
-                    ?>
-                          <div class="slide swiper-slide" id="<?php echo $product["id"]; ?>">
-                            <div class="content">
-                                <span>Our special dish</span>
-                                <h3><?php echo $product['name']; ?></h3>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo minus beatae perferendis.</p>
-                                <a href="cart.php?add_to_cart=<?php echo $product["id"]; ?>"  class="btn food">order now</a>
+    <!-- right section in landing page -->
+    <div class="right-landing"></div>
+    <!-- Middle section in landing page -->
+    <div class="main-landing">
+        <div class="hero-section"></div>
+        <!-- carousel slider starts here -->
+        <div class="home-carousel swiper">
+            <div class="wrapper swiper-wrapper">
+                <!-- main slide contents starts here -->
+                <?php
+                // after he is signed in, we make a query to db to show user all the best selling products. These products will be displayed in the carousel in landing page
+                    $sliderProdQuery = "SELECT * FROM products WHERE type = 3";   //order by rand() limit 0,8 to fetch products at random
+                    $sliderProdResult = mysqli_query($connection, $sliderProdQuery) or die('Error in completing query');
+                    
+                // echo mysqli_num_rows($productResult);
+                // while($arr = mysqli_fetch_array($sliderProdResult)){
+                //     print_r($arr);
+                //     echo "<br>";
+                // }
+                // loop through all the products in the result from the sliderQuery and display each product one at a time
+                    mysqli_data_seek($sliderProdResult, 0);
+                    while($product = mysqli_fetch_array($sliderProdResult)){
+                        $image = $product['image'];
+                        $imagePath = "pic/";
+                        $imageUrl = $imagePath.$image;
+                        ?>
+                            <div class="slide swiper-slide" id="<?php echo $product["id"]; ?>">
+                                <div class="content">
+                                    <span>Our special dish</span>
+                                    <h3><?php echo $product['name']; ?></h3>
+                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo minus beatae perferendis.</p>
+                                    <a href="cart.php?add_to_cart=<?php echo $product["id"]; ?>"  class="btn food">order now</a>
+                                </div>
+                                <div class="image">
+                                    <img src="<?php echo $imageUrl; ?>" loading="lazy" alt="">
+                                </div>
                             </div>
-                            <div class="image">
-                                <img src="<?php echo $imageUrl; ?>" loading="lazy" alt="">
-                            </div>
-                        </div>
-                    <?php
-                }
+                        <?php
+                    }
 
-            ?>
+                ?>
+            </div>
+            <!-- swiper pagination -->
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+            <!-- swiper buttons -->
         </div>
-        <!-- swiper pagination -->
-        <div class="swiper-pagination"></div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-        <!-- swiper buttons -->
+        <!-- carousel slider ends here -->
+        <!-- left pan of landing page starts here  -->
+         <div class="left-landing"></div>
+
     </div>
-    
-   
-    
 </section>
 
 <!--Home section ends here-->
@@ -324,35 +330,56 @@ include('connect.php');
         <!-- review -->
         <!-- <div class="review-container"> -->
         <div class="review-container swiper">
+                    <div class="review-wrapper swiper-wrapper">
+                         <!-- make a query to db to get review of users -->
+        <?php
 
-            <div class="review-wrapper swiper-wrapper">
-                <div class="wrapper">
-                    <div class="review-slide swiper-slide">
-                        <div class="user">
-                            <div id="white" class="review-image"></div>
-                            <img src="pictures/testimonial-1.jpg" class="review-image">
-                            <div class="user-info">
-                                <h1>Olu Johnson</h3>
-                                <p>4 reviews</p>
-                                <div class="stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half"></i>
-                                </div>
-                                <p>2 months ago</p>
-                                <div class="comment">
-                                    <h3>Verified customer</h3>
-                                    <p>Lorem ipsum dolor sit amet.</p>
+            // make a query to get all users where not admin
+            $queryUserReview = "SELECT * FROM users WHERE type = 0";
+            $resultUserReview = mysqli_query($connection, $queryUserReview) or die("Error in getting reviews for users");
+            $rows = mysqli_fetch_row($resultUserReview);
+            // echo $rows;
+            if($rows > 0){
+                mysqli_data_seek($resultUserReview, 0);
+                // if the query returned more than one row, we loop through the returned assoc array and set values
+                while($person = mysqli_fetch_array($resultUserReview)){
+                    $name = $person['firstName'];
+                    $image = $person['picture'];
+                    $url = "pictures/".$image;
+
+                    ?>
+                        <div class="wrapper swiper-slide">
+                            <div class="review-slide">
+                                <div class="user">
+                                    <div id="white" class="review-image"></div>
+                                    <img src="<?php echo $url; ?>" class="review-image">
+                                    <div class="user-info">
+                                        <h1><?php echo $name; ?></h3>
+                                        <p>4 reviews</p>
+                                         <div class="stars">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half"></i>
+                                        </div>
+                                        <p>2 months ago</p>
+                                        <div class="comment">
+                                            <h3>Verified customer</h3>
+                                            <p>Lorem ipsum dolor sit amet.</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <?php
+                }
+                
+            }
+            echo "<br>";
+        ?>
                     </div>
                 </div>
-
-            </div>
-            </div>
      </div>
 
 </section>

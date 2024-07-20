@@ -23,3 +23,4 @@ function payWithPaystack(e) {
 
   handler.openIframe();
 }
+

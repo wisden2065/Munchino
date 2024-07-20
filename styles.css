@@ -233,12 +233,19 @@ header .icons #menu-list-icon{
 }
 
 /* Home section starts here */
+.right-landing{
+    background-color: red;
+    height: 100px;
+}
 .home{
     position: relative;
     width: 100vw;
     height: 90vh;
     /* height: 90vh; */
     /* background-color: #F8E559; */
+    display: grid;
+    grid-template-columns: .5fr 2fr .5fr;
+
 }
 .hero-section{
     position: absolute;
@@ -248,7 +255,6 @@ header .icons #menu-list-icon{
     background-color: var(--review);
     background-size: cover;
     object-fit: cover;
-
 }
 .home .home-carousel{
     position: absolute;
@@ -315,6 +321,10 @@ header .icons #menu-list-icon{
     font-size: 2rem;
     padding: 4rem 0;
     line-height: 1.5;
+}
+.left-landing{
+    background-color: red;
+    height: 100px;
 }
 /* Home section ends here */
 
@@ -450,10 +460,18 @@ menu #box-container .box .content span{
     width: 100vw;
  }
  .review-container{
-    width: 100%;
+    background-color: var(--yellow);
+ }
+ .review-container{
+    width: 30vw;
     /* background-color: #ae9127; */
     display: flex;
     justify-items: center;
+ }
+ .review-wrapper{
+    background-color: var(--black) !important;
+    border: solid 3px red;
+    width: 30vw;
  }
  .review-wrapper .wrapper{
     width: 200px;
@@ -464,6 +482,8 @@ menu #box-container .box .content span{
     flex-direction: column;
     justify-content: flex-end;
     box-shadow: var(--box-shadow);
+    /* margin-right: 50px; */
+    /* padding: 50px; */
  }
  .review-container .review-slide{
     display:flex;
@@ -471,6 +491,7 @@ menu #box-container .box .content span{
     justify-items: center;
     align-items: center;
     background-color: var(--review);
+    box-shadow: var(--box-shadow);
     padding: 5px 20px 5px 20px;
     cursor: pointer;
     margin-right: 20px;
