@@ -335,7 +335,7 @@ include('connect.php');
         <?php
 
             // make a query to get all users where not admin
-            $queryUserReview = "SELECT * FROM users WHERE type = 0";
+            $queryUserReview = "SELECT * FROM users WHERE type = 2";
             $resultUserReview = mysqli_query($connection, $queryUserReview) or die("Error in getting reviews for users");
             $rows = mysqli_fetch_row($resultUserReview);
             // echo $rows;
@@ -357,11 +357,20 @@ include('connect.php');
                                         <h1><?php echo $name; ?></h3>
                                         <p>4 reviews</p>
                                          <div class="stars">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star-half"></i>
+                                            <!-- in this containing the reviewers starts, write a loop to increase number of starts based on likes -->
+                                            <?php
+                                                // make a query to db to get the product_count for each user where type is 2
+                                                $user_starQuery = "SELECT * FROM products WHERE type = 2";
+                                                $user_starResult = mysqli_query($connection, $user_starQuery);
+
+                                                while($res = mysqli_fetch_array($user_starResult) > 0){
+                                                    ?>
+                                                    <!-- show the star -->
+                                                    <i class="fas fa-star"></i>
+                                                    <?php
+                                                }
+
+                                            ?>
                                         </div>
                                         <p>2 months ago</p>
                                         <div class="comment">
