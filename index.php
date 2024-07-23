@@ -343,6 +343,7 @@ include('connect.php');
                 mysqli_data_seek($resultUserReview, 0);
                 // if the query returned more than one row, we loop through the returned assoc array and set values
                 while($person = mysqli_fetch_array($resultUserReview)){
+                    $user_ID = $person['id'];
                     $name = $person['firstName'];
                     $image = $person['picture'];
                     $url = "pictures/".$image;
@@ -355,15 +356,22 @@ include('connect.php');
                                     <img src="<?php echo $url; ?>" class="review-image">
                                     <div class="user-info">
                                         <h1><?php echo $name; ?></h3>
-                                        <p>4 reviews</p>
-                                         <div class="stars">
-                                            <!-- in this containing the reviewers starts, write a loop to increase number of starts based on likes -->
+                                           <!-- in this containing the reviewers starts, write a loop to increase number of starts based on likes -->
                                             <?php
                                                 // make a query to db to get the product_count for each user where type is 2
-                                                $user_starQuery = "SELECT * FROM products WHERE type = 2";
-                                                $user_starResult = mysqli_query($connection, $user_starQuery);
-
-                                                while($res = mysqli_fetch_array($user_starResult) > 0){
+                                                $user_starQuery = "SELECT likes_count FROM products_count WHERE user_id = '$user_ID'";
+                                                $user_starResult = mysqli_query($connection, $user_starQuery) or die("Unable to fetch user review count");
+                                                // store the count in a variable
+                                                // mysqli_data_seek($user_starResult, 0);
+                                                
+                                                $count = mysqli_fetch_array($user_starResult);
+                                                $stars = intval($count['likes_count']);
+                                                // echo ($stars);
+                                               ?>
+                                        <p> <?php echo "$stars reviews";?></p>
+                                         <div class="stars">
+                                            <?php
+                                                for($i = 0; $i < $stars; $i++){
                                                     ?>
                                                     <!-- show the star -->
                                                     <i class="fas fa-star"></i>
