@@ -346,7 +346,16 @@ include('connect.php');
                     $user_ID = $person['id'];
                     $name = $person['firstName'];
                     $image = $person['picture'];
-                    $url = "pictures/".$image;
+                    // if user did not upload any image for profile, we give him a default profile picture
+                    if(empty($image)){
+                        $default = $person['picture'];
+                        $default = "defaultProfilePic.jpg";
+                        $url = "pictures/".$default;
+                    }
+                    else{
+                        $url = "pictures/".$image;
+                    }
+                    
 
                     ?>
                         <div class="wrapper swiper-slide">
@@ -369,7 +378,7 @@ include('connect.php');
                                                 // echo ($stars);
                                                ?>
                                         <p> <?php echo "$stars reviews";?></p>
-                                         <div class="stars">
+                                        <div class="stars">
                                             <?php
                                                 for($i = 0; $i < $stars; $i++){
                                                     ?>
